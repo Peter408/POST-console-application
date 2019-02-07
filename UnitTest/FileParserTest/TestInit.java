@@ -1,4 +1,4 @@
-import FileReader.*;
+import FileParser.*;
 
 
 
@@ -7,8 +7,8 @@ public class TestInit {
     private static final String FAIL_LOG = "Fail";
     public static void main( String[] args ) {
         try {
-            new ProductReader();
-            new TransactionReader();
+            new ProductParser();
+            new TransactionParser();
             System.out.println(SUCCESS_LOG);
         } catch( Exception exception) {
             System.out.println(exception);
