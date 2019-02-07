@@ -1,0 +1,1 @@
+public class ProductReader extends FileReader {}
