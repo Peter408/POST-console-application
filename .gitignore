@@ -1,0 +1,5 @@
+/conf
+/logs
+*.class
+*.DS_Store
+launch.json
