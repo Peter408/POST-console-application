@@ -1,0 +1,11 @@
+QWE
+1111@@@@@5
+2222@@@@@13
+<CASH $9.99>
+<CASH Rejected>
+
+QWE2
+1111@@@@@5
+2222@@@@@13
+<CREDIT 12345>
+<CREDIT Rejected>
