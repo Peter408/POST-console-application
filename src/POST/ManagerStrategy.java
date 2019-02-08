@@ -1,3 +1,4 @@
+package post;
 
 public class ManagerStrategy extends POST {
 

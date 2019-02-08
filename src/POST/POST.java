@@ -1,3 +1,4 @@
+package post;
 
 // import User;
 
@@ -5,7 +6,7 @@
   Represents Point of Sale Terminal
  */
 
-public class POST {
+abstract public class POST {
 
   public final int postid;
   public User user;
