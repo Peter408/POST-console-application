@@ -69,4 +69,32 @@ public class CartItem {
             throw new IllegalArgumentException("quantity must be greater than or equal to 0");
         }
     }
+
+    /**
+     * hashCode implementation, ensure that `CartItem.item` is not null!
+     */
+    @Override
+    public int hashCode() {
+        return this.item.hashCode() ^ this.quantity;
+    }
+
+    /**
+     * Ensure item is not not null. Two `CartItem`s are equal if their item has the
+     * same UPC id and they have the same quantity.
+     * 
+     * @return true if objects are equal
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (item == null)
+            return false;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof CartItem))
+            return false;
+        CartItem other = (CartItem) obj;
+        if (other.getItem() == null)
+            return false;
+        return item.equals(other.getItem()) && quantity == other.getQuantity();
+    }
 }
