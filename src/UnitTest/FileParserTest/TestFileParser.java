@@ -1,7 +1,9 @@
+package UnitTest.FileParserTest;
+
 import FileParser.*;
 
 public class TestFileParser {
-    private static final String FILE_TEST_FILE_PATH = "./UnitTest/FileParserTest/fileTest.txt";
+    private static final String FILE_TEST_FILE_PATH = "./src/UnitTest/FileParserTest/fileTest.txt";
     private static final int SEGMENT_LENGTH_VALUE = 4;
     private static final String SEGMENT_LENGTH_OUTPUT = "line";
     private static final String PARSE_LINE_OUTPUT = "1";
@@ -13,7 +15,7 @@ public class TestFileParser {
     private static final String FAIL_LOG = "Fail";
     public static void main( String[] args ) {
         try {
-            FileParser testFileParser = new ProductParser(FILE_TEST_FILE_PATH);
+            ProductParser testFileParser = new ProductParser(FILE_TEST_FILE_PATH);
             if (!SEGMENT_LENGTH_OUTPUT.equals(testFileParser.parseSegment(SEGMENT_LENGTH_VALUE))) {
                 throw new Exception(SEGMENT_FAIL_LOG);
             }

@@ -1,7 +1,9 @@
+package UnitTest.FileParserTest;
+
 import FileParser.*;
 
 public class TestTransactionParser {
-    private static final String TRANSACTION_TEST_FILE_PATH = "./UnitTest/FileParserTest/transactionTest.txt";
+    private static final String TRANSACTION_TEST_FILE_PATH = "./src/UnitTest/FileParserTest/transactionTest.txt";
     private static final String TEST_CASE_OUTPUT = "[".concat(
         "QWE\n"
     ).concat(

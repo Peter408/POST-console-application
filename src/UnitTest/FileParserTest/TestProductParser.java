@@ -1,7 +1,9 @@
+package UnitTest.FileParserTest;
+
 import FileParser.*;
 
 public class TestProductParser {
-    private static final String PRODUCT_TEST_FILE_PATH = "./UnitTest/FileParserTest/productTest.txt";
+    private static final String PRODUCT_TEST_FILE_PATH = "./src/UnitTest/FileParserTest/productTest.txt";
     private static final String TEST_CASE_OUTPUT = 
         String.format("id: %s\nname: %s\nprice: %.2f\n\n", "1111", "Item 1", Double.parseDouble("15.20")) + 
         String.format("id: %s\nname: %s\nprice: %.2f\n\n", "1112", "Item 2 jygkbytiby", Double.parseDouble("111111111")) +
