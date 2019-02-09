@@ -1,6 +1,6 @@
-package UnitTest.FileParserTest;
+package unittest.fileparser;
 
-import FileParser.*;
+import fileparser.*;
 
 public class TestFileParser {
     private static final String FILE_TEST_FILE_PATH = "./src/UnitTest/FileParserTest/fileTest.txt";
