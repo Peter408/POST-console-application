@@ -1,20 +1,10 @@
-package post;
 
-public class ManagerStrategy extends POST {
-
-  public ManagerStrategy() {
-    super();
+class ManagerStrategy implements Strategy {
+  static boolean open() {
+    // open
   }
 
-  public ManagerStrategy(User user) {
-    super(user);
-  }
-
-  public static void open() {
-
-  }
-
-  public static void close() {
-
+  static boolean close() {
+    // close
   }
 }

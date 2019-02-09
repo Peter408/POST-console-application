@@ -2,42 +2,41 @@ package post;
 
 // import User;
 
-/*
-  Represents Point of Sale Terminal
- */
-
 abstract public class POST {
 
   public final int postid;
-  public User user;
-  private int choice;
-  private String menu;
+  private static int idCount = 0;
 
-  private static int counter = 0;
+  private enum Choice {
+    CHECKOUT, OPEN, CLOSE;
+  }
 
   public POST() {
-    this.postid = counter++;
-    this.user = new User();
+    this.postid = idCount++;
   }
 
-  public POST(User user) {
-    this.postid = counter++;
-    this.user = user;
+  public boolean action(User user, Choice choice) {
+    Strategy strategy;
+    if (isManager(user)) {
+      strategy = new ManagerStrategy();
+    } else {
+      strategy = new CustomerStrategy();
+    }
+
+    switch (choice) {
+      case Choice.CHECKOUT:
+        return strategy.checkout(user);
+        break;
+      case Choice.OPEN:
+        return strategy.open();
+        break;
+      case Choice.CLOSE:
+        return strategy.close();
+        break;
+    }
   }
 
-  public void printMenu() {
-    System.out.println(this.menu);
-  }
-
-  public static void getUserChoice() {
-
-  }
-
-  public static void executeUserChoice() {
-
-  }
-
-  public static void checkout() {
-
+  private boolean isManager(User user) {
+    return user instanceof Manager;
   }
 }

@@ -1,12 +1,10 @@
-package post;
 
-public class CustomerStrategy extends POST {
-
-  public CustomerStrategy() {
-    super();
+class CustomerStrategy implements Strategy {
+  static boolean open() {
+    return false;
   }
 
-  public CustomerStrategy(User user) {
-    super(user);
+  static boolean close() {
+    return false;
   }
 }
