@@ -9,11 +9,11 @@ public class TransactionParser extends FileParser {
         super(fileName);
     }
 
-    public Object extractTransactions() {
-        return parseTransaction();
+    public HashSet<Object> extractTransactions() {
+        return parseTransactions();
     }
 
-    private Set<Object> parseTransactions() {
+    private HashSet<Object> parseTransactions() {
         HashSet<Object> transactions = new HashSet<>();
         Object transaction;
         while(null != (transaction = parseTransaction())) {
@@ -43,12 +43,12 @@ public class TransactionParser extends FileParser {
         String firstCharacter;
         String UPC;
         String quantitySegment;
-        Integer qantity;
-        while ("<" != (firstCharacter = parseSegment(1))) {
-            UPC = String.valueOf(firstCharacter) + parseSegment(3);
+        Integer quantity;
+        while (!"<".equals(firstCharacter = parseSegment(1))) {
+            UPC = firstCharacter.concat(parseSegment(3));
             quantitySegment = parseLine();       
             if (5 < quantitySegment.length()) {
-                quantity = Integer.getInteger(quantitySegment.substring(5));
+                quantity = Integer.valueOf(quantitySegment.substring(5));
             } else {
                 quantity = 1;
             }
@@ -60,26 +60,29 @@ public class TransactionParser extends FileParser {
 
     private Double getTotal(HashSet<Object> cartItems) {
         // todo filter through cartItems and return sum
-        return 0;
+        return 0.00;
     }
 
     private Object parsePaymentInformation(Double total) throws IOException {
         String paymentInfo = parseLine();
-        Boolean cash = paymentInfo.indexOf('$');
+        Boolean cash = -1 != paymentInfo.indexOf('$');
         Boolean approved = '<' != parseLine().charAt(0);
+        if (!approved) {
+            nextLine();
+        }
         String creditCardNumber = "NaN";
         if ( !cash ) {
             creditCardNumber = paymentInfo.substring(7, 12);
         }
         Double payment;
         if ( cash ) {
-            payment = paymentInfo.subString(paymentInfo.indexOf('$') + 1, paymentInfo.length());
+            payment = Double.valueOf(paymentInfo.substring(paymentInfo.indexOf('$') + 1, paymentInfo.length() - 1));
         } else {
             payment = total;
         }
-        Double change = total - payment;
+        Double change = payment - total;
         // Object payment = new Object(cash, approved, creditCardNumber, total, payment, change);
-        return Sting.format("payment info:\ncash: %b\napproved:%b\ncreditCardNumber:%s\ntotal:%.2f\npayment:%.2f\nchange:%.2f", cash, approved, creditCardNumber, total, payment, change);
+        return String.format("payment info:\ncash: %b\napproved:%b\ncreditCardNumber:%s\ntotal:%.2f\npayment:%.2f\nchange:%.2f", cash, approved, creditCardNumber, total, payment, change);
     }
 
 }
