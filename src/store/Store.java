@@ -2,6 +2,8 @@
 * Store class is responsible for storing and manipulating items 
 *  in stock / Catalog
 **********************************************************************/
+package store;
+
 import java.util.*;
 
 public Class Store(){
@@ -32,6 +34,19 @@ public Class Store(){
     public Store (String storeName, POST post){
         Store(storename);
         terminals.add(post);
+    }
+
+    /**********************************************
+    * Store Open / Close
+    **********************************************/
+    public bool open(){
+        this.isOpen = true;
+        return isOpen;
+    }
+
+    public bool close(){
+        this.isOpen = false;
+        return isOpen;
     }
     
     /**********************************************
@@ -92,6 +107,10 @@ public Class Store(){
     //Print all items in catalog
     public void printCatalog() {
         System.out.println(this.catalog);
+    }
+
+    @Override String toString() {
+        return storeName + "\n" + this.catalog.toString() + this.inventory.toString();
     }
 
 }
