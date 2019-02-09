@@ -37,7 +37,7 @@ public Class Catalog implements Observer{
     //Retrieve items in catalog based on upc / description
     //Should check inventory
     public Item searchItem (String searchParameter){
-        return this.catalog.searchItem(String searchParameter);
+        return null;
     }
 
     //Print all items in catalog
@@ -45,6 +45,25 @@ public Class Catalog implements Observer{
         System.out.println(this.catalog);
     }
 
+
+    //if item removed from inventory remove it from catalog
+    @Override
+    public void update(Observable observable, Object arg)
+    {
+            inventoryUpdate = (Inventory) observable;
+            inventory = inventoryUpdate.getInventory();
+            for (Item item : catalogItems){ 
+                if( !inventory.containsKey(item) ){
+                    catalogItems.remove(item);
+                    return;
+                } 
+            }
+    }
+
+    @Override
+    public String toString(){
+        return "CATALOG: \n" + this.catalogItems.toString() + "\n";
+    }
 
 
 

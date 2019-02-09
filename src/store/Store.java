@@ -22,6 +22,7 @@ public Class Store(){
     private Store(){
         this.inventory = new Inventory();
         this.catalog = new Catalog();
+        this.inventory.addObservor(this.catalog); //catalog may need to update if inventory item is removed
     }
 
     //Creates a store with the given name, and an empty inventory / catalog
@@ -32,7 +33,7 @@ public Class Store(){
 
     //Create store and assign initial POST
     public Store (String storeName, POST post){
-        Store(storename);
+        Store(storeName);
         terminals.add(post);
     }
 

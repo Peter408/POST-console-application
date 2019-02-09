@@ -15,6 +15,7 @@ public Class Inventory extends Observerable {
         if (quantity != null){
             quantity += increment;
             inventoryMap.put(item, quantity);   
+            upcMap.put(item.getId, item);
             return true;
         }
         return false;
@@ -26,12 +27,12 @@ public Class Inventory extends Observerable {
         Integer quantity = inventoryMap.get(Item);
         if (quantity != null){
             quantity -= increment;
+
+            if(quantity < 0 ) return false; //CANNOT HAVE NEGATIVE ITEMS
+
             inventoryMap.put(item, quantity);
-            setChanged();
-            notifyObservers();
             return true;
         }
-        return false;   
     }
 
     //Remove inventory item based on upc / description
@@ -39,12 +40,30 @@ public Class Inventory extends Observerable {
         Integer quantity = inventoryMap.get(Item);
         if (quantity != null){
             quantity -= increment;
+
+            if(quantity < 0) return false;
+            
             inventoryMap.put(item, quantity);
-            setChanged();
-            notifyObservers();
             return true;
         }
-        return false;   
+    }
+
+
+    //Remove item completely from inventory
+    public bool deleteItem( Item item ) {
+        inventoryMap.remove(item);
+        upcMap.remove( item.getId() );
+
+        setChanged();
+        notifyObservers();
+    }
+
+    public bool deleteItem(String upc) {
+        inventoryMap.remove(upc);
+        upcMap.remove(upc);
+
+        setChanged();
+        notifyObservers();
     }
 
     //Print items in inventory
@@ -53,7 +72,10 @@ public Class Inventory extends Observerable {
 
     }
 
+    public HashMap getInventory(){
+        return inventoryMap;
+    }
     @Override String toString(){
-        return inventoryMap.toString();
+        return "INVENTORY: \n" + inventoryMap.toString() + "\n";
     }
 }
