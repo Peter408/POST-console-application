@@ -10,25 +10,25 @@ public class Customer extends User {
         this.cart = new Cart();
     }
 
-    // TODO: what if item is in cart?
+    // TODO return false if not in catalog
     public boolean addToCart(Item item, int quantity) {
-        try {
-            cart.setQuantityForItem(item, quantity);
-            return true;
-        } catch(Exception exception) {
-            return false;
-        }
-        
+        final int itemQuantity = cart.getQuantityForItem(item);
+        cart.setQuantityForItem(item, quantity + itemQuantity);
+        return true;
     }
 
-    // TODO: do something with qanitity
     public boolean removeFromCart(Item item, int quantity) {
-        try {
-            cart.removeItem(item);
-            return true;
-        } catch(Exception exception) {
+        final int itemQuantity = cart.getQuantityForItem(item);
+        if(itemQuantity == 0 || quantity <= 0) {
             return false;
         }
+        final int newQuantity = itemQuantity - quantity;
+        if(newQuantity > 0) {
+            cart.setQuantityForItem(item, newQuantity);
+        } else {
+            cart.removeItem(item);
+        }
+        return true;
     }
 
     public double getTotal() {

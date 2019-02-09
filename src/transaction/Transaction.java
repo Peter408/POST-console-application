@@ -13,7 +13,34 @@ public class Transaction {
         this.customer = customer;
         double total = customer.getTotal();
         this.payment = new Payment(paymentType, total, payment, cardNumber);
+        dateTime = new ZonedDateTime.now();
     }
 
-    // setters and getters coming in version 1.1
+    public string getPaymentType() {
+        return this.payment.getPaymentType();
+    }
+
+    public boolean getApproved() {
+        return this.payment.getApproved();
+    }
+
+    public double getTotal() {
+        return this.payment.getTotal();
+    }
+
+    public double getPayment() {
+        return this.payment.getPayment();
+    }
+
+    public double getChange() {
+        return this.getPayment.getChange();
+    }
+
+    public int getCardNumber() {
+        return this.payment.getCardNumber();
+    }
+
+    public string getTimestamp() {
+        return this.dateTime.toString();
+    }
 }

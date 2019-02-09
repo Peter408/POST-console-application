@@ -59,8 +59,8 @@ public class Payment {
         // idk how this shit works
     }
 
-    public PaymentType getPaymentType() {
-        return this.paymentType;
+    public string getPaymentType() {
+        return this.paymentType.toString();
     }
 
     public boolean getApproved() {
