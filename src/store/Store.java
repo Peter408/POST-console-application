@@ -52,6 +52,10 @@ public class Store {
     **********************************************/
 
     //Add item to inventory
+    public boolean addToInventory (Item item, int quantity){
+        return this.inventory.addItem(item, quantity);
+    }
+
     public boolean addToInventory (Item item){
         return this.inventory.addItem(item);
     }
@@ -61,9 +65,17 @@ public class Store {
         return this.inventory.removeItem(item);
     }
 
+    public boolean removeFromInventory (Item item, int quantity){
+        return this.inventory.removeItem(item, quantity);
+    }
+
     //Remove inventory item based on upc
     public boolean removeFromInventory (String upc){
         return this.inventory.removeItem(upc);
+    }
+
+    public boolean removeFromInventory (String upc, int quantity){
+        return this.inventory.removeItem(upc, quantity);
     }
 
     //Print items in inventory

@@ -20,13 +20,14 @@ public class Inventory extends Observable {
             quantity = inventoryMap.get(item);
         }
 
-        if (quantity != null){
-            quantity += increment;
-            inventoryMap.put(item, quantity);   
-            upcMap.put(item.getId(), item);
-            return true;
+        if (quantity == null) {
+            quantity = 0;
         }
-        return false;
+
+        quantity += increment;
+        inventoryMap.put(item, quantity);
+        upcMap.put(item.getId(), item);
+        return true;
     }
 
     public boolean addItem(Item item){
