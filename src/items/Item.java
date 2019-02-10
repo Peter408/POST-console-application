@@ -113,4 +113,9 @@ public class Item {
             return false;
         return this.id.equals(asItem.id);
     }
+
+    @Override
+    public String toString() {
+        return String.format("id: %10s name: %20s price: %.2f", this.id, this.name, this.price);
+    }
 }
