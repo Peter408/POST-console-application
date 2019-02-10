@@ -32,13 +32,11 @@ public class Payment {
     private void pay() {
         switch(this.paymentType) {
             case CASH:
-                chargeCash();
+            case CHECK:
+                chargeNonCard();
                 break;
             case CREDIT:
                 chargeCard();
-                break;
-            case CHECK:
-                chargeCheck();
                 break;
             default:
                 System.out.println("something fucked up");
@@ -54,15 +52,7 @@ public class Payment {
         }
     }
 
-    private void chargeCash() {
-        if(this.payment >= this.total) {
-            this.approved = true;
-        } else {
-            this.approved = false;
-        }
-    }
-
-    private void chargeCheck() {
+    private void chargeNonCard() {
         if(this.payment >= this.total) {
             this.approved = true;
         } else {
