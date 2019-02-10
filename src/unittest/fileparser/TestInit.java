@@ -3,7 +3,7 @@ package unittest.fileparser;
 import fileparser.*;
 
 public class TestInit {
-    private static final String PRODUCT_TEST_FILE_PATH = "./src/UnitTest/FileParserTest/productTest.txt";
+    private static final String PRODUCT_TEST_FILE_PATH = "./src/unittest/fileparser/productTest.txt";
     // private static final String TRANSACTION_TEST_FILE_PATH = "./src/UnitTest/FileParserTest/transactionTest.txt";
     private static final String SUCCESS_LOG = "Success";
     private static final String FAIL_LOG = "Fail";

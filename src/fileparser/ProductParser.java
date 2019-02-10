@@ -2,33 +2,30 @@ package fileparser;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashSet;
+
+import items.Item;
 
 public class ProductParser extends FileParser {
-    // private Object catalog;
-
     public ProductParser(String fileName) throws FileNotFoundException {
         super(fileName);
     }
 
-    public Object extractProducts() {
-        // catalog = new Object();
-        String testCase = "";
-        Object item;
+    public HashSet<Item> extractProducts() {
+        HashSet<Item> products = new HashSet<>();
+        Item item;
         while(null != (item = parseProduct())) {
-            // catalog.addItem(item);
-            testCase = testCase.concat((String)item);
+            products.add(item);
         }
-        // return catalog;
-        return testCase;
+        return products;
     }
 
-    private Object parseProduct() {
+    private Item parseProduct() {
         try {
             String id = parseUPC();
             String name = parseDescription();
             Double price = parsePrice();
-            // return new Item(id, name, price);
-            return String.format("id: %s\nname: %s\nprice: %.2f\n\n", id, name, price);
+            return new Item(id, name, price);
         } catch(Exception exception) {
             return null;
         } 
@@ -47,5 +44,4 @@ public class ProductParser extends FileParser {
         parseSegment(5);
         return Double.parseDouble(parseLine());
     }
-
 }
