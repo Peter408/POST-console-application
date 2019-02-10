@@ -94,8 +94,6 @@ public class Payment {
     private void printApproved(StringBuffer SB) {
         switch(this.paymentType) {
             case CASH:
-                SB.append("$" + this.payment);
-                break;
             case CHECK:
                 SB.append("$" + this.payment);
                 break;
