@@ -115,7 +115,7 @@ public class Item {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("id: %10s name: %20s price: %.2f", this.id, this.name, this.price);
     }
 }
