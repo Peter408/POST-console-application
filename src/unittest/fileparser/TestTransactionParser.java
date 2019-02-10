@@ -1,8 +1,9 @@
 package unittest.fileparser;
-
+/*
 import fileparser.*;
-
+*/
 public class TestTransactionParser {
+    /*
     private static final String TRANSACTION_TEST_FILE_PATH = "./src/UnitTest/FileParserTest/transactionTest.txt";
     private static final String TEST_CASE_OUTPUT = "[".concat(
         "QWE\n"
@@ -22,7 +23,9 @@ public class TestTransactionParser {
     private static final String TEST_CASE_FAIL_LOG = "transaction parsing failed";
     private static final String SUCCESS_LOG = "Success";
     private static final String FAIL_LOG = "Fail";
+    */
     public static void main( String[] args ) {
+        /*
         try {
             TransactionParser testTransactionParser = new TransactionParser(TRANSACTION_TEST_FILE_PATH);
             if (!TEST_CASE_OUTPUT.equals(testTransactionParser.extractTransactions().toString())) {
@@ -33,5 +36,6 @@ public class TestTransactionParser {
             System.out.println(exception);
             System.out.println(FAIL_LOG);
         }
+        */
     }
 }

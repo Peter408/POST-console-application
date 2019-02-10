@@ -4,33 +4,46 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
 
-public class TransactionParser extends FileParser {
-    // Object store
+import store.*;
+import transaction.*;
+import user.Customer;
 
-    public TransactionParser(String fileName) throws FileNotFoundException {
+public class TransactionParser extends FileParser {
+    Store store;
+
+    public TransactionParser(String fileName, Store storeParameter) throws FileNotFoundException {
         super(fileName);
+        store = storeParameter;
     }
 
-    public HashSet<Object> extractTransactions() {
+    public HashSet<Transaction> extractTransactions() {
         return parseTransactions();
     }
 
-    private HashSet<Object> parseTransactions() {
-        HashSet<Object> transactions = new HashSet<>();
-        Object transaction;
+    private HashSet<Transaction> parseTransactions() {
+        HashSet<Transaction> transactions = new HashSet<>();
+        Transaction transaction;
         while(null != (transaction = parseTransaction())) {
             transactions.add(transaction);
         }
         return transactions;
     }
 
-    private Object parseTransaction() {
+    private Transaction parseTransaction() {
         try {
-            String name = parseName();
-            HashSet<Object> cartItems = parseItems();
-            Object paymentInformation = parsePaymentInformation(getTotal(cartItems));
-            // Object transaction = new Object(name, cartItems, paymentInformation);
-            return String.format("%s\nitems:\n%s\n%s", name, cartItems, paymentInformation);
+            Customer customer = new Customer(parseName());
+            parseItems(customer);
+            String paymentType = parsePaymentType();
+            switch(paymentType) {
+                case "CASH":
+                case "CHECK":
+                    return new Transaction(customer, parsePaymentType(), parsePaymentSum(), "NaN");
+                case "CREDIT":
+                    return new Transaction(customer, parsePaymentType(), customer.getTotal(), parseCreditCardNumber());
+                default:
+                    return null;
+            }
+            
         } catch(Exception exception) {
             return null;
         }
@@ -40,8 +53,7 @@ public class TransactionParser extends FileParser {
         return parseLine().trim();
     }
 
-    private HashSet<Object> parseItems() throws IOException {
-        HashSet<Object> cartItems = new HashSet<>();
+    private void parseItems(Customer customer) throws IOException {
         String firstCharacter;
         String UPC;
         String quantitySegment;
@@ -54,37 +66,33 @@ public class TransactionParser extends FileParser {
             } else {
                 quantity = 1;
             }
-            // cartItems.add(new CartItem(UPC, quantity));
-            cartItems.add(String.format("id:%s qty:%d", UPC, quantity));
+            customer.addToCart(store.searchItem(UPC), quantity);
         }
-        return cartItems;
     }
 
-    private Double getTotal(HashSet<Object> cartItems) {
-        // todo filter through cartItems and return sum
-        return 0.00;
+    private String parsePaymentType() throws IOException {
+        switch (parseSegment(4)) {
+            case "CASH":
+                parseSegment(2);
+                return "CASH";
+            case "CHEC":
+                parseSegment(3);
+                return "CHECK";
+            case "CRED":
+                parseSegment(3);
+                return "CREDIT";
+            default:
+                return "NaN";
+        }
     }
 
-    private Object parsePaymentInformation(Double total) throws IOException {
-        String paymentInfo = parseLine();
-        Boolean cash = -1 != paymentInfo.indexOf('$');
-        Boolean approved = '<' != parseLine().charAt(0);
-        if (!approved) {
-            nextLine();
-        }
-        String creditCardNumber = "NaN";
-        if ( !cash ) {
-            creditCardNumber = paymentInfo.substring(7, 12);
-        }
-        Double payment;
-        if ( cash ) {
-            payment = Double.valueOf(paymentInfo.substring(paymentInfo.indexOf('$') + 1, paymentInfo.length() - 1));
-        } else {
-            payment = total;
-        }
-        Double change = payment - total;
-        // Object payment = new Object(cash, approved, creditCardNumber, total, payment, change);
-        return String.format("payment info:\ncash: %b\napproved:%b\ncreditCardNumber:%s\ntotal:%.2f\npayment:%.2f\nchange:%.2f", cash, approved, creditCardNumber, total, payment, change);
+    private double parsePaymentSum() throws IOException {
+        String sum = parseLine();
+        return Double.parseDouble(sum.substring(0, sum.length() - 1));
     }
 
+    private String parseCreditCardNumber() throws IOException {
+        String creditCardNumber = parseLine();
+        return creditCardNumber.substring(0, creditCardNumber.length() - 1);
+    }
 }
