@@ -1,81 +1,97 @@
 package store;
 
-import java util.*;
-import item.*;
+import java.util.*;
+import items.*;
 
 
-public Class Inventory extends Observerable {
+public class Inventory extends Observable {
     private HashMap<Item, Integer> inventoryMap; //item keyed to quantity
     private HashMap<String, Item> upcMap;
     
     
     //Add item
-    public bool addItem(Item item, int increment = 1){
-        Integer quantity = inventoryMap.get(Item);
+    public boolean addItem(Item item, int increment){
+        Integer quantity = inventoryMap.get(item);
         if (quantity != null){
             quantity += increment;
             inventoryMap.put(item, quantity);   
-            upcMap.put(item.getId, item);
+            upcMap.put(item.getId(), item);
             return true;
         }
         return false;
     }
 
+    public boolean addItem(Item item){
+        return addItem(item, 1);
+    }
+
     
     //Remove item based on passed item
-    public bool removeItem(Item item, int decrement = 1){
-        Integer quantity = inventoryMap.get(Item);
+    public boolean removeItem(Item item, int decrement){
+        Integer quantity = inventoryMap.get(item);
         if (quantity != null){
-            quantity -= increment;
+            quantity -= decrement;
 
             if(quantity < 0 ) return false; //CANNOT HAVE NEGATIVE ITEMS
 
             inventoryMap.put(item, quantity);
-            return true;
         }
+        return true;
     }
 
+    public boolean removeItem(Item item){
+        return removeItem(item, 1);
+    }
+
+
     //Remove inventory item based on upc / description
-    public bool removeItem(String item, int decrement = 1){
-        Integer quantity = inventoryMap.get(Item);
+    public boolean removeItem(String item, int decrement){
+        Integer quantity = inventoryMap.get(item);
         if (quantity != null){
-            quantity -= increment;
+            quantity -= decrement;
 
             if(quantity < 0) return false;
-            
-            inventoryMap.put(item, quantity);
-            return true;
+
+            Item nameOnly = new Item();
+            nameOnly.setId(item);
+            inventoryMap.put(nameOnly, quantity);
         }
+        return true;
+    }
+
+    public boolean removeItem(String item){
+        return removeItem(item, 1);
     }
 
 
     //Remove item completely from inventory
-    public bool deleteItem( Item item ) {
+    public boolean deleteItem( Item item ) {
         inventoryMap.remove(item);
         upcMap.remove( item.getId() );
 
         setChanged();
         notifyObservers();
+        return true;
     }
 
-    public bool deleteItem(String upc) {
+    public boolean deleteItem(String upc) {
         inventoryMap.remove(upc);
         upcMap.remove(upc);
 
         setChanged();
         notifyObservers();
+        return true;
     }
 
     //Print items in inventory
     public void printInventory (){
-        System.out.println(intentoryMap);
-
+        System.out.println(inventoryMap);
     }
 
     public HashMap getInventory(){
         return inventoryMap;
     }
-    @Override String toString(){
+    @Override public String toString(){
         return "INVENTORY: \n" + inventoryMap.toString() + "\n";
     }
 }

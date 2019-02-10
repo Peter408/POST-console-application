@@ -3,49 +3,48 @@
 *  in stock / Catalog
 **********************************************************************/
 package store;
-
+import items.*;
+import store.*;
+import transactions.*;
 import java.util.*;
 
-public Class Store(){
+public class Store {
     private String storeName;
     private Inventory inventory;
     private Catalog catalog;
-    private List <POST> terminals;
     private boolean isOpen = false;
 
     /**********************************************
     * Constructors
     **********************************************/
 
+    public void initializeStore(){
+        this.inventory = new Inventory();
+        this.catalog = new Catalog();
+        this.inventory.addObserver(this.catalog); //catalog may need to update if inventory item is removed
+    }
+
     //Constructor for empty store, initializes empty inventory and catalog
     //Private -- will only be called within this store class, should never be called outside
     private Store(){
-        this.inventory = new Inventory();
-        this.catalog = new Catalog();
-        this.inventory.addObservor(this.catalog); //catalog may need to update if inventory item is removed
+        initializeStore();
     }
 
     //Creates a store with the given name, and an empty inventory / catalog
     public Store(String storeName){
-        Store();
+        initializeStore();
         this.storeName = storeName;
-    }
-
-    //Create store and assign initial POST
-    public Store (String storeName, POST post){
-        Store(storeName);
-        terminals.add(post);
     }
 
     /**********************************************
     * Store Open / Close
     **********************************************/
-    public bool open(){
+    public boolean open(){
         this.isOpen = true;
         return isOpen;
     }
 
-    public bool close(){
+    public boolean close(){
         this.isOpen = false;
         return isOpen;
     }
@@ -55,18 +54,18 @@ public Class Store(){
     **********************************************/
 
     //Add item to inventory
-    public bool addToInventory (Item item){ 
+    public boolean addToInventory (Item item){
         return this.inventory.addItem(item);
     }
 
     //Remove item based on passed item
-    public bool removeFromInventory (Item item){
-        return this.inventory.removeItem(item) 
+    public boolean removeFromInventory (Item item){
+        return this.inventory.removeItem(item);
     }
 
     //Remove inventory item based on upc
-    public bool removeFromInventory (String upc){
-        return this.inventory.removeItem(String upc);
+    public boolean removeFromInventory (String upc){
+        return this.inventory.removeItem(upc);
     }
 
     //Print items in inventory
@@ -80,18 +79,18 @@ public Class Store(){
     **********************************************/
 
     //Add catalog item
-    public bool addToCatalog (Item item) {
-        return this.catlog.addItem(item);
+    public boolean addToCatalog (Item item) {
+        return this.catalog.addToCatalog(item);
     }
 
     //Remove catalog item based on item
-    public bool removeFromCatalog (Item item) {
-        return this.catalog.removeItem(item);
+    public boolean removeFromCatalog (Item item) {
+        return this.catalog.removeFromCatalog(item);
     }
 
 
     //Retrieve all items in catalog
-    public List<Items> getAvailableItems () {
+    public List<Item> getAvailableItems () {
         return this.catalog.getAvailableItems();
     }
 
@@ -102,7 +101,7 @@ public Class Store(){
 
     //Retrieve items in catalog based on upc / description
     public Item searchItem (String searchParameter){
-        return this.catalog.searchItem(String searchParameter);
+        return this.catalog.searchItem(searchParameter);
     }
 
     //Print all items in catalog
@@ -110,7 +109,11 @@ public Class Store(){
         System.out.println(this.catalog);
     }
 
-    @Override String toString() {
+    public boolean isOpen(){
+        return this.isOpen;
+    }
+
+    @Override public String toString() {
         return storeName + "\n" + this.catalog.toString() + this.inventory.toString();
     }
 
