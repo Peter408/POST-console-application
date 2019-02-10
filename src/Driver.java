@@ -1,16 +1,15 @@
 
 import java.util.Scanner;
+import post.POST;
 
 public class Driver {
   private static final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
   private static final String DESC = "\nMain menu\nEnter a number to continue...";
   private static final String MENU = "1: open store\n2: close store\n3: auto test\n4: Log out";
 
-  private POST post = new POST();
-
-
-
   public static void main(String[] args) {
+    POST post = new POST();
+
     // specify database location
 
 
@@ -26,13 +25,16 @@ public class Driver {
 
       switch(choice) {
         case 1:
-          System.out.println("1");
+          System.out.println("Opening Store...");
+          post.openStore();
           break;
         case 2:
-          System.out.println("2");
+          System.out.println("Closing Store...");
+          post.closeStore();
           break;
         case 3:
-          System.out.println("3");
+          System.out.println("Parsing transactions.txt...");
+          // do that
           break;
         case 4:
           System.out.println("Logging off...");
