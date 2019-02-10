@@ -89,6 +89,13 @@ public class Cart {
         return this.itemToQuantityMap.remove(item);
     }
 
+    /**
+     * Removes all items from the cart
+     */
+    public void clearCart() {
+        itemToQuantityMap.clear();
+    }
+
     // TODO make this shit look nicer
     @Override
     public String toString() {

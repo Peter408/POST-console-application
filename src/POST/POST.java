@@ -1,42 +1,41 @@
 package post;
 
-// import User;
+import user.*;
+import transaction.*;
+import store.Store;
+import items.Item;
 
-abstract public class POST {
+/**
+ * Public interface to the application
+ */
+public class POST {
 
   public final int postid;
   private static int idCount = 0;
-
-  private enum Choice {
-    CHECKOUT, OPEN, CLOSE;
-  }
+  private Store store;
 
   public POST() {
     this.postid = idCount++;
+    this.store = new Store(this.postid.toString());
   }
 
-  public boolean action(User user, Choice choice) {
-    Strategy strategy;
-    if (isManager(user)) {
-      strategy = new ManagerStrategy();
-    } else {
-      strategy = new CustomerStrategy();
-    }
-
-    switch (choice) {
-      case Choice.CHECKOUT:
-        return strategy.checkout(user);
-        break;
-      case Choice.OPEN:
-        return strategy.open();
-        break;
-      case Choice.CLOSE:
-        return strategy.close();
-        break;
-    }
+  /**
+   * Completes a transaction.
+   * 
+   * @param customer    user purchasing item(s)
+   * @param paymentType String of "CREDIT", "CASH", or "CHECK"
+   * @param cardNumber  String of card number
+   * @return Transaction instance
+   */
+  public Transaction checkout(Customer customer, String paymentType, String cardNumber) {
+    return new Transaction(customer, paymentType, cardNumber);
   }
 
-  private boolean isManager(User user) {
-    return user instanceof Manager;
+  public void addItemToCatalog(Item item) {
+    store.addToCatalog(item);
+  }
+
+  public void addItemToInventory(Item item) {
+    store.addToInventory(item);
   }
 }
