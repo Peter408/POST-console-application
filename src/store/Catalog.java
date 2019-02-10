@@ -6,6 +6,9 @@ import items.*;
 public class Catalog implements Observer{
     private List<Item> catalogItems;
 
+    public Catalog(){
+        catalogItems = new ArrayList<>();
+    }
     //Add catalog item
     public boolean addToCatalog (Item item) {
         //check if in Inventory first

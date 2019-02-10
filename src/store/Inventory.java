@@ -7,11 +7,19 @@ import items.*;
 public class Inventory extends Observable {
     private HashMap<Item, Integer> inventoryMap; //item keyed to quantity
     private HashMap<String, Item> upcMap;
-    
+
+    public Inventory(){
+        this.inventoryMap = new HashMap<>();
+        this.upcMap = new HashMap<>();
+    }
     
     //Add item
     public boolean addItem(Item item, int increment){
-        Integer quantity = inventoryMap.get(item);
+        Integer quantity = null;
+        if (inventoryMap.containsKey(item)) {
+            quantity = inventoryMap.get(item);
+        }
+
         if (quantity != null){
             quantity += increment;
             inventoryMap.put(item, quantity);   

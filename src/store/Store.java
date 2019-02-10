@@ -4,8 +4,6 @@
 **********************************************************************/
 package store;
 import items.*;
-import store.*;
-import transactions.*;
 import java.util.*;
 
 public class Store {
