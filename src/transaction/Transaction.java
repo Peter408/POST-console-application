@@ -52,6 +52,12 @@ public class Transaction {
         return this.today.toString();
     }
 
+    // public void getTransaction() {
+    //     StringBuffer SB = new StringBuffer();
+    //     SB.append(this.customer.getName());
+    //     this.customer.getCart().
+    // }
+
     @Override
     public String toString() {
         StringBuffer SB = new StringBuffer();
