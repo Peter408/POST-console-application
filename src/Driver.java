@@ -5,7 +5,9 @@ import post.POST;
 public class Driver {
   private static final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
   private static final String DESC = "\nMain menu\nEnter a number to continue...";
-  private static final String MENU = "1: open store\n2: close store\n3: auto test\n4: Log out";
+  private static final String MENU = "1: open store\n2: close store\n3: auto test\n4: log out";
+
+  private static String status = "\nSTATUS\nStore: CLOSED\n";
 
   public static void main(String[] args) {
     POST post = new POST();
@@ -18,6 +20,7 @@ public class Driver {
 
     while (true) {
       System.out.println(DESC);
+      System.out.println(status)
       System.out.println(MENU);
 
       Scanner in = new Scanner(System.in);
@@ -26,10 +29,12 @@ public class Driver {
       switch(choice) {
         case 1:
           System.out.println("Opening Store...");
+          status = "\nSTATUS\nStore: OPEN\n";
           post.openStore();
           break;
         case 2:
           System.out.println("Closing Store...");
+          status = "\nSTATUS\nStore: CLOSED\n";
           post.closeStore();
           break;
         case 3:
