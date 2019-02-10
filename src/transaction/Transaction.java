@@ -1,22 +1,30 @@
 package transaction;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 import user.Customer;
 
 public class Transaction {
     Customer customer;
     Payment payment;
-    ZonedDateTime dateTime;
+    LocalDateTime today;
 
-    public Transaction(Customer customer, string paymentType, double payment, int cardNumber) {
+    public Transaction(Customer customer, String paymentType, double payment, String cardNumber) {
         this.customer = customer;
         double total = customer.getTotal();
         this.payment = new Payment(paymentType, total, payment, cardNumber);
-        dateTime = new ZonedDateTime.now();
+        today = LocalDateTime.now();
     }
 
-    public string getPaymentType() {
+    public Transaction(Customer customer, String paymentType, double payment) {
+        this(customer, paymentType, payment, "");
+    }
+
+    public Transaction(Customer customer, String paymentType, String cardNumber) {
+        this(customer, paymentType, 0, cardNumber);
+    }
+
+    public String getPaymentType() {
         return this.payment.getPaymentType();
     }
 
@@ -33,14 +41,22 @@ public class Transaction {
     }
 
     public double getChange() {
-        return this.getPayment.getChange();
+        return this.payment.getChange();
     }
 
-    public int getCardNumber() {
+    public String getCardNumber() {
         return this.payment.getCardNumber();
     }
 
-    public string getTimestamp() {
-        return this.dateTime.toString();
+    public String getTimestamp() {
+        return this.today.toString();
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer SB = new StringBuffer();
+        SB.append(this.customer.toString());
+        SB.append(this.payment.toString());
+        return SB.toString();
     }
 }

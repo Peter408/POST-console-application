@@ -1,7 +1,7 @@
 package transaction;
 
 enum PaymentType {
-    CASH, CARD, CHECK;
+    CASH, CREDIT, CHECK;
 }
 
 public class Payment {
@@ -10,14 +10,22 @@ public class Payment {
     double total;
     double payment;
     double change;
-    int cardNumber;
+    String cardNumber;
 
-    public Payment(string paymentType, double total, double payment, int cardNumber) {
-        this.paymentType = PaymentType.valueOf(paymentType); 
+    public Payment(String paymentType, double total, double payment, String cardNumber) {
+        this.paymentType = PaymentType.valueOf(paymentType);
         this.total = total;
         this.payment = payment;
         this.cardNumber = cardNumber;
         pay();
+    }
+
+    public Payment(String paymentType, double total, double payment) {
+        this(paymentType, total, payment, "");
+    }
+
+    public Payment(String paymentType, double total, String cardNumber) {
+        this(paymentType, total, 0, cardNumber);
     }
 
     private void pay() {
@@ -25,7 +33,7 @@ public class Payment {
             case CASH:
                 chargeCash();
                 break;
-            case CARD:
+            case CREDIT:
                 chargeCard();
                 break;
             case CHECK:
@@ -37,12 +45,12 @@ public class Payment {
         }
     }
 
-    // TODO: not sure how card is charge? infinite about?
     private void chargeCard() {
-        if(this.payment >= this.total) {
+        if(validateCard()) {
             this.approved = true;
+        } else {
+            this.approved = false;
         }
-        this.approved = false;
     }
 
     private void chargeCash() {
@@ -54,12 +62,23 @@ public class Payment {
         }
     }
 
-    // TODO: stuff
     private void chargeCheck() {
-        // idk how this shit works
+        if(this.payment >= this.total) {
+            this.change = this.payment - this.total;
+            this.approved = true;
+        } else {
+            this.approved = false;
+        }
     }
 
-    public string getPaymentType() {
+    private boolean validateCard() {
+        if(this.cardNumber.length() == 5 || this.cardNumber.matches("[0-9]+")) {
+            return true;
+        }
+        return false;
+    }
+
+    public String getPaymentType() {
         return this.paymentType.toString();
     }
 
@@ -79,7 +98,35 @@ public class Payment {
         return this.change;
     }
 
-    public int getCardNumber() {
+    public String getCardNumber() {
         return this.cardNumber;
+    }
+
+    private void printApproved(StringBuffer SB) {
+        switch(this.paymentType) {
+            case CASH:
+                SB.append("$" + this.payment);
+                break;
+            case CHECK:
+                SB.append("$" + this.payment);
+                break;
+            case CREDIT:
+                SB.append(this.cardNumber);
+                break;
+            default:
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer SB = new StringBuffer();
+        SB.append("<" + this.paymentType + " ");
+        if(this.approved) {
+            printApproved(SB);
+        } else {
+            SB.append("Rejected");
+        }
+        SB.append(">");
+        return SB.toString();
     }
 }

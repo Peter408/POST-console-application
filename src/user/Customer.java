@@ -1,11 +1,11 @@
 package user;
 
-import items.Cart;
+import items.*;
 
 public class Customer extends User {
     Cart cart;
 
-    public Customer(string name) {
+    public Customer(String name) {
         super(name);
         this.cart = new Cart();
     }
@@ -33,5 +33,17 @@ public class Customer extends User {
 
     public double getTotal() {
         return this.cart.getTotalCost();
+    }
+
+    public Cart getCart() {
+        return this.cart;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer SB = new StringBuffer();
+        SB.append(this.getName() + "\n");
+        SB.append(this.cart.toString());
+        return SB.toString();
     }
 }

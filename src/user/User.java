@@ -1,17 +1,17 @@
 package user;
 
 public abstract class User {
-    private string name;
+    private String name;
 
-    public User(string name) {
+    public User(String name) {
         this.name = name;
     }
 
-    public void getName() {
+    public String getName() {
         return this.name;
     }
 
-    public void setName(string name) {
+    public void setName(String name) {
         this.name = name;
     }
 }

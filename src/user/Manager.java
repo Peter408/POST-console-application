@@ -3,12 +3,12 @@ package user;
 public class Manager extends User {
     Store store;
 
-    public Manager(string name) {
+    public Manager(String name) {
         super(name);
     }
 
     // or some shit like this, don't have store
-    boolean openStore(string storeName) {
+    boolean openStore(String storeName) {
         try {
             this.store = new Store(storeName);
         } catch(Exception exception) {
