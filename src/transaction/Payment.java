@@ -16,6 +16,7 @@ public class Payment {
         this.paymentType = PaymentType.valueOf(paymentType);
         this.total = total;
         this.payment = payment;
+        this.change = payment - total;
         this.cardNumber = cardNumber;
         pay();
     }
@@ -55,7 +56,6 @@ public class Payment {
 
     private void chargeCash() {
         if(this.payment >= this.total) {
-            this.change = this.payment - this.total;
             this.approved = true;
         } else {
             this.approved = false;
@@ -64,7 +64,6 @@ public class Payment {
 
     private void chargeCheck() {
         if(this.payment >= this.total) {
-            this.change = this.payment - this.total;
             this.approved = true;
         } else {
             this.approved = false;
