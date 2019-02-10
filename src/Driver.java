@@ -20,7 +20,7 @@ public class Driver {
 
     while (true) {
       System.out.println(DESC);
-      System.out.println(status)
+      System.out.println(status);
       System.out.println(MENU);
 
       Scanner in = new Scanner(System.in);
