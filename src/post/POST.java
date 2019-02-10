@@ -16,7 +16,7 @@ public class POST {
 
   public POST() {
     this.postid = idCount++;
-    this.store = new Store(this.postid.toString());
+    this.store = new Store(Integer.toString(this.postid));
   }
 
   /**
