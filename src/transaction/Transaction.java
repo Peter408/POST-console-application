@@ -88,6 +88,12 @@ public class Transaction {
         return SB.toString();
     }
 
+    public String displayRejected() {
+        StringBuffer SB = new StringBuffer();
+        SB.append("<" + this.payment.getPaymentType() + " Rejected>");
+        return SB.toString();
+    }
+
     @Override
     public String toString() {
         StringBuffer SB = new StringBuffer();
