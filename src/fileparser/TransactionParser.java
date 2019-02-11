@@ -2,7 +2,7 @@ package fileparser;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import store.*;
 import transaction.*;
@@ -16,15 +16,21 @@ public class TransactionParser extends FileParser {
         store = storeParameter;
     }
 
-    public HashSet<Transaction> extractTransactions() {
+    public ArrayList<Transaction> extractTransactions() {
         return parseTransactions();
     }
 
-    private HashSet<Transaction> parseTransactions() {
-        HashSet<Transaction> transactions = new HashSet<>();
+    private ArrayList<Transaction> parseTransactions() {
+        ArrayList<Transaction> transactions = new ArrayList<>();
         Transaction transaction;
-        while(null != (transaction = parseTransaction())) {
-            transactions.add(transaction);
+        try {
+            while(null != (transaction = parseTransaction())) {
+                transactions.add(transaction);
+                nextLine();
+            }
+        } catch(Exception exception) {
+            System.out.println(exception);
+            return transactions;
         }
         return transactions;
     }
@@ -37,9 +43,9 @@ public class TransactionParser extends FileParser {
             switch(paymentType) {
                 case "CASH":
                 case "CHECK":
-                    return new Transaction(customer, parsePaymentType(), parsePaymentSum(), "NaN");
+                    return new Transaction(customer, paymentType, parsePaymentSum(), "NaN");
                 case "CREDIT":
-                    return new Transaction(customer, parsePaymentType(), customer.getTotal(), parseCreditCardNumber());
+                    return new Transaction(customer, paymentType, customer.getTotal(), parseCreditCardNumber());
                 default:
                     return null;
             }

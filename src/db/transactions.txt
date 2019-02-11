@@ -6,6 +6,7 @@ Jane Doe
 1357
 9999
 <CASH $9.99>
+
 Jane Does
 1234     1
 2345     2
@@ -14,5 +15,3 @@ Jane Does
 1357
 9999
 <CREDIT 99999>
-<CREDIT Rejected>
-<CHECK Rejected>

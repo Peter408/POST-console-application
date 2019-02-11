@@ -7,9 +7,9 @@ import java.time.format.DateTimeFormatter;
 import user.Customer;
 
 public class Transaction {
-    Customer customer;
-    Payment payment;
-    String today;
+    private Customer customer;
+    private Payment payment;
+    private String today;
 
     public Transaction(Customer customer, String paymentType, double payment, String cardNumber) {
         this.customer = customer;
@@ -74,7 +74,7 @@ public class Transaction {
         switch(this.payment.getPaymentType()) {
             case "CASH":
                 SB.append("$" + String.format("%.2f", this.payment.getPayment()) + "\n");
-                SB.append("Amount Returned: $" + String.format("%.2f", this.payment.getChange()) + "\n");
+                SB.append("Amount Returned: $" + String.format("%.2f", this.payment.getChange()));
                 break;
             case "CHECK":
                 SB.append("Paid by check");
@@ -84,6 +84,13 @@ public class Transaction {
                 break;
             default:
         }
+        SB.append("\n");
+        return SB.toString();
+    }
+
+    public String displayRejected() {
+        StringBuffer SB = new StringBuffer();
+        SB.append("<" + this.payment.getPaymentType() + " Rejected>");
         return SB.toString();
     }
 

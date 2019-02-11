@@ -1,16 +1,16 @@
 package driver;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.io.FileNotFoundException;
 
 import post.POST;
 import fileparser.TransactionParser;
 import fileparser.ProductParser;
-import items.Item;
-import transaction.Transaction;
+import item.Item;
+import transaction.*;
 
 /*
   Driver is the middleware between the POST and the UI
@@ -130,8 +130,15 @@ public class Driver {
 
   protected void runTest() {
     System.out.println("Running tests...");
-    HashSet<Transaction> transactions = transactionParser.extractTransactions();
-    // TODO export invoices
+    HashSet<Item> items = productParser.extractProducts();
+    for (Item item: items) {
+      this.post.addItemToInventory(item);
+      this.post.addItemToCatalog(item);
+    }
+    ArrayList<Transaction> transactions = transactionParser.extractTransactions();
+    for (Transaction transaction : transactions) {
+      System.out.println((new Invoice(transaction)).displayInvoice());
+    }
   }
 
   protected void exit() {

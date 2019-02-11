@@ -3,7 +3,7 @@
 *  in stock / Catalog
 **********************************************************************/
 package store;
-import items.*;
+import item.*;
 import java.util.*;
 
 public class Store {

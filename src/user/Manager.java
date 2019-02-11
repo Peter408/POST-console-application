@@ -1,13 +1,14 @@
 package user;
 
+import store.Store;
+
 public class Manager extends User {
-    Store store;
+    private Store store;
 
     public Manager(String name) {
         super(name);
     }
 
-    // or some shit like this, don't have store
     boolean openStore(String storeName) {
         try {
             this.store = new Store(storeName);
@@ -17,9 +18,9 @@ public class Manager extends User {
         return true;
     }
 
-    // or some shit like, don't have store
+    
     boolean closeStore() {
-        if( this.store.setOpen(false) ) {
+        if( this.store.close() ) {
             return true;
         }
         return false;

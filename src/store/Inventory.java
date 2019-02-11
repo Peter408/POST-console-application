@@ -1,7 +1,7 @@
 package store;
 
 import java.util.*;
-import items.*;
+import item.*;
 
 
 public class Inventory extends Observable {

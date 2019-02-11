@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
 
-import items.Item;
+import item.Item;
 
 public class ProductParser extends FileParser {
     public ProductParser(String fileName) throws FileNotFoundException {
@@ -42,6 +42,6 @@ public class ProductParser extends FileParser {
 
     private Double parsePrice() throws IOException {
         parseSegment(5);
-        return Double.parseDouble(parseLine());
+        return Double.parseDouble(parseLine().trim());
     }
 }
