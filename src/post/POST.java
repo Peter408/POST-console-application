@@ -21,7 +21,7 @@ public class POST {
 
   /**
    * Completes a transaction.
-   * 
+   *
    * @param customer    user purchasing item(s)
    * @param paymentType String of "CREDIT", "CASH", or "CHECK"
    * @param cardNumber  String of card number
@@ -32,10 +32,22 @@ public class POST {
   }
 
   public void addItemToCatalog(Item item) {
-    store.addToCatalog(item);
+    this.store.addToCatalog(item);
   }
 
   public void addItemToInventory(Item item) {
-    store.addToInventory(item);
+    this.store.addToInventory(item);
+  }
+
+  public void openStore() {
+    this.store.open();
+  }
+
+  public void closeStore() {
+    this.store.close();
+  }
+
+  public Store getStore() {
+    return this.store;
   }
 }

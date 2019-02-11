@@ -1,68 +1,138 @@
 
-import user.*;
-import items.*;
-import transaction.*;
+import java.util.Scanner;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.io.FileNotFoundException;
+
+import post.POST;
+import fileparser.TransactionParser;
+import fileparser.ProductParser;
+import items.Item;
+import transaction.Transaction;
 
 public class Driver {
-    public static void main(String[] args) {
-        System.out.println("hello world");
+  private final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
+  private final String DESC = "\nMain menu\nEnter a number to continue...";
+  private final String MENU = "1: open store\n2: close store\n3: auto test\n4: log out";
+  private final String STATUS = "\nSTATUS\nStore: ";
+  private final String INVALIDINPUT = "Input not recognized, valid input is a single digit number from 1 - 4";
 
-        Customer customer1 = new Customer("james");
-        Customer customer2 = new Customer("amanda");
-        Customer customer3 = new Customer("alvin");
+  private Scanner in = new Scanner(System.in);
+  private POST post = new POST();
+  private TransactionParser transactionParser;
+  private ProductParser productParser;
+  private String storeState = "CLOSED";
+  private String dbLocation = "";
 
-        Item item1 = new Item("123", "box", 20.13);
-        Item item2 = new Item("234", "gym", 11.10);
-        Item item3 = new Item("454", "toy", 10.11);
-        Item item4 = new Item("111", "iPad", 199.99);
+  public void start(String[] args) {
+    String path = getDatabasePath(args);
+    initDataBase(path);
+    runMainMenu();
+  }
 
-
-        customer1.addToCart(item1, 3);
-        customer1.addToCart(item2, 1);
-        customer1.addToCart(item3, 2);
-        customer1.removeFromCart(item1, 2);
-        customer1.removeFromCart(item2, 1);
-
-        customer2.addToCart(item1, 1);
-        customer2.addToCart(item2, 1);
-        customer2.addToCart(item3, 1);
-
-        customer3.addToCart(item1, 2);
-        customer3.addToCart(item2, 1);
-        customer3.addToCart(item4, 2);
-        customer3.removeFromCart(item3, 1);
-        customer3.removeFromCart(item1, 5);
-
-        System.out.println(customer1.toString());
-        System.out.println("total: " + customer1.getTotal() + "\n");
-
-        System.out.println(customer2.toString());
-        System.out.println("total: " + customer2.getTotal() + "\n");
-
-        System.out.println(customer3.toString());
-        System.out.println("total: " + customer3.getTotal() + "\n");
-
-        System.out.println("TRANSACTION:\n");
-
-        Transaction transaction1 = new Transaction(customer1, "CASH", 200.50);
-        Transaction transaction2 = new Transaction(customer2, "CREDIT", "12345");
-        Transaction transaction3 = new Transaction(customer3, "CHECK", 50.50);
-
-        System.out.println("change: " + transaction1.getChange());
-        System.out.println(transaction1.getTimestamp());
-        System.out.println(transaction1.toString() + "\n");
-
-        System.out.println("change: " + transaction2.getChange());
-        System.out.println(transaction2.getTimestamp());
-        System.out.println(transaction2.toString() + "\n");
-
-        System.out.println("change: " + transaction3.getChange());
-        System.out.println(transaction3.getTimestamp());
-        System.out.println(transaction3.toString() + "\n");
-
-        System.out.println("INVOICE: \n");
-
-        Invoice invoice1 = new Invoice(transaction1);
-        System.out.println(invoice1.displayInvoice());
+  /*
+  databasePath is relative to this folder, /src
+  default path/ no path provided -> database is in /src
+  */
+  private String getDatabasePath(String[] args) {
+    if (args.length > 0) {
+      return args[0];
+    } else {
+      return "";
     }
+  }
+
+  private void initDataBase(String path) {
+    initTransactionParser(path);
+    initProductParser(path);
+    setDbLocation(path);
+  }
+
+  private void initTransactionParser(String path) {
+    try {
+      this.transactionParser = new TransactionParser(path + "transactions.txt", post.getStore());
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      System.exit(-1);
+    }
+  }
+
+  private void initProductParser(String path) {
+    try {
+      this.productParser = new ProductParser(path + "products.txt");
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      System.exit(-1);
+    }
+  }
+
+  private void setDbLocation(String path) {
+    this.dbLocation = "Database:\n    " + path + "transactions.txt\n    " + path + "products.txt";
+  }
+
+  private void runMainMenu() {
+    System.out.println(NAME);
+    while (true) {
+      printPrompt();
+      int choice = in.nextInt();
+      runChoice(choice);
+    }
+  }
+
+  private void printPrompt() {
+    System.out.println(DESC);
+    System.out.println(STATUS + storeState + "\n" + dbLocation + "\n");
+    System.out.println(MENU);
+  }
+
+  private void runChoice(int choice) {
+    switch(choice) {
+      case 1:
+        openStore();
+        break;
+      case 2:
+        closeStore();
+        break;
+      case 3:
+        runTest();
+        break;
+      case 4:
+        exit();
+        break;
+      default:
+        System.out.println(INVALIDINPUT);
+        break;
+    }
+  }
+
+  private void openStore() {
+    System.out.println("Opening Store...");
+    this.storeState = "OPEN";
+    this.post.openStore();
+  }
+
+  private void closeStore() {
+    System.out.println("Closing Store...");
+    this.storeState = "CLOSED";
+    this.post.closeStore();
+  }
+
+  private void runTest() {
+    System.out.println("Running tests...");
+    HashSet<Item> items = productParser.extractProducts();
+
+    for (Item item: items) {
+      this.post.addItemToInventory(item);
+      this.post.addItemToCatalog(item);
+    }
+
+    HashSet<Transaction> transactions = transactionParser.extractTransactions();
+  }
+
+  private void exit() {
+    System.out.println("Logging off...");
+    this.in.close();
+    // TODO "Log off"
+    System.exit(0);
+  }
 }
