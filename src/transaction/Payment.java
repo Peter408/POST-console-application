@@ -5,12 +5,12 @@ enum PaymentType {
 }
 
 public class Payment {
-    PaymentType paymentType;
-    boolean approved;
-    double total;
-    double payment;
-    double change;
-    String cardNumber;
+    private PaymentType paymentType;
+    private boolean approved;
+    private double total;
+    private double payment;
+    private double change;
+    private String cardNumber;
 
     public Payment(String paymentType, double total, double payment, String cardNumber) {
         this.paymentType = PaymentType.valueOf(paymentType);
@@ -32,11 +32,13 @@ public class Payment {
     private void pay() {
         switch(this.paymentType) {
             case CASH:
+                chargeCash();
+                break;
             case CHECK:
-                chargeNonCard();
+                chargeCheck();
                 break;
             case CREDIT:
-                chargeCard();
+                chargeCredit();
                 break;
             default:
                 System.out.println("something broke =(");
@@ -44,7 +46,7 @@ public class Payment {
         }
     }
 
-    private void chargeCard() {
+    private void chargeCredit() {
         if(validateCard()) {
             this.approved = true;
         } else {
@@ -52,12 +54,16 @@ public class Payment {
         }
     }
 
-    private void chargeNonCard() {
+    private void chargeCash() {
         if(this.payment >= this.total) {
             this.approved = true;
         } else {
             this.approved = false;
         }
+    }
+
+    private void chargeCheck() {
+        this.approved = true;
     }
 
     private boolean validateCard() {

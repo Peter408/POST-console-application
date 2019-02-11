@@ -3,14 +3,13 @@ package user;
 import item.*;
 
 public class Customer extends User {
-    Cart cart;
+    private Cart cart;
 
     public Customer(String name) {
         super(name);
         this.cart = new Cart();
     }
 
-    // TODO return false if not in catalog
     public boolean addToCart(Item item, int quantity) {
         final int itemQuantity = cart.getQuantityForItem(item);
         cart.setQuantityForItem(item, quantity + itemQuantity);
