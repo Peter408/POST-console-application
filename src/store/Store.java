@@ -90,7 +90,9 @@ public class Store {
 
     //Add catalog item
     public boolean addToCatalog (Item item) {
-        return this.catalog.addToCatalog(item);
+        if(this.inventory.getItem(item) != null) {
+            return this.catalog.addToCatalog(item);
+        } else return false;
     }
 
     //Remove catalog item based on item
@@ -106,12 +108,12 @@ public class Store {
 
     //Retrieve single item in catalog based on item
     public Item searchItem( Item item) {
-        return this.catalog.searchItem(item);
+        return this.catalog.getItem(item);
     }
 
     //Retrieve items in catalog based on upc / description
     public Item searchItem (String searchParameter){
-        return this.catalog.searchItem(searchParameter);
+        return this.catalog.getItem(searchParameter);
     }
 
     //Print all items in catalog
