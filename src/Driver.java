@@ -8,7 +8,7 @@ import post.POST;
 import fileparser.TransactionParser;
 import fileparser.ProductParser;
 import item.Item;
-import transaction.Transaction;
+import transaction.*;
 
 public class Driver {
   private final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
@@ -120,13 +120,14 @@ public class Driver {
   private void runTest() {
     System.out.println("Running tests...");
     HashSet<Item> items = productParser.extractProducts();
-
     for (Item item: items) {
       this.post.addItemToInventory(item);
       this.post.addItemToCatalog(item);
     }
-
     ArrayList<Transaction> transactions = transactionParser.extractTransactions();
+    for (Transaction transaction : transactions) {
+      System.out.println((new Invoice(transaction)).displayInvoice());
+    }
   }
 
   private void exit() {
