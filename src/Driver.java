@@ -1,8 +1,10 @@
 
 import java.util.Scanner;
+import java.io.FileNotFoundException;
 
 import post.POST;
 import fileparser.TransactionParser;
+import fileparser.ProductParser;
 
 public class Driver {
   private static final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
@@ -12,11 +14,55 @@ public class Driver {
   private static final String INVALIDINPUT = "Input not recognized, valid input is a single digit number from 1 - 4";
 
   private static POST post = new POST();
+  private static TransactionParser tp;
+  private static ProductParser pp;
   private static String storeState = "CLOSED";
+  private static String dbLocation = "";
 
   public static void main(String[] args) {
-    // specify database location
+    String path = getDatabasePath(args);
+    initDataBase(path);
     runMainMenu();
+  }
+
+  /*
+  databasePath is relative to this folder, /src
+  default path/ no path provided -> database is in /src
+  */
+  private static String getDatabasePath(String[] args) {
+    if (args.length > 0) {
+      return args[0];
+    } else {
+      return "";
+    }
+  }
+
+  private static void initDataBase(String path) {
+    initTransactionParser(path);
+    initProductParser(path);
+    setDbLocation(path);
+  }
+
+  private static void initTransactionParser(String path) {
+    try {
+      tp = new TransactionParser(path + "transactions.txt");
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      System.exit(-1);
+    }
+  }
+
+  private static void initProductParser(String path) {
+    try {
+      pp = new ProductParser(path + "products.txt");
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      System.exit(-1);
+    }
+  }
+
+  private static void setDbLocation(String path) {
+    dbLocation = "Database:\n    " + path + "transactions.txt\n    " + path + "products.txt";
   }
 
   private static void runMainMenu() {
@@ -35,7 +81,7 @@ public class Driver {
 
   private static void printPrompt() {
     System.out.println(DESC);
-    System.out.println(storeState + "\n");
+    System.out.println(STATUS + storeState + "\n" + dbLocation + "\n");
     System.out.println(MENU);
   }
 
