@@ -26,7 +26,7 @@ public class Payment {
     }
 
     public Payment(String paymentType, double total, String cardNumber) {
-        this(paymentType, total, 0, cardNumber);
+        this(paymentType, total, total, cardNumber);
     }
 
     private void pay() {
@@ -39,7 +39,7 @@ public class Payment {
                 chargeCard();
                 break;
             default:
-                System.out.println("something fucked up");
+                System.out.println("something broke =(");
                 break;
         }
     }
@@ -101,6 +101,7 @@ public class Payment {
                 SB.append(this.cardNumber);
                 break;
             default:
+                SB.append("ERROR");
         }
     }
 
