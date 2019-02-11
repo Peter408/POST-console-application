@@ -1,7 +1,9 @@
+package driver;
 
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.io.FileNotFoundException;
 
 import java.util.Random;
@@ -12,26 +14,49 @@ import fileparser.ProductParser;
 import item.Item;
 import transaction.*;
 
+/*
+  Driver is the middleware between the POST and the UI
+*/
 public class Driver {
-  private final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
-  private final String DESC = "\nMain menu\nEnter a number to continue...";
-  private final String MENU = "1: open store\n2: close store\n3: auto test\n4: log out";
-  private final String STATUS = "\nSTATUS\nStore: ";
-  private final String INVALIDINPUT = "Input not recognized, valid input is a single digit number from 1 - 4";
+  protected final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
+  protected final String STATUS = "\nSTATUS\nStore: ";
+  protected final String INVALIDINPUT = "Input not recognized, valid input is a single digit number from 1 - 4";
 
-  private Scanner in = new Scanner(System.in);
-  private POST post = new POST();
+  protected enum Page {
+    MAIN, OPERATIONS, SHOPPING, CHECKOUT;
+  }
+
+  /*
+   * Runtime State
+   */
+  protected Page page = Page.MAIN;
+  private Inputs currentInput;
+  private HashMap<Page, Inputs> inputs;
+  private Scanner in;
+  private POST post;
   private TransactionParser transactionParser;
   private ProductParser productParser;
-  private String storeState = "CLOSED";
-  private String dbLocation = "";
+  protected String storeState;
+  protected String dbLocation;
+
+  public Driver() {
+    this.in = new Scanner(System.in);
+    this.post = new POST();
+    this.storeState = "CLOSED";
+    this.dbLocation = "";
+    this.inputs = new HashMap<Page, Inputs>();
+    this.inputs.put(Page.MAIN, new MainMenu(this));
+    this.inputs.put(Page.OPERATIONS, new Operations(this));
+    this.inputs.put(Page.SHOPPING, new Shopping(this));
+    this.inputs.put(Page.CHECKOUT, new Checkout(this));
+  }
 
   private static Random random = new Random();
 
   public void start(String[] args) {
     String path = getDatabasePath(args);
-    initDataBase(path);
-    runMainMenu();
+    initDatabase(path);
+    screen(this.page);
   }
 
   /*
@@ -46,7 +71,7 @@ public class Driver {
     }
   }
 
-  private void initDataBase(String path) {
+  private void initDatabase(String path) {
     initTransactionParser(path);
     initProductParser(path);
     setDbLocation(path);
@@ -68,60 +93,46 @@ public class Driver {
       e.printStackTrace();
       System.exit(-1);
     }
+
+    HashSet<Item> items = productParser.extractProducts();
+
+    for (Item item : items) {
+      this.post.addItemToInventory(item);
+      this.post.addItemToCatalog(item);
+    }
   }
 
   private void setDbLocation(String path) {
     this.dbLocation = "Database:\n    " + path + "transactions.txt\n    " + path + "products.txt";
   }
 
-  private void runMainMenu() {
-    System.out.println(NAME);
-    while (true) {
-      printPrompt();
-      int choice = in.nextInt();
-      runChoice(choice);
+  protected void screen(Page page) {
+    this.page = page;
+    while (this.page == page) {
+      display(page);
+      int input = in.nextInt();
+      this.currentInput.run(input);
     }
   }
 
-  private void printPrompt() {
-    System.out.println(DESC);
-    System.out.println(STATUS + storeState + "\n" + dbLocation + "\n");
-    System.out.println(MENU);
+  private void display(Page page) {
+    this.currentInput = this.inputs.get(page);
+    this.currentInput.printPrompt();
   }
 
-  private void runChoice(int choice) {
-    switch (choice) {
-    case 1:
-      openStore();
-      break;
-    case 2:
-      closeStore();
-      break;
-    case 3:
-      runTest();
-      break;
-    case 4:
-      exit();
-      break;
-    default:
-      System.out.println(INVALIDINPUT);
-      break;
-    }
-  }
-
-  private void openStore() {
+  protected void openStore() {
     System.out.println("Opening Store...");
     this.storeState = "OPEN";
     this.post.openStore();
   }
 
-  private void closeStore() {
+  protected void closeStore() {
     System.out.println("Closing Store...");
     this.storeState = "CLOSED";
     this.post.closeStore();
   }
 
-  private void runTest() {
+  protected void runTest() {
     System.out.println("Running tests...");
     try {
       productParser.restart();
@@ -150,10 +161,10 @@ public class Driver {
     return rand < 0.1;
   }
 
-  private void exit() {
+  protected void exit() {
     System.out.println("Logging off...");
     this.in.close();
-    // TODO "Log off"
+    // BEYOND SCOPE OF APPLICATION "Log off"
     System.exit(0);
   }
 }
