@@ -89,6 +89,17 @@ public class Cart {
         return this.itemToQuantityMap.remove(item);
     }
 
+    /**
+     * Removes all items from the cart
+     */
+    public void clearCart() {
+        itemToQuantityMap.clear();
+    }
+
+    /**
+     * displays the cart in a list format
+     * @return the string representation
+     */
     public String displayCartItems() {
         StringBuffer SB = new StringBuffer();
         itemToQuantityMap.forEach((k, v) -> {

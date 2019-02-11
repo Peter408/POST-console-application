@@ -16,6 +16,7 @@ public class Payment {
         this.paymentType = PaymentType.valueOf(paymentType);
         this.total = total;
         this.payment = payment;
+        this.change = payment - total;
         this.cardNumber = cardNumber;
         pay();
     }
@@ -31,13 +32,11 @@ public class Payment {
     private void pay() {
         switch(this.paymentType) {
             case CASH:
-                chargeCash();
+            case CHECK:
+                chargeNonCard();
                 break;
             case CREDIT:
                 chargeCard();
-                break;
-            case CHECK:
-                chargeCheck();
                 break;
             default:
                 System.out.println("something broke =(");
@@ -53,18 +52,8 @@ public class Payment {
         }
     }
 
-    private void chargeCash() {
+    private void chargeNonCard() {
         if(this.payment >= this.total) {
-            this.change = this.payment - this.total;
-            this.approved = true;
-        } else {
-            this.approved = false;
-        }
-    }
-
-    private void chargeCheck() {
-        if(this.payment >= this.total) {
-            this.change = this.payment - this.total;
             this.approved = true;
         } else {
             this.approved = false;
@@ -105,8 +94,6 @@ public class Payment {
     private void printApproved(StringBuffer SB) {
         switch(this.paymentType) {
             case CASH:
-                SB.append("$" + this.payment);
-                break;
             case CHECK:
                 SB.append("$" + this.payment);
                 break;
