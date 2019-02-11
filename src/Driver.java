@@ -123,19 +123,26 @@ public class Driver {
 
   private void runTest() {
     System.out.println("Running tests...");
-    HashSet<Item> items = productParser.extractProducts();
-    for (Item item : items) {
-      this.post.addItemToInventory(item);
-      this.post.addItemToCatalog(item);
-    }
-    ArrayList<Transaction> transactions = transactionParser.extractTransactions();
-    for (Transaction transaction : transactions) {
-      if (this.shouldReject(transaction)) {
-        transaction.setApproved(false);
+    try {
+      productParser.restart();
+      transactionParser.restart();
+      HashSet<Item> items = productParser.extractProducts();
+      for (Item item : items) {
+        this.post.addItemToInventory(item);
+        this.post.addItemToCatalog(item);
       }
-      Invoice invoice = new Invoice(transaction);
-      System.out.println(invoice.displayInvoice());
+      ArrayList<Transaction> transactions = transactionParser.extractTransactions();
+      for (Transaction transaction : transactions) {
+        if (this.shouldReject(transaction)) {
+          transaction.setApproved(false);
+        }
+        Invoice invoice = new Invoice(transaction);
+        System.out.println(invoice.displayInvoice());
+      }
+    } catch (FileNotFoundException e) {
+      System.out.println("Unable to find transactions file: " + e.getMessage());
     }
+
   }
 
   private boolean shouldReject(Transaction transaction) {

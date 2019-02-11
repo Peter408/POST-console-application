@@ -10,8 +10,14 @@ abstract class FileParser {
     private File file;
     private FileReader fileReader;
     private BufferedReader bufferedReader;
+    private String fileName;
 
     public FileParser(String fileName) throws FileNotFoundException {
+        setup(fileName);
+    }
+
+    private void setup(String fileName) throws FileNotFoundException {
+        this.fileName = fileName;
         file = new File(fileName);
         fileReader = new FileReader(file);
         bufferedReader = new BufferedReader(fileReader);
@@ -29,5 +35,9 @@ abstract class FileParser {
 
     public void nextLine() throws IOException {
         bufferedReader.readLine();
+    }
+
+    public void restart() throws FileNotFoundException {
+        setup(this.fileName);
     }
 }
