@@ -17,23 +17,27 @@ import transaction.Transaction;
 public class Driver {
   private final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
   private final String STATUS = "\nSTATUS\nStore: ";
-  private final String INVALIDINPUT = "Input not recognized, valid input is a single digit number from 1 - 4";
+  protected final String INVALIDINPUT = "Input not recognized, valid input is a single digit number from 1 - 4";
 
-  private enum Page {
+  protected enum Page {
     MAIN, OPERATIONS;
   }
 
-  private enum Operation {
-    AddToInventory, RemoveFromInventory, DeleteFromInventory, AddToCatalog, RemoveFromCatalog, NewTransaction;
-  }
-
-  private Page page = Page.MAIN;
-  private Scanner in = new Scanner(System.in);
-  private POST post = new POST();
+  protected Page page = Page.MAIN;
+  private Inputs inputs;
+  private Scanner in;
+  private POST post;
   private TransactionParser transactionParser;
   private ProductParser productParser;
-  private String storeState = "CLOSED";
-  private String dbLocation = "";
+  private String storeState;
+  private String dbLocation;
+
+  public Driver() {
+    this.in = new Scanner(System.in);
+    this.post = new POST();
+    this.storeState = "CLOSED";
+    this.dbLocation = "";
+  }
 
   public void start(String[] args) {
     String path = getDatabasePath(args);
@@ -88,6 +92,15 @@ public class Driver {
     this.dbLocation = "Database:\n    " + path + "transactions.txt\n    " + path + "products.txt";
   }
 
+  protected void screen(Page page) {
+    this.page = page;
+    while (this.page == page) {
+      printPrompt();
+      int input = in.nextInt();
+      execute(input);
+    }
+  }
+
   private void printPrompt() {
     System.out.println(this.NAME);
     String description;
@@ -113,100 +126,38 @@ public class Driver {
     System.out.println(choices);
   }
 
-  private void screen(Page page) {
-    this.page = page;
-    while (this.page == page) {
-      printPrompt();
-      int input = in.nextInt();
-      execute(input);
-    }
-  }
-
-  private void screen(Operation operation) {
-    // TODO route operations
-  }
-
   private void execute(int input) {
     switch (this.page) {
       case MAIN:
-        mainRouter(input);
+        this.inputs = new MainMenu(this);
+        this.inputs.run(input);
         break;
       case OPERATIONS:
-        operationsRouter(input);
+        this.inputs = new Operations(this);
+        this.inputs.run(input);
         break;
     }
   }
 
-  private void mainRouter(int input) {
-    switch(input) {
-      case 1:
-        openStore();
-        break;
-      case 2:
-        closeStore();
-        break;
-      case 3:
-        runTest();
-        break;
-      case 4:
-        screen(Page.OPERATIONS);
-        break;
-      case 5:
-        exit();
-        break;
-      default:
-        System.out.println(INVALIDINPUT);
-        break;
-    }
-  }
-
-  private void operationsRouter(int input) {
-    switch(input) {
-      case 1:
-        screen(Operation.AddToInventory);
-        break;
-      case 2:
-        screen(Operation.RemoveFromInventory);
-        break;
-      case 3:
-        screen(Operation.DeleteFromInventory);
-        break;
-      case 4:
-        screen(Operation.AddToCatalog);
-      case 5:
-        screen(Operation.RemoveFromCatalog);
-        break;
-      case 6:
-        screen(Operation.NewTransaction);
-        break;
-      case 7:
-        this.page = Page.MAIN;
-        break;
-      default:
-        System.out.println(INVALIDINPUT);
-        break;
-    }
-  }
-
-  private void openStore() {
+  protected void openStore() {
     System.out.println("Opening Store...");
     this.storeState = "OPEN";
     this.post.openStore();
   }
 
-  private void closeStore() {
+  protected void closeStore() {
     System.out.println("Closing Store...");
     this.storeState = "CLOSED";
     this.post.closeStore();
   }
 
-  private void runTest() {
+  protected void runTest() {
     System.out.println("Running tests...");
     HashSet<Transaction> transactions = transactionParser.extractTransactions();
     // TODO export invoices
   }
 
-  private void exit() {
+  protected void exit() {
     System.out.println("Logging off...");
     this.in.close();
     // BEYOND SCOPE OF APPLICATION "Log off"
