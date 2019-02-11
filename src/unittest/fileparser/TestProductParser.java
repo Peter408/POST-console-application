@@ -3,7 +3,7 @@ package unittest.fileparser;
 import java.util.HashSet;
 
 import fileparser.*;
-import items.Item;
+import item.Item;
 
 public class TestProductParser {
     private static final String PRODUCT_TEST_FILE_PATH = "./src/unittest/fileparser/productTest.txt";

@@ -1,41 +1,48 @@
 package unittest.fileparser;
-/*
+
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import fileparser.*;
-*/
+import item.*;
+import store.*;
+import transaction.*;
+import user.*;
+
 public class TestTransactionParser {
-    /*
-    private static final String TRANSACTION_TEST_FILE_PATH = "./src/UnitTest/FileParserTest/transactionTest.txt";
-    private static final String TEST_CASE_OUTPUT = "[".concat(
-        "QWE\n"
-    ).concat(
-        "items:\n[id:2222 qty:13, id:5432 qty:1, id:1111 qty:5]\n"
-    ).concat(
-        "payment info:\ncash: true\napproved:false\ncreditCardNumber:NaN\ntotal:0.00\npayment:9.99\nchange:9.99"
-    ).concat(
-        ", QWE2\n"
-    ).concat(
-        "items:\n[id:2222 qty:13, id:1111 qty:5]\n"
-    ).concat(
-        "payment info:\ncash: false\napproved:false\ncreditCardNumber:12345\ntotal:0.00\npayment:0.00\nchange:0.00"
-    ).concat(
-        "]"
-    );
+    private static final String PRODUCT_TEST_FILE_PATH = "./src/unittest/fileparser/productTest.txt";
+    private static final String TRANSACTION_TEST_FILE_PATH = "./src/unittest/fileparser/transactionTest.txt";
+    private static Customer customer1 = new Customer("QWE");
+    private static Customer customer2 = new Customer("QWE2");
+    private static final Transaction TEST_CASE_OUTPUT1 = new Transaction(new Customer("QWE"), "CASH", 9.99, "NaN");
+    private static final Transaction TEST_CASE_OUTPUT2 = new Transaction(new Customer("QWE2"), "CREDIT", 1519.00, "12345");
     private static final String TEST_CASE_FAIL_LOG = "transaction parsing failed";
     private static final String SUCCESS_LOG = "Success";
     private static final String FAIL_LOG = "Fail";
-    */
     public static void main( String[] args ) {
-        /*
         try {
-            TransactionParser testTransactionParser = new TransactionParser(TRANSACTION_TEST_FILE_PATH);
-            if (!TEST_CASE_OUTPUT.equals(testTransactionParser.extractTransactions().toString())) {
+            ProductParser testProductParser = new ProductParser(PRODUCT_TEST_FILE_PATH);
+            Store store = new Store("testCase");
+            HashSet<Item> items = testProductParser.extractProducts();
+            for (Item item : items) {
+                store.addToInventory(item);
+                store.addToCatalog(item);
+            }
+            TransactionParser testTransactionParser = new TransactionParser(TRANSACTION_TEST_FILE_PATH, store);
+            ArrayList<Transaction> transactions = testTransactionParser.extractTransactions();
+            if (!transactions.contains(TEST_CASE_OUTPUT1)) {
+                System.out.println(transactions.get(0));
+                System.out.println(TEST_CASE_OUTPUT1);
+                System.out.println("a");
+                throw new Exception(TEST_CASE_FAIL_LOG);
+            }
+            if (!transactions.contains(TEST_CASE_OUTPUT2)) {
                 throw new Exception(TEST_CASE_FAIL_LOG);
             }
             System.out.println(SUCCESS_LOG);
         } catch( Exception exception) {
-            System.out.println(exception);
+            exception.printStackTrace();
             System.out.println(FAIL_LOG);
         }
-        */
     }
 }

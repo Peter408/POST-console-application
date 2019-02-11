@@ -1,6 +1,6 @@
 package user;
 
-import items.*;
+import item.*;
 
 public class Customer extends User {
     private Cart cart;

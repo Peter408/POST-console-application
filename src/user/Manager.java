@@ -1,5 +1,7 @@
 package user;
 
+import store.Store;
+
 public class Manager extends User {
     private Store store;
 
@@ -18,7 +20,7 @@ public class Manager extends User {
 
     
     boolean closeStore() {
-        if( this.store.setOpen(false) ) {
+        if( this.store.close() ) {
             return true;
         }
         return false;
