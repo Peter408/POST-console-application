@@ -44,7 +44,7 @@ public class Driver {
 
   public void start(String[] args) {
     String path = getDatabasePath(args);
-    initDataBase(path);
+    initDatabase(path);
     screen(this.page);
   }
 
@@ -60,7 +60,7 @@ public class Driver {
     }
   }
 
-  private void initDataBase(String path) {
+  private void initDatabase(String path) {
     initTransactionParser(path);
     initProductParser(path);
     setDbLocation(path);
