@@ -29,7 +29,7 @@ public class Operations extends Inputs {
         newTransaction();
         break;
       case 7:
-        this.driver.page = Driver.Page.MAIN;
+        cancel();
         break;
       default:
         System.out.println(this.driver.INVALIDINPUT);
@@ -58,6 +58,10 @@ public class Operations extends Inputs {
   }
 
   private void newTransaction() {
-    System.out.println("NEW");
+    this.driver.screen(Driver.Page.SHOPPING);
+  }
+
+  private void cancel() {
+    this.driver.page = Driver.Page.MAIN;
   }
 }

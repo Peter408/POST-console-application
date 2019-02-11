@@ -27,7 +27,8 @@ public class Driver {
     Runtime State
   */
   protected Page page = Page.MAIN;
-  private Inputs inputs;
+  private Inputs currentInput;
+  private Inputs[] inputs = {new MainMenu(this), new Operations(this), new Shopping(this), new Checkout(this)};
   private Scanner in;
   private POST post;
   private TransactionParser transactionParser;
@@ -98,26 +99,26 @@ public class Driver {
   protected void screen(Page page) {
     this.page = page;
     while (this.page == page) {
-      setInputs(page);
-      this.inputs.printPrompt();
+      setInput(page);
+      this.currentInput.printPrompt();
       int input = in.nextInt();
-      this.inputs.run(input);
+      this.currentInput.run(input);
     }
   }
 
-  private void setInputs(Page page) {
+  private void setInput(Page page) {
     switch (page) {
       case MAIN:
-        this.inputs = new MainMenu(this);
+        this.currentInput = this.inputs[0];
         break;
       case OPERATIONS:
-        this.inputs = new Operations(this);
+        this.currentInput = this.inputs[1];
         break;
       case SHOPPING:
-        this.inputs = new Shopping(this);
+        this.currentInput = this.inputs[2];
         break;
       case CHECKOUT:
-        this.inputs = new Checkout(this);
+        this.currentInput = this.inputs[3];
         break;
     }
   }

@@ -4,6 +4,8 @@ public class Shopping extends Inputs {
 
   protected Shopping(Driver driver) {
     this.driver = driver;
+    this.description = "\nShopping\nEnter a number to continue...";
+    this.choices = "1: get product\n2: search for product\n3: add to cart\n4: remove from cart\n5: checkout\n6: cancel transaction";
   }
 
   protected void run(int input) {
@@ -49,7 +51,7 @@ public class Shopping extends Inputs {
   }
 
   private void checkout() {
-
+    this.driver.screen(Driver.Page.CHECKOUT);
   }
 
   private void cancel() {
