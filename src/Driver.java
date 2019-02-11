@@ -17,6 +17,7 @@ public class Driver {
   private final String STATUS = "\nSTATUS\nStore: ";
   private final String INVALIDINPUT = "Input not recognized, valid input is a single digit number from 1 - 4";
 
+  private Scanner in = new Scanner(System.in);
   private POST post = new POST();
   private TransactionParser transactionParser;
   private ProductParser productParser;
@@ -49,7 +50,7 @@ public class Driver {
 
   private void initTransactionParser(String path) {
     try {
-      transactionParser = new TransactionParser(path + "transactions.txt", post.getStore());
+      this.transactionParser = new TransactionParser(path + "transactions.txt", post.getStore());
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       System.exit(-1);
@@ -58,7 +59,7 @@ public class Driver {
 
   private void initProductParser(String path) {
     try {
-      productParser = new ProductParser(path + "products.txt");
+      this.productParser = new ProductParser(path + "products.txt");
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       System.exit(-1);
@@ -66,12 +67,11 @@ public class Driver {
   }
 
   private void setDbLocation(String path) {
-    dbLocation = "Database:\n    " + path + "transactions.txt\n    " + path + "products.txt";
+    this.dbLocation = "Database:\n    " + path + "transactions.txt\n    " + path + "products.txt";
   }
 
   private void runMainMenu() {
     System.out.println(NAME);
-    Scanner in = new Scanner(System.in);
     while (true) {
       printPrompt();
       int choice = in.nextInt();
@@ -107,14 +107,14 @@ public class Driver {
 
   private void openStore() {
     System.out.println("Opening Store...");
-    storeState = "OPEN";
-    post.openStore();
+    this.storeState = "OPEN";
+    this.post.openStore();
   }
 
   private void closeStore() {
     System.out.println("Closing Store...");
-    storeState = "CLOSED";
-    post.closeStore();
+    this.storeState = "CLOSED";
+    this.post.closeStore();
   }
 
   private void runTest() {
@@ -122,8 +122,8 @@ public class Driver {
     HashSet<Item> items = productParser.extractProducts();
 
     for (Item item: items) {
-      post.addItemToInventory(item);
-      post.addItemToCatalog(item);
+      this.post.addItemToInventory(item);
+      this.post.addItemToCatalog(item);
     }
 
     HashSet<Transaction> transactions = transactionParser.extractTransactions();
@@ -131,6 +131,7 @@ public class Driver {
 
   private void exit() {
     System.out.println("Logging off...");
+    this.in.close();
     // TODO "Log off"
     System.exit(0);
   }
