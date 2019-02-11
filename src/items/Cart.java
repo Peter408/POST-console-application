@@ -89,7 +89,14 @@ public class Cart {
         return this.itemToQuantityMap.remove(item);
     }
 
-    // TODO make this shit look nicer
+    public String displayCartItems() {
+        StringBuffer SB = new StringBuffer();
+        itemToQuantityMap.forEach((k, v) -> {
+            SB.append("Item: " + k.getName() + " @ " + v + " $" + k.getPrice() + " $" + k.getPrice() * v + "\n");
+        });
+        return SB.toString();
+    }
+
     @Override
     public String toString() {
         StringBuffer SB = new StringBuffer();

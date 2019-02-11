@@ -60,6 +60,9 @@ public class Driver {
         System.out.println(transaction3.getTimestamp());
         System.out.println(transaction3.toString() + "\n");
 
-        System.out.println(customer1.getCart().getPurchases());
+        System.out.println("INVOICE: \n");
+
+        Invoice invoice1 = new Invoice(transaction1);
+        System.out.println(invoice1.displayInvoice());
     }
 }

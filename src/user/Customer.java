@@ -39,6 +39,10 @@ public class Customer extends User {
         return this.cart;
     }
 
+    public String getCartItemList() {
+        return this.cart.displayCartItems();
+    }
+
     @Override
     public String toString() {
         StringBuffer SB = new StringBuffer();

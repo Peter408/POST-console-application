@@ -1,19 +1,21 @@
 package transaction;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import user.Customer;
 
 public class Transaction {
     Customer customer;
     Payment payment;
-    LocalDateTime today;
+    String today;
 
     public Transaction(Customer customer, String paymentType, double payment, String cardNumber) {
         this.customer = customer;
         double total = customer.getTotal();
         this.payment = new Payment(paymentType, total, payment, cardNumber);
-        today = LocalDateTime.now();
+        setDateTime();
     }
 
     public Transaction(Customer customer, String paymentType, double payment) {
@@ -49,14 +51,41 @@ public class Transaction {
     }
 
     public String getTimestamp() {
-        return this.today.toString();
+        return this.today;
     }
 
-    // public void getTransaction() {
-    //     StringBuffer SB = new StringBuffer();
-    //     SB.append(this.customer.getName());
-    //     this.customer.getCart().
-    // }
+    public Customer getCustomer() {
+        return this.customer;
+    }
+
+    public String getFormattedCartList() {
+        return this.customer.getCartItemList();
+    }
+
+    private void setDateTime() {
+        DateTimeFormatter FOMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy 'at' hh:mm a");
+        LocalDateTime localDateTime = LocalDateTime.now();
+        this.today = FOMATTER.format(localDateTime);
+    }
+
+    public String displayTransactionPayment() {
+        StringBuffer SB = new StringBuffer();
+        SB.append("Amount Tendered: " );
+        switch(this.payment.getPaymentType()) {
+            case "CASH":
+                SB.append("$" + String.format("%.2f", this.payment.getPayment()) + "\n");
+                SB.append("Amount Returned: $" + String.format("%.2f", this.payment.getChange()) + "\n");
+                break;
+            case "CHECK":
+                SB.append("Paid by check");
+                break;
+            case "CREDIT":
+                SB.append("Credit Card " + this.payment.getCardNumber());
+                break;
+            default:
+        }
+        return SB.toString();
+    }
 
     @Override
     public String toString() {
