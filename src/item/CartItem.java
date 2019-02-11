@@ -1,4 +1,4 @@
-package items;
+package item;
 
 /**
  * Represents and item in a cart with a quantity.

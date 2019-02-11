@@ -1,13 +1,13 @@
 
 import java.util.Scanner;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.io.FileNotFoundException;
 
 import post.POST;
 import fileparser.TransactionParser;
 import fileparser.ProductParser;
-import items.Item;
+import item.Item;
 import transaction.Transaction;
 
 public class Driver {
@@ -126,7 +126,7 @@ public class Driver {
       this.post.addItemToCatalog(item);
     }
 
-    HashSet<Transaction> transactions = transactionParser.extractTransactions();
+    ArrayList<Transaction> transactions = transactionParser.extractTransactions();
   }
 
   private void exit() {

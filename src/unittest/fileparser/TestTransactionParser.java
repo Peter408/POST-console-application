@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import fileparser.*;
-import items.*;
+import item.*;
 import store.*;
 import transaction.*;
 import user.*;

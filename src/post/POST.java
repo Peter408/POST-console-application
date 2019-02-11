@@ -3,7 +3,7 @@ package post;
 import user.*;
 import transaction.*;
 import store.Store;
-import items.Item;
+import item.Item;
 
 /**
  * Public interface to the application

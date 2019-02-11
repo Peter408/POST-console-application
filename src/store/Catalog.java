@@ -1,7 +1,7 @@
 package store;
 
 import java.util.*;
-import items.*;
+import item.*;
 
 public class Catalog implements Observer{
     private List<Item> catalogItems;
