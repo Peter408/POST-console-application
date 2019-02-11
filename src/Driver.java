@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.io.FileNotFoundException;
 
+import java.util.Random;
+
 import post.POST;
 import fileparser.TransactionParser;
 import fileparser.ProductParser;
@@ -24,6 +26,8 @@ public class Driver {
   private String storeState = "CLOSED";
   private String dbLocation = "";
 
+  private static Random random = new Random();
+
   public void start(String[] args) {
     String path = getDatabasePath(args);
     initDataBase(path);
@@ -31,9 +35,9 @@ public class Driver {
   }
 
   /*
-  databasePath is relative to this folder, /src
-  default path/ no path provided -> database is in /src
-  */
+   * databasePath is relative to this folder, /src default path/ no path provided
+   * -> database is in /src
+   */
   private String getDatabasePath(String[] args) {
     if (args.length > 0) {
       return args[0];
@@ -86,22 +90,22 @@ public class Driver {
   }
 
   private void runChoice(int choice) {
-    switch(choice) {
-      case 1:
-        openStore();
-        break;
-      case 2:
-        closeStore();
-        break;
-      case 3:
-        runTest();
-        break;
-      case 4:
-        exit();
-        break;
-      default:
-        System.out.println(INVALIDINPUT);
-        break;
+    switch (choice) {
+    case 1:
+      openStore();
+      break;
+    case 2:
+      closeStore();
+      break;
+    case 3:
+      runTest();
+      break;
+    case 4:
+      exit();
+      break;
+    default:
+      System.out.println(INVALIDINPUT);
+      break;
     }
   }
 
@@ -120,14 +124,23 @@ public class Driver {
   private void runTest() {
     System.out.println("Running tests...");
     HashSet<Item> items = productParser.extractProducts();
-    for (Item item: items) {
+    for (Item item : items) {
       this.post.addItemToInventory(item);
       this.post.addItemToCatalog(item);
     }
     ArrayList<Transaction> transactions = transactionParser.extractTransactions();
     for (Transaction transaction : transactions) {
-      System.out.println((new Invoice(transaction)).displayInvoice());
+      if (this.shouldReject(transaction)) {
+        transaction.setApproved(false);
+      }
+      Invoice invoice = new Invoice(transaction);
+      System.out.println(invoice.displayInvoice());
     }
+  }
+
+  private boolean shouldReject(Transaction transaction) {
+    double rand = Driver.random.nextDouble();
+    return rand < 0.1;
   }
 
   private void exit() {

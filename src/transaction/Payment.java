@@ -30,24 +30,24 @@ public class Payment {
     }
 
     private void pay() {
-        switch(this.paymentType) {
-            case CASH:
-                chargeCash();
-                break;
-            case CHECK:
-                chargeCheck();
-                break;
-            case CREDIT:
-                chargeCredit();
-                break;
-            default:
-                System.out.println("something broke =(");
-                break;
+        switch (this.paymentType) {
+        case CASH:
+            chargeCash();
+            break;
+        case CHECK:
+            chargeCheck();
+            break;
+        case CREDIT:
+            chargeCredit();
+            break;
+        default:
+            System.out.println("something broke =(");
+            break;
         }
     }
 
     private void chargeCredit() {
-        if(validateCard()) {
+        if (validateCard()) {
             this.approved = true;
         } else {
             this.approved = false;
@@ -55,7 +55,7 @@ public class Payment {
     }
 
     private void chargeCash() {
-        if(this.payment >= this.total) {
+        if (this.payment >= this.total) {
             this.approved = true;
         } else {
             this.approved = false;
@@ -67,7 +67,7 @@ public class Payment {
     }
 
     private boolean validateCard() {
-        if(this.cardNumber.length() == 5 || this.cardNumber.matches("[0-9]+")) {
+        if (this.cardNumber.length() == 5 || this.cardNumber.matches("[0-9]+")) {
             return true;
         }
         return false;
@@ -79,6 +79,10 @@ public class Payment {
 
     public boolean getApproved() {
         return this.approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
     public double getTotal() {
@@ -98,16 +102,16 @@ public class Payment {
     }
 
     private void printApproved(StringBuffer SB) {
-        switch(this.paymentType) {
-            case CASH:
-            case CHECK:
-                SB.append("$" + this.payment);
-                break;
-            case CREDIT:
-                SB.append(this.cardNumber);
-                break;
-            default:
-                SB.append("ERROR");
+        switch (this.paymentType) {
+        case CASH:
+        case CHECK:
+            SB.append("$" + this.payment);
+            break;
+        case CREDIT:
+            SB.append(this.cardNumber);
+            break;
+        default:
+            SB.append("ERROR");
         }
     }
 
@@ -115,7 +119,7 @@ public class Payment {
     public String toString() {
         StringBuffer SB = new StringBuffer();
         SB.append("<" + this.paymentType + " ");
-        if(this.approved) {
+        if (this.approved) {
             printApproved(SB);
         } else {
             SB.append("Rejected");
