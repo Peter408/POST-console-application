@@ -42,6 +42,6 @@ public class ProductParser extends FileParser {
 
     private Double parsePrice() throws IOException {
         parseSegment(5);
-        return Double.parseDouble(parseLine());
+        return Double.parseDouble(parseLine().trim());
     }
 }
