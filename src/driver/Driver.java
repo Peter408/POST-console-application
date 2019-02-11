@@ -1,3 +1,4 @@
+package driver;
 
 import java.util.Scanner;
 import java.util.HashSet;
@@ -122,7 +123,7 @@ public class Driver {
   }
 
   private void screen(Operation operation) {
-
+    // TODO route operations
   }
 
   private void execute(int input) {
@@ -202,15 +203,7 @@ public class Driver {
   private void runTest() {
     System.out.println("Running tests...");
     HashSet<Transaction> transactions = transactionParser.extractTransactions();
-
-  }
-
-  private void removeInventory() {
-
-  }
-
-  private void deleteInventory() {
-
+    // TODO export invoices
   }
 
   private void exit() {
