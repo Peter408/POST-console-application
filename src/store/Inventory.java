@@ -92,6 +92,14 @@ public class Inventory extends Observable {
         return true;
     }
 
+    public Item getItem(String upc){
+        return this.upcMap.get(upc);
+    };
+
+    public Item getItem(Item item){
+        return this.upcMap.get(item.getId());
+    }
+
     //Print items in inventory
     public void printInventory (){
         System.out.println(inventoryMap);

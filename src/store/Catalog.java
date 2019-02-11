@@ -11,7 +11,6 @@ public class Catalog implements Observer{
     }
     //Add catalog item
     public boolean addToCatalog (Item item) {
-        //check if in Inventory first
         catalogItems.add(item);
         return true;
     }
@@ -28,7 +27,7 @@ public class Catalog implements Observer{
     }
 
     //Retrieve single item in catalog based on item
-    public Item searchItem( Item item) {
+    public Item getItem( Item item) {
         Item result = null;
         int index = this.catalogItems.indexOf(item);
         if(index != -1) {
@@ -38,14 +37,13 @@ public class Catalog implements Observer{
     }
 
     //Retrieve items in catalog based on upc / description
-    //Should check inventory
-    public Item searchItem (String searchParameter){
+    public Item getItem (String searchParameter){
+        for(Item item : catalogItems){
+            if (item.getId().equalsIgnoreCase(searchParameter) || item.getName().equalsIgnoreCase(searchParameter)){
+                return item;
+            }
+        }
         return null;
-    }
-
-    //Print all items in catalog
-    public void printCatalog() {
-        System.out.println(catalogItems);
     }
 
 
