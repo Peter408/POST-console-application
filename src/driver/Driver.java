@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.io.FileNotFoundException;
 
+import java.util.Random;
+
 import post.POST;
 import fileparser.TransactionParser;
 import fileparser.ProductParser;
@@ -25,8 +27,8 @@ public class Driver {
   }
 
   /*
-    Runtime State
-  */
+   * Runtime State
+   */
   protected Page page = Page.MAIN;
   private Inputs currentInput;
   private HashMap<Page, Inputs> inputs;
@@ -49,6 +51,8 @@ public class Driver {
     this.inputs.put(Page.CHECKOUT, new Checkout(this));
   }
 
+  private static Random random = new Random();
+
   public void start(String[] args) {
     String path = getDatabasePath(args);
     initDatabase(path);
@@ -56,9 +60,9 @@ public class Driver {
   }
 
   /*
-  databasePath is relative to this folder, /src
-  default path/ no path provided -> database is in /src
-  */
+   * databasePath is relative to this folder, /src default path/ no path provided
+   * -> database is in /src
+   */
   private String getDatabasePath(String[] args) {
     if (args.length > 0) {
       return args[0];
@@ -92,7 +96,7 @@ public class Driver {
 
     HashSet<Item> items = productParser.extractProducts();
 
-    for (Item item: items) {
+    for (Item item : items) {
       this.post.addItemToInventory(item);
       this.post.addItemToCatalog(item);
     }
@@ -130,15 +134,31 @@ public class Driver {
 
   protected void runTest() {
     System.out.println("Running tests...");
-    HashSet<Item> items = productParser.extractProducts();
-    for (Item item: items) {
-      this.post.addItemToInventory(item);
-      this.post.addItemToCatalog(item);
+    try {
+      productParser.restart();
+      transactionParser.restart();
+      HashSet<Item> items = productParser.extractProducts();
+      for (Item item : items) {
+        this.post.addItemToInventory(item);
+        this.post.addItemToCatalog(item);
+      }
+      ArrayList<Transaction> transactions = transactionParser.extractTransactions();
+      for (Transaction transaction : transactions) {
+        if (this.shouldReject(transaction)) {
+          transaction.setApproved(false);
+        }
+        Invoice invoice = new Invoice(transaction);
+        System.out.println(invoice.displayInvoice());
+      }
+    } catch (FileNotFoundException e) {
+      System.out.println("Unable to find transactions file: " + e.getMessage());
     }
-    ArrayList<Transaction> transactions = transactionParser.extractTransactions();
-    for (Transaction transaction : transactions) {
-      System.out.println((new Invoice(transaction)).displayInvoice());
-    }
+
+  }
+
+  private boolean shouldReject(Transaction transaction) {
+    double rand = Driver.random.nextDouble();
+    return rand < 0.1;
   }
 
   protected void exit() {
