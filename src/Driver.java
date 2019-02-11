@@ -118,7 +118,7 @@ public class Driver {
   }
 
   private static void runTest() {
-    System.out.println("Parsing transactions.txt...");
+    System.out.println("Running tests...");
 
   }
 
