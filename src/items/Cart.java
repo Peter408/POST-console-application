@@ -96,7 +96,18 @@ public class Cart {
         itemToQuantityMap.clear();
     }
 
-    // TODO make this shit look nicer
+    /**
+     * displays the cart in a list format
+     * @return the string representation
+     */
+    public String displayCartItems() {
+        StringBuffer SB = new StringBuffer();
+        itemToQuantityMap.forEach((k, v) -> {
+            SB.append("Item: " + k.getName() + " @ " + v + " $" + k.getPrice() + " $" + k.getPrice() * v + "\n");
+        });
+        return SB.toString();
+    }
+
     @Override
     public String toString() {
         StringBuffer SB = new StringBuffer();
