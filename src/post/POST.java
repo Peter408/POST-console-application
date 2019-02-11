@@ -46,4 +46,8 @@ public class POST {
   public void closeStore() {
     this.store.close();
   }
+
+  public Store getStore() {
+    return this.store;
+  }
 }

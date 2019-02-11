@@ -1,0 +1,18 @@
+Jane Doe
+1234     1
+2345     2
+9876     15
+2468     99
+1357
+9999
+<CASH $9.99>
+Jane Does
+1234     1
+2345     2
+9876     15
+2468     9
+1357
+9999
+<CREDIT 99999>
+<CREDIT Rejected>
+<CHECK Rejected>

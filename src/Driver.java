@@ -1,25 +1,29 @@
 
 import java.util.Scanner;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.io.FileNotFoundException;
 
 import post.POST;
 import fileparser.TransactionParser;
 import fileparser.ProductParser;
+import items.Item;
+import transaction.Transaction;
 
 public class Driver {
-  private static final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
-  private static final String DESC = "\nMain menu\nEnter a number to continue...";
-  private static final String MENU = "1: open store\n2: close store\n3: auto test\n4: log out";
-  private static final String STATUS = "\nSTATUS\nStore: ";
-  private static final String INVALIDINPUT = "Input not recognized, valid input is a single digit number from 1 - 4";
+  private final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
+  private final String DESC = "\nMain menu\nEnter a number to continue...";
+  private final String MENU = "1: open store\n2: close store\n3: auto test\n4: log out";
+  private final String STATUS = "\nSTATUS\nStore: ";
+  private final String INVALIDINPUT = "Input not recognized, valid input is a single digit number from 1 - 4";
 
-  private static POST post = new POST();
-  private static TransactionParser tp;
-  private static ProductParser pp;
-  private static String storeState = "CLOSED";
-  private static String dbLocation = "";
+  private POST post = new POST();
+  private TransactionParser transactionParser;
+  private ProductParser productParser;
+  private String storeState = "CLOSED";
+  private String dbLocation = "";
 
-  public static void main(String[] args) {
+  public void start(String[] args) {
     String path = getDatabasePath(args);
     initDataBase(path);
     runMainMenu();
@@ -29,7 +33,7 @@ public class Driver {
   databasePath is relative to this folder, /src
   default path/ no path provided -> database is in /src
   */
-  private static String getDatabasePath(String[] args) {
+  private String getDatabasePath(String[] args) {
     if (args.length > 0) {
       return args[0];
     } else {
@@ -37,55 +41,51 @@ public class Driver {
     }
   }
 
-  private static void initDataBase(String path) {
+  private void initDataBase(String path) {
     initTransactionParser(path);
     initProductParser(path);
     setDbLocation(path);
   }
 
-  private static void initTransactionParser(String path) {
+  private void initTransactionParser(String path) {
     try {
-      tp = new TransactionParser(path + "transactions.txt");
+      transactionParser = new TransactionParser(path + "transactions.txt", post.getStore());
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       System.exit(-1);
     }
   }
 
-  private static void initProductParser(String path) {
+  private void initProductParser(String path) {
     try {
-      pp = new ProductParser(path + "products.txt");
+      productParser = new ProductParser(path + "products.txt");
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       System.exit(-1);
     }
   }
 
-  private static void setDbLocation(String path) {
+  private void setDbLocation(String path) {
     dbLocation = "Database:\n    " + path + "transactions.txt\n    " + path + "products.txt";
   }
 
-  private static void runMainMenu() {
+  private void runMainMenu() {
     System.out.println(NAME);
+    Scanner in = new Scanner(System.in);
     while (true) {
       printPrompt();
-      int choice = getIntInput();
+      int choice = in.nextInt();
       runChoice(choice);
     }
   }
 
-  private static int getIntInput() {
-    Scanner in = new Scanner(System.in);
-    return in.nextInt();
-  }
-
-  private static void printPrompt() {
+  private void printPrompt() {
     System.out.println(DESC);
     System.out.println(STATUS + storeState + "\n" + dbLocation + "\n");
     System.out.println(MENU);
   }
 
-  private static void runChoice(int choice) {
+  private void runChoice(int choice) {
     switch(choice) {
       case 1:
         openStore();
@@ -105,24 +105,31 @@ public class Driver {
     }
   }
 
-  private static void openStore() {
+  private void openStore() {
     System.out.println("Opening Store...");
     storeState = "OPEN";
     post.openStore();
   }
 
-  private static void closeStore() {
+  private void closeStore() {
     System.out.println("Closing Store...");
     storeState = "CLOSED";
     post.closeStore();
   }
 
-  private static void runTest() {
+  private void runTest() {
     System.out.println("Running tests...");
+    HashSet<Item> items = productParser.extractProducts();
 
+    for (Item item: items) {
+      post.addItemToInventory(item);
+      post.addItemToCatalog(item);
+    }
+
+    HashSet<Transaction> transactions = transactionParser.extractTransactions();
   }
 
-  private static void exit() {
+  private void exit() {
     System.out.println("Logging off...");
     // TODO "Log off"
     System.exit(0);
