@@ -103,7 +103,7 @@ public class Cart {
     public String displayCartItems() {
         StringBuffer SB = new StringBuffer();
         itemToQuantityMap.forEach((k, v) -> {
-            SB.append("Item: " + k.getName() + " @ " + v + " $" + k.getPrice() + " $" + k.getPrice() * v + "\n");
+            SB.append("Item: " + k.getName() + " " + v + " @ $" + k.getPrice() + " $" + k.getPrice() * v + "\n");
         });
         return SB.toString();
     }
