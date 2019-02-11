@@ -1,6 +1,6 @@
 package driver;
 
-public class Shopping extends Inputs {
+public class Shopping extends Input {
 
   protected Shopping(Driver driver) {
     this.driver = driver;

@@ -28,8 +28,8 @@ public class Driver {
     Runtime State
   */
   protected Page page = Page.MAIN;
-  private Inputs currentInput;
-  private HashMap<Page, Inputs> inputs;
+  private Input currentInput;
+  private HashMap<Page, Input> inputs;
   private Scanner in;
   private POST post;
   private TransactionParser transactionParser;
@@ -38,11 +38,15 @@ public class Driver {
   protected String dbLocation;
 
   public Driver() {
+    initInputs();
     this.in = new Scanner(System.in);
     this.post = new POST();
     this.storeState = "CLOSED";
     this.dbLocation = "";
-    this.inputs = new HashMap<Page, Inputs>();
+  }
+
+  private void initInputs() {
+    this.inputs = new HashMap<Page, Input>();
     this.inputs.put(Page.MAIN, new MainMenu(this));
     this.inputs.put(Page.OPERATIONS, new Operations(this));
     this.inputs.put(Page.SHOPPING, new Shopping(this));

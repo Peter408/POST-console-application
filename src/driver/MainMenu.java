@@ -1,6 +1,6 @@
 package driver;
 
-public class MainMenu extends Inputs {
+public class MainMenu extends Input {
 
   protected MainMenu(Driver driver) {
     this.driver = driver;

@@ -1,6 +1,6 @@
 package driver;
 
-public class Operations extends Inputs {
+public class Operations extends Input {
 
   protected Operations(Driver driver) {
     this.driver = driver;

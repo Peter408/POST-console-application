@@ -1,11 +1,11 @@
 package driver;
 
-abstract public class Inputs {
+abstract public class Input {
   protected static Driver driver;
   protected String description;
   protected String choices;
 
-  abstract protected void run(int inputs);
+  abstract protected void run(int input);
 
   protected void printPrompt() {
     System.out.println(this.driver.NAME);

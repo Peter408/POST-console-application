@@ -1,6 +1,6 @@
 package driver;
 
-public class Checkout extends Inputs {
+public class Checkout extends Input {
 
   protected Checkout(Driver driver) {
     this.driver = driver;
