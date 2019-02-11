@@ -2,11 +2,13 @@ package driver;
 
 public class MainMenu extends Inputs {
 
-  public MainMenu(Driver driver) {
+  protected MainMenu(Driver driver) {
     this.driver = driver;
+    this.description = "\nMain menu\nEnter a number to continue...";
+    this.choices = "1: open store\n2: close store\n3: auto test\n4: POST operations\n5: log out";
   }
 
-  public void run(int input) {
+  protected void run(int input) {
     switch(input) {
       case 1:
         this.driver.openStore();

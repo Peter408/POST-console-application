@@ -15,22 +15,25 @@ import transaction.Transaction;
   Driver is the middleware between the POST and the UI
 */
 public class Driver {
-  private final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
-  private final String STATUS = "\nSTATUS\nStore: ";
+  protected final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
+  protected final String STATUS = "\nSTATUS\nStore: ";
   protected final String INVALIDINPUT = "Input not recognized, valid input is a single digit number from 1 - 4";
 
   protected enum Page {
-    MAIN, OPERATIONS;
+    MAIN, OPERATIONS, SHOPPING, CHECKOUT;
   }
 
+  /*
+    Runtime State
+  */
   protected Page page = Page.MAIN;
   private Inputs inputs;
   private Scanner in;
   private POST post;
   private TransactionParser transactionParser;
   private ProductParser productParser;
-  private String storeState;
-  private String dbLocation;
+  protected String storeState;
+  protected String dbLocation;
 
   public Driver() {
     this.in = new Scanner(System.in);
@@ -95,46 +98,26 @@ public class Driver {
   protected void screen(Page page) {
     this.page = page;
     while (this.page == page) {
-      printPrompt();
+      setInputs(page);
+      this.inputs.printPrompt();
       int input = in.nextInt();
-      execute(input);
+      this.inputs.run(input);
     }
   }
 
-  private void printPrompt() {
-    System.out.println(this.NAME);
-    String description;
-    String choices;
-
-    switch(this.page) {
-      case MAIN:
-        description = "\nMain menu\nEnter a number to continue...";
-        choices = "1: open store\n2: close store\n3: auto test\n4: POST operations\n5: log out";
-        promptOptions(description, choices);
-        break;
-      case OPERATIONS:
-        description = "\nPOST Operations\nEnter a number to continue...";
-        choices = "1: add inventory\n2: remove inventory\n3: delete inventory\n4: add to catalog\n5: remove from catalog\n6: new transaction\n7: back to main menu";
-        promptOptions(description, choices);
-        break;
-    }
-  }
-
-  private void promptOptions(String description, String choices) {
-    System.out.println(description);
-    System.out.println(this.STATUS + this.storeState + "\n" + this.dbLocation + "\n");
-    System.out.println(choices);
-  }
-
-  private void execute(int input) {
-    switch (this.page) {
+  private void setInputs(Page page) {
+    switch (page) {
       case MAIN:
         this.inputs = new MainMenu(this);
-        this.inputs.run(input);
         break;
       case OPERATIONS:
         this.inputs = new Operations(this);
-        this.inputs.run(input);
+        break;
+      case SHOPPING:
+        this.inputs = new Shopping(this);
+        break;
+      case CHECKOUT:
+        this.inputs = new Checkout(this);
         break;
     }
   }

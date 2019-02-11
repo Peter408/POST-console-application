@@ -2,11 +2,13 @@ package driver;
 
 public class Operations extends Inputs {
 
-  public Operations(Driver driver) {
+  protected Operations(Driver driver) {
     this.driver = driver;
+    this.description = "\nPOST Operations\nEnter a number to continue...";
+    this.choices = "1: add inventory\n2: remove inventory\n3: delete inventory\n4: add to catalog\n5: remove from catalog\n6: new transaction\n7: back to main menu";
   }
 
-  public void run(int input) {
+  protected void run(int input) {
     switch(input) {
       case 1:
         addToInventory();
