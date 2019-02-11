@@ -11,7 +11,9 @@ public class Catalog implements Observer{
     }
     //Add catalog item
     public boolean addToCatalog (Item item) {
-        catalogItems.add(item);
+        if(this.getItem(item) == null) {
+            catalogItems.add(item);
+        }
         return true;
     }
 
