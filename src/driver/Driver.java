@@ -2,6 +2,7 @@ package driver;
 
 import java.util.Scanner;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.io.FileNotFoundException;
 
@@ -28,7 +29,7 @@ public class Driver {
   */
   protected Page page = Page.MAIN;
   private Inputs currentInput;
-  private Inputs[] inputs = {new MainMenu(this), new Operations(this), new Shopping(this), new Checkout(this)};
+  private HashMap<Page, Inputs> inputs;
   private Scanner in;
   private POST post;
   private TransactionParser transactionParser;
@@ -41,6 +42,11 @@ public class Driver {
     this.post = new POST();
     this.storeState = "CLOSED";
     this.dbLocation = "";
+    this.inputs = new HashMap<Page, Inputs>();
+    this.inputs.put(Page.MAIN, new MainMenu(this));
+    this.inputs.put(Page.OPERATIONS, new Operations(this));
+    this.inputs.put(Page.SHOPPING, new Shopping(this));
+    this.inputs.put(Page.CHECKOUT, new Checkout(this));
   }
 
   public void start(String[] args) {
@@ -99,28 +105,15 @@ public class Driver {
   protected void screen(Page page) {
     this.page = page;
     while (this.page == page) {
-      setInput(page);
-      this.currentInput.printPrompt();
+      display(page);
       int input = in.nextInt();
       this.currentInput.run(input);
     }
   }
 
-  private void setInput(Page page) {
-    switch (page) {
-      case MAIN:
-        this.currentInput = this.inputs[0];
-        break;
-      case OPERATIONS:
-        this.currentInput = this.inputs[1];
-        break;
-      case SHOPPING:
-        this.currentInput = this.inputs[2];
-        break;
-      case CHECKOUT:
-        this.currentInput = this.inputs[3];
-        break;
-    }
+  private void display(Page page) {
+    this.currentInput = this.inputs.get(page);
+    this.currentInput.printPrompt();
   }
 
   protected void openStore() {
