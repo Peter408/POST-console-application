@@ -9,7 +9,7 @@ public class Manager extends User {
         super(name);
     }
 
-    boolean openStore(String storeName) {
+    public boolean openStore(String storeName) {
         try {
             this.store = new Store(storeName);
         } catch(Exception exception) {
@@ -19,7 +19,7 @@ public class Manager extends User {
     }
 
     
-    boolean closeStore() {
+    public boolean closeStore() {
         if( this.store.close() ) {
             return true;
         }
