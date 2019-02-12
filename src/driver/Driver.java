@@ -25,8 +25,8 @@ public class Driver {
   }
 
   /*
-    Runtime State
-  */
+   * Runtime State
+   */
   protected Page page = Page.MAIN;
   private Inputs currentInput;
   private HashMap<Page, Inputs> inputs;
@@ -35,7 +35,11 @@ public class Driver {
   private TransactionParser transactionParser;
   private ProductParser productParser;
   protected String storeState;
+  protected String productsPath;
+  protected String transactionsPath;
   protected String dbLocation;
+  // only run tests and not menu
+  private boolean onlyTest = false;
 
   public Driver() {
     this.in = new Scanner(System.in);
@@ -50,32 +54,44 @@ public class Driver {
   }
 
   public void start(String[] args) {
-    String path = getDatabasePath(args);
-    initDatabase(path);
+    setDatabasePath(args);
+    initDatabase(this.productsPath, this.transactionsPath);
+    if (onlyTest) {
+      this.runTest();
+      System.exit(0);
+    }
     screen(this.page);
   }
 
   /*
-  databasePath is relative to this folder, /src
-  default path/ no path provided -> database is in /src
-  */
-  private String getDatabasePath(String[] args) {
-    if (args.length > 0) {
-      return args[0];
+   * databasePath is relative to this folder, /src default path/ no path provided
+   * -> database is in /src
+   */
+  private void setDatabasePath(String[] args) {
+    if (args.length != 2 && args.length != 0) {
+      System.err.println(
+          "Invalid number of command line arguments: please enter the path to the list of products (1) and then the list of transactions (2).");
+      System.exit(-1);
+    }
+    if (args.length == 2) {
+      this.productsPath = args[0];
+      this.transactionsPath = args[1];
+      this.onlyTest = true;
     } else {
-      return "";
+      this.productsPath = "db/products.txt";
+      this.transactionsPath = "db/transactions.txt";
     }
   }
 
-  private void initDatabase(String path) {
-    initTransactionParser(path);
-    initProductParser(path);
-    setDbLocation(path);
+  private void initDatabase(String productsPath, String transactionsPath) {
+    initTransactionParser(transactionsPath);
+    initProductParser(productsPath);
+    setDbLocation(productsPath, transactionsPath);
   }
 
   private void initTransactionParser(String path) {
     try {
-      this.transactionParser = new TransactionParser(path + "transactions.txt", post.getStore());
+      this.transactionParser = new TransactionParser(path, post.getStore());
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       System.exit(-1);
@@ -84,7 +100,7 @@ public class Driver {
 
   private void initProductParser(String path) {
     try {
-      this.productParser = new ProductParser(path + "products.txt");
+      this.productParser = new ProductParser(path);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       System.exit(-1);
@@ -92,14 +108,14 @@ public class Driver {
 
     HashSet<Item> items = productParser.extractProducts();
 
-    for (Item item: items) {
+    for (Item item : items) {
       this.post.addItemToInventory(item);
       this.post.addItemToCatalog(item);
     }
   }
 
-  private void setDbLocation(String path) {
-    this.dbLocation = "Database:\n    " + path + "transactions.txt\n    " + path + "products.txt";
+  private void setDbLocation(String productsPath, String transactionsPath) {
+    this.dbLocation = "Database:\n" + productsPath + "\n" + transactionsPath;
   }
 
   protected void screen(Page page) {
@@ -131,7 +147,7 @@ public class Driver {
   protected void runTest() {
     System.out.println("Running tests...");
     HashSet<Item> items = productParser.extractProducts();
-    for (Item item: items) {
+    for (Item item : items) {
       this.post.addItemToInventory(item);
       this.post.addItemToCatalog(item);
     }
