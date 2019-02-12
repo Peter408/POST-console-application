@@ -1,0 +1,18 @@
+@startuml item
+class Item {
+    - String id
+    - String name
+    - double price
+    + Item()
+    + Item(String id, String name, double price)
+    + String getId()
+    + String getName()
+    + double getPrice()
+    + void setId(String id)
+    + void setName(String name)
+    + void setPrice(double price)
+    + int hashCode()
+    + boolean equals(Object obj)
+    + String toString()
+}
+@enduml

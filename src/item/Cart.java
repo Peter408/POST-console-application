@@ -1,8 +1,8 @@
 package item;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +20,7 @@ public class Cart {
 
     /**
      * Standard constructor.
-     * 
+     *
      * @param purchases list of `CartItems` to be purchased. Null values and
      *                  `CartItem`s with null `Item`s will be ignored.
      */
@@ -31,7 +31,7 @@ public class Cart {
 
     /**
      * Accessor for the total cost of all items in a cart.
-     * 
+     *
      * @return cost in dollars and cents
      */
     public double getTotalCost() {
@@ -44,7 +44,7 @@ public class Cart {
 
     /**
      * Accessor for items in Cart
-     * 
+     *
      * @return list of `CartItem`s
      */
     public List<CartItem> getPurchases() {
@@ -55,7 +55,7 @@ public class Cart {
     /**
      * Sets the quantity for a certain item. If item doesn't exists in cart it will
      * be added.
-     * 
+     *
      * @param item     `Item` instance
      * @param quantity quantity of item
      * @throws IllegalArgumentException if quantity is less than 0
@@ -69,7 +69,7 @@ public class Cart {
 
     /**
      * Gets the quantity of a certain item in a cart
-     * 
+     *
      * @param item `Item` instance
      * @return quantity of item in cart or 0 if not exists
      */
@@ -81,7 +81,7 @@ public class Cart {
      * Removes all of a certain item from the cart. This is not to deduct from the
      * quantity of the item but remove it entirely, instead use
      * `setQuantityForItem`.
-     * 
+     *
      * @param item `Item` instace
      * @return the quantity of this item that was contained in the cart
      */
@@ -98,14 +98,15 @@ public class Cart {
 
     /**
      * displays the cart in a list format
+     *
      * @return the string representation
      */
     public String displayCartItems() {
         StringBuffer SB = new StringBuffer();
         itemToQuantityMap.forEach((k, v) -> {
-            SB.append("Item: " + k.getName() + " " + v + " @ $" + 
-            String.format("%.2f", k.getPrice()) + " $" + 
-            String.format("%.2f", k.getPrice() * v) + "\n");
+            SB.append("Item: " + k.getName() + " " + v + " @ $" +
+                    String.format("%.2f", k.getPrice()) + " $" +
+                    String.format("%.2f", k.getPrice() * v) + "\n");
         });
         return SB.toString();
     }

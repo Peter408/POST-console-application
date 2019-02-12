@@ -1,0 +1,8 @@
+@startuml user
+abstract class User {
+    - String name
+    + User(String name)
+    + String getName()
+    + void setName(String name)
+}
+@enduml

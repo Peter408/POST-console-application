@@ -1,0 +1,13 @@
+@startuml productparser
+abstract class FileParser
+class ProductParser {
+    + ProductParser(String fileName)
+    + HashSet<Item> extractProducts()
+    - Item parseProduct()
+    - String parseUPC()
+    - String parseDescription()
+    - Double parsePrice()
+}
+
+FileParser <|-- ProductParser
+@enduml

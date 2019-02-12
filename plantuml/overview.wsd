@@ -1,0 +1,54 @@
+@startuml overview
+scale max 800*600
+package "fileparser" {
+    class FileParser
+    class ProductParser
+    class TransactionParser
+}
+package "user" {
+    class User
+    class Customer
+    class Manager
+}
+package "item" {
+    class Cart
+    class CartItem
+    class Item
+}
+package "store" {
+    class Store
+    class Inventory
+    class Catalog
+}
+package "transaction" {
+    class Transaction
+    class Payment
+    class Invoice
+}
+package "post" {
+    class POST
+}
+FileParser <|-- ProductParser
+FileParser <|-- TransactionParser
+TransactionParser o- Store
+
+Cart *- "0..*" CartItem
+CartItem o- Item
+
+Store *- Inventory
+Store *- Catalog
+Catalog o- "0..*" Item
+Inventory o- "0..*" Item
+
+User <|-- Customer
+User <|-- Manager
+Customer *- Cart
+Manager *- Store
+
+POST *- Store
+
+Transaction *- Payment
+Invoice o- Transaction
+Transaction o- Customer
+
+@enduml

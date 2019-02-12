@@ -13,7 +13,7 @@ public class Invoice {
         SB.append(this.transaction.getFormattedCartList());
         SB.append("-----\n");
         SB.append("Total $" + String.format("%.2f", transaction.getTotal()) + "\n");
-        if(transaction.getApproved()) {
+        if (transaction.getApproved()) {
             SB.append(transaction.displayTransactionPayment());
         } else {
             SB.append(transaction.displayRejected());

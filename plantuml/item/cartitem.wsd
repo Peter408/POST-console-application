@@ -1,0 +1,17 @@
+@startuml cartitem
+class Item
+class CartItem {
+    - Item item
+    - int quantity
+    + CartItem()
+    + CartItem(Item item, int quantity)
+    + Item getItem()
+    + int getQuantity()
+    + void setQuantity(int quantity)
+    - void checkQuantity(int quantity)
+    + int hashCode()
+    + boolean equals(Object obj)
+}
+
+CartItem o- Item
+@enduml

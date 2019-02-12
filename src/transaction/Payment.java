@@ -31,18 +31,18 @@ public class Payment {
 
     private void pay() {
         switch (this.paymentType) {
-        case CASH:
-            chargeCash();
-            break;
-        case CHECK:
-            chargeCheck();
-            break;
-        case CREDIT:
-            chargeCredit();
-            break;
-        default:
-            System.out.println("something broke =(");
-            break;
+            case CASH:
+                chargeCash();
+                break;
+            case CHECK:
+                chargeCheck();
+                break;
+            case CREDIT:
+                chargeCredit();
+                break;
+            default:
+                System.out.println("something broke =(");
+                break;
         }
     }
 
@@ -103,15 +103,15 @@ public class Payment {
 
     private void printApproved(StringBuffer SB) {
         switch (this.paymentType) {
-        case CASH:
-        case CHECK:
-            SB.append("$" + this.payment);
-            break;
-        case CREDIT:
-            SB.append(this.cardNumber);
-            break;
-        default:
-            SB.append("ERROR");
+            case CASH:
+            case CHECK:
+                SB.append("$" + this.payment);
+                break;
+            case CREDIT:
+                SB.append(this.cardNumber);
+                break;
+            default:
+                SB.append("ERROR");
         }
     }
 

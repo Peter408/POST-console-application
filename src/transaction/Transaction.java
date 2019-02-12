@@ -1,10 +1,9 @@
 package transaction;
 
-import java.text.DecimalFormat;
+import user.Customer;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-import user.Customer;
 
 public class Transaction {
     private Customer customer;
@@ -75,18 +74,18 @@ public class Transaction {
     public String displayTransactionPayment() {
         StringBuffer SB = new StringBuffer();
         switch (this.payment.getPaymentType()) {
-        case "CASH":
-            SB.append("Amount Tendered: ");
-            SB.append("$" + String.format("%.2f", this.payment.getPayment()) + "\n");
-            SB.append("Amount Returned: $" + String.format("%.2f", this.payment.getChange()));
-            break;
-        case "CHECK":
-            SB.append("Paid by check");
-            break;
-        case "CREDIT":
-            SB.append("Credit Card " + this.payment.getCardNumber());
-            break;
-        default:
+            case "CASH":
+                SB.append("Amount Tendered: ");
+                SB.append("$" + String.format("%.2f", this.payment.getPayment()) + "\n");
+                SB.append("Amount Returned: $" + String.format("%.2f", this.payment.getChange()));
+                break;
+            case "CHECK":
+                SB.append("Paid by check");
+                break;
+            case "CREDIT":
+                SB.append("Credit Card " + this.payment.getCardNumber());
+                break;
+            default:
         }
         SB.append("\n");
         return SB.toString();

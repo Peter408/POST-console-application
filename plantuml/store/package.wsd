@@ -1,0 +1,9 @@
+@startuml package
+package "store" {
+    class Store
+    class Inventory
+    class Catalog
+}
+Store *- Inventory
+Store *- Catalog
+@enduml

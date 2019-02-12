@@ -7,10 +7,10 @@ abstract public class Input {
 
   abstract protected void run(int input);
 
-  protected void printPrompt() {
-    System.out.println(this.driver.NAME);
-    System.out.println(this.description);
-    System.out.println(this.driver.STATUS + this.driver.storeState + "\n" + this.driver.dbLocation + "\n");
-    System.out.println(this.choices);
-  }
+    protected void printPrompt() {
+        System.out.println(this.driver.NAME);
+        System.out.println(this.description);
+        System.out.println(this.driver.STATUS + this.driver.storeState + "\n" + this.driver.dbLocation + "\n");
+        System.out.println(this.choices);
+    }
 }

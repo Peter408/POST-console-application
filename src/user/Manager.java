@@ -9,18 +9,18 @@ public class Manager extends User {
         super(name);
     }
 
-    boolean openStore(String storeName) {
+    public boolean openStore(String storeName) {
         try {
             this.store = new Store(storeName);
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             return false;
         }
         return true;
     }
 
-    
-    boolean closeStore() {
-        if( this.store.close() ) {
+
+    public boolean closeStore() {
+        if (this.store.close()) {
             return true;
         }
         return false;

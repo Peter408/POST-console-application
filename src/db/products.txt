@@ -1,6 +1,6 @@
-1234     ITEM DESCRIPTION 1       1.23
-2345     ITEM DESCRIPTION 2       2.0
-9876     ITEM DESCRIPTION 3       3.0
-2468     ITEM DESCRIPTION 4       9.9
-1357     ITEM DESCRIPTION 5       1.5
-9999     ITEM DESCRIPTION 6       2.5
+1234     Burger                   1.23
+2345     Double Burger            2.0
+9876     Triple Burger            3.0
+2468     Quadruple Burger         9.9
+1357     Cinnamon                 1.5
+9999     Fries                    2.5
