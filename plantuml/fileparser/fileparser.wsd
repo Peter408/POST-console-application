@@ -1,4 +1,4 @@
-@startuml
+@startuml fileparser
 abstract class FileParser {
     - File file
     - FileReader fileReader

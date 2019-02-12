@@ -1,4 +1,4 @@
-@startuml
+@startuml transactionparser
 class Store
 class FileParser
 class TransactionParser {
