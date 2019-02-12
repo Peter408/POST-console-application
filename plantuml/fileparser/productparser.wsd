@@ -1,5 +1,5 @@
 @startuml productparser
-class FileParser
+abstract class FileParser
 class ProductParser {
     + ProductParser(String fileName)
     + HashSet<Item> extractProducts()

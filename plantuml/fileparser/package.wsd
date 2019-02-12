@@ -1,6 +1,6 @@
 @startuml package
 package "fileparser" {
-    class FileParser
+    abstract class FileParser
     class ProductParser
     class TransactionParser
 }

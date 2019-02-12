@@ -1,6 +1,6 @@
 @startuml transactionparser
 class Store
-class FileParser
+abstract class FileParser
 class TransactionParser {
     Store store
     + TransactionParser(String fileName, Store storeParameter)
