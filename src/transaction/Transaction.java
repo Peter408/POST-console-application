@@ -34,6 +34,10 @@ public class Transaction {
         return this.payment.getApproved();
     }
 
+    public void setApproved(boolean approved) {
+        this.payment.setApproved(approved);
+    }
+
     public double getTotal() {
         return this.payment.getTotal();
     }
@@ -70,19 +74,19 @@ public class Transaction {
 
     public String displayTransactionPayment() {
         StringBuffer SB = new StringBuffer();
-        SB.append("Amount Tendered: " );
-        switch(this.payment.getPaymentType()) {
-            case "CASH":
-                SB.append("$" + String.format("%.2f", this.payment.getPayment()) + "\n");
-                SB.append("Amount Returned: $" + String.format("%.2f", this.payment.getChange()));
-                break;
-            case "CHECK":
-                SB.append("Paid by check");
-                break;
-            case "CREDIT":
-                SB.append("Credit Card " + this.payment.getCardNumber());
-                break;
-            default:
+        switch (this.payment.getPaymentType()) {
+        case "CASH":
+            SB.append("Amount Tendered: ");
+            SB.append("$" + String.format("%.2f", this.payment.getPayment()) + "\n");
+            SB.append("Amount Returned: $" + String.format("%.2f", this.payment.getChange()));
+            break;
+        case "CHECK":
+            SB.append("Paid by check");
+            break;
+        case "CREDIT":
+            SB.append("Credit Card " + this.payment.getCardNumber());
+            break;
+        default:
         }
         SB.append("\n");
         return SB.toString();
