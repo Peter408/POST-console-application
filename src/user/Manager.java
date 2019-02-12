@@ -12,15 +12,15 @@ public class Manager extends User {
     public boolean openStore(String storeName) {
         try {
             this.store = new Store(storeName);
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             return false;
         }
         return true;
     }
 
-    
+
     public boolean closeStore() {
-        if( this.store.close() ) {
+        if (this.store.close()) {
             return true;
         }
         return false;

@@ -2,7 +2,7 @@ package item;
 
 /**
  * Represents an item in a catalog
- * 
+ *
  * @author Eric Groom
  */
 public class Item {
@@ -24,7 +24,7 @@ public class Item {
 
     /**
      * Standard-use constructor
-     * 
+     *
      * @param id    UPC id
      * @param name  Name/description of product
      * @param price Price in dollars and cents
@@ -37,7 +37,7 @@ public class Item {
 
     /**
      * Accessor for UPC id
-     * 
+     *
      * @return UPC id as String
      */
     public String getId() {
@@ -46,7 +46,7 @@ public class Item {
 
     /**
      * Accessor for item name
-     * 
+     *
      * @return item's name
      */
     public String getName() {
@@ -55,7 +55,7 @@ public class Item {
 
     /**
      * Accessor for item's price
-     * 
+     *
      * @return item's price in dollars and cents
      */
     public double getPrice() {
@@ -64,7 +64,7 @@ public class Item {
 
     /**
      * Mutator for item's UPC id
-     * 
+     *
      * @param id new UPC id as String
      */
     public void setId(String id) {
@@ -73,7 +73,7 @@ public class Item {
 
     /**
      * Mutator for item's name
-     * 
+     *
      * @param name new item name
      */
     public void setName(String name) {
@@ -82,7 +82,7 @@ public class Item {
 
     /**
      * Mutator for item's price
-     * 
+     *
      * @param price new price in dollars and cents
      */
     public void setPrice(double price) {

@@ -1,10 +1,10 @@
 package fileparser;
 
+import item.Item;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
-
-import item.Item;
 
 public class ProductParser extends FileParser {
     public ProductParser(String fileName) throws FileNotFoundException {
@@ -14,7 +14,7 @@ public class ProductParser extends FileParser {
     public HashSet<Item> extractProducts() {
         HashSet<Item> products = new HashSet<>();
         Item item;
-        while(null != (item = parseProduct())) {
+        while (null != (item = parseProduct())) {
             products.add(item);
         }
         return products;
@@ -26,9 +26,9 @@ public class ProductParser extends FileParser {
             String name = parseDescription();
             Double price = parsePrice();
             return new Item(id, name, price);
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             return null;
-        } 
+        }
     }
 
     private String parseUPC() throws IOException {

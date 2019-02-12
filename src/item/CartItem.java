@@ -2,7 +2,7 @@ package item;
 
 /**
  * Represents and item in a cart with a quantity.
- * 
+ *
  * @author Eric Groom
  */
 public class CartItem {
@@ -23,7 +23,7 @@ public class CartItem {
 
     /**
      * Standard constructor for CartItem
-     * 
+     *
      * @param item     item to be stored in a cart
      * @param quantity number of `Item`s to store, must be greater than or equal to
      *                 0
@@ -37,7 +37,7 @@ public class CartItem {
 
     /**
      * Item accessor
-     * 
+     *
      * @return `Item` instance that belongs to this class
      */
     public Item getItem() {
@@ -46,7 +46,7 @@ public class CartItem {
 
     /**
      * Quantity accessor
-     * 
+     *
      * @return quantity of CartItem
      */
     public int getQuantity() {
@@ -55,7 +55,7 @@ public class CartItem {
 
     /**
      * Mutator of quantity of CartItem.
-     * 
+     *
      * @param quantity new quantity of CartItem, must be greater than or equal to 0.
      * @throws IllegalArgumentException if quantity < 0
      */
@@ -81,7 +81,7 @@ public class CartItem {
     /**
      * Ensure item is not not null. Two `CartItem`s are equal if their item has the
      * same UPC id and they have the same quantity.
-     * 
+     *
      * @return true if objects are equal
      */
     @Override
