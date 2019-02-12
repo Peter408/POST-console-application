@@ -2,16 +2,19 @@
 class Store
 class POST {
   + final int postid
-  {static} - int idCount
+  - static int idCount
   - Store store
   + POST()
   + Transaction checkout(Customer customer, String paymentType, String cardNumber)
-  + void addItemToCatalog(Item item)
-  + void addItemToInventory(Item item)
-  + void openStore()
-  + void closeStore()
+  + boolean addItemToCatalog(Item item)
+  + boolean removeItemFromCatalog(Item item)
+  + boolean addItemToInventory(Item item)
+  + boolean removeItemFromInventory(Item item)
+  + boolean openStore()
+  + boolean closeStore()
   + Store getStore()
 }
+
 
 POST *- Store
 @enduml
