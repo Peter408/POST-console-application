@@ -71,7 +71,6 @@ public class Driver {
    * databasePath is relative to this folder, /src default path/ no path provided
    * -> database is in /src
    */
-  <<<<<<<HEAD
 
   private void setDatabasePath(String[] args) {
     if (args.length != 2 && args.length != 0) {
@@ -83,12 +82,6 @@ public class Driver {
       this.productsPath = args[0];
       this.transactionsPath = args[1];
       this.onlyTest = true;
-=======
-
-  private String getDatabasePath(String[] args) {
-    if (args.length > 0) {
-      return args[0];
->>>>>>> master
     } else {
       this.productsPath = "db/products.txt";
       this.transactionsPath = "db/transactions.txt";

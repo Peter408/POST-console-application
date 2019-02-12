@@ -31,20 +31,28 @@ public class POST {
     return new Transaction(customer, paymentType, cardNumber);
   }
 
-  public void addItemToCatalog(Item item) {
-    this.store.addToCatalog(item);
+  public boolean addItemToCatalog(Item item) {
+    return this.store.addToCatalog(item);
   }
 
-  public void addItemToInventory(Item item) {
-    this.store.addToInventory(item);
+  public boolean removeItemFromCatalog(Item item) {
+    return this.store.removeFromCatalog(item);
   }
 
-  public void openStore() {
-    this.store.open();
+  public boolean addItemToInventory(Item item) {
+    return this.store.addToInventory(item);
   }
 
-  public void closeStore() {
-    this.store.close();
+  public boolean removeItemFromInventory(Item item) {
+    return this.store.removeFromInventory(item);
+  }
+
+  public boolean openStore() {
+    return this.store.open();
+  }
+
+  public boolean closeStore() {
+    return this.store.close();
   }
 
   public Store getStore() {
