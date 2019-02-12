@@ -1,12 +1,12 @@
 package fileparser;
 
+import store.Store;
+import transaction.Transaction;
+import user.Customer;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import store.*;
-import transaction.*;
-import user.Customer;
 
 public class TransactionParser extends FileParser {
     Store store;
@@ -24,11 +24,11 @@ public class TransactionParser extends FileParser {
         ArrayList<Transaction> transactions = new ArrayList<>();
         Transaction transaction;
         try {
-            while(null != (transaction = parseTransaction())) {
+            while (null != (transaction = parseTransaction())) {
                 transactions.add(transaction);
                 nextLine();
             }
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             System.out.println(exception);
             return transactions;
         }
@@ -40,7 +40,7 @@ public class TransactionParser extends FileParser {
             Customer customer = new Customer(parseName());
             parseItems(customer);
             String paymentType = parsePaymentType();
-            switch(paymentType) {
+            switch (paymentType) {
                 case "CASH":
                 case "CHECK":
                     return new Transaction(customer, paymentType, parsePaymentSum(), "NaN");
@@ -49,8 +49,8 @@ public class TransactionParser extends FileParser {
                 default:
                     return null;
             }
-            
-        } catch(Exception exception) {
+
+        } catch (Exception exception) {
             return null;
         }
     }
@@ -66,7 +66,7 @@ public class TransactionParser extends FileParser {
         Integer quantity;
         while (!"<".equals(firstCharacter = parseSegment(1))) {
             UPC = firstCharacter.concat(parseSegment(3));
-            quantitySegment = parseLine();       
+            quantitySegment = parseLine();
             if (5 < quantitySegment.length()) {
                 quantity = Integer.valueOf(quantitySegment.substring(5));
             } else {

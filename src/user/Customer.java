@@ -1,6 +1,7 @@
 package user;
 
-import item.*;
+import item.Cart;
+import item.Item;
 
 public class Customer extends User {
     private Cart cart;
@@ -18,11 +19,11 @@ public class Customer extends User {
 
     public boolean removeFromCart(Item item, int quantity) {
         final int itemQuantity = cart.getQuantityForItem(item);
-        if(itemQuantity == 0 || quantity <= 0) {
+        if (itemQuantity == 0 || quantity <= 0) {
             return false;
         }
         final int newQuantity = itemQuantity - quantity;
-        if(newQuantity > 0) {
+        if (newQuantity > 0) {
             cart.setQuantityForItem(item, newQuantity);
         } else {
             cart.removeItem(item);
