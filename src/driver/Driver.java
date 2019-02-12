@@ -4,9 +4,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.HashMap;
-import java.io.FileNotFoundException;
-
 import java.util.Random;
+import java.io.FileNotFoundException;
 
 import post.POST;
 import fileparser.TransactionParser;
@@ -107,7 +106,7 @@ public class Driver {
   }
 
   private void setDbLocation(String path) {
-    this.dbLocation = "Database:\n    " + path + "transactions.txt\n    " + path + "products.txt";
+    this.dbLocation = "Database:\n\t" + path + "transactions.txt\n\t" + path + "products.txt";
   }
 
   protected void screen(Page page) {
