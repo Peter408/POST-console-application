@@ -1,0 +1,9 @@
+@startuml package
+package "transaction" {
+    class Transaction
+    class Payment
+    class Invoice
+}
+Transaction *- Payment
+Invoice o- Transaction
+@enduml

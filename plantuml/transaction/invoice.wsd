@@ -1,0 +1,9 @@
+@startuml invoice
+class Transaction
+class Invoice {
+    - Transaction transaction
+    + Invoice(Transaction transaction)
+    + String displayInvoice()
+}
+Invoice o- Transaction
+@enduml

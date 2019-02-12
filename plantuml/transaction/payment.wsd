@@ -1,0 +1,33 @@
+@startuml payment
+enum PaymentType {
+    CASH, CREDIT, CHECK;
+}
+
+class Payment {
+    - PaymentType paymentType
+    - boolean approved
+    - double total
+    - double payment
+    - double change
+    - String cardNumber
+    + Payment(String paymentType, double total, double payment, String cardNumber)
+    + Payment(String paymentType, double total, double payment)
+    + Payment(String paymentType, double total, String cardNumber)
+    - void pay()
+    - void chargeCredit()
+    - void chargeCash()
+    - void chargeCheck()
+    - boolean validateCard()
+    + String getPaymentType()
+    + boolean getApproved()
+    + void setApproved(boolean approved)
+    + double getTotal()
+    + double getPayment()
+    + double getChange()
+    + String getCardNumber()
+    - void printApproved(StringBuffer SB)
+    + String toString()
+}
+
+Payment o- PaymentType
+@enduml
