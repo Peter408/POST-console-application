@@ -35,8 +35,16 @@ public class POST {
     return this.store.addToCatalog(item);
   }
 
+  public boolean removeItemFromCatalog(Item item) {
+    return this.store.removeFromCatalog(item);
+  }
+
   public boolean addItemToInventory(Item item) {
     return this.store.addToInventory(item);
+  }
+
+  public boolean removeItemFromInventory(Item item) {
+    return this.store.removeFromInventory(item);
   }
 
   public boolean openStore() {
