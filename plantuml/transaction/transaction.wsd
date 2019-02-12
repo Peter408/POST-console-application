@@ -1,0 +1,28 @@
+@startuml transaction
+class Customer
+class Payment
+class Transaction {
+    - Customer customer
+    - Payment payment
+    - String today
+    + Transaction(Customer customer, String paymentType, double payment, String cardNumber)
+    + Transaction(Customer customer, String paymentType, double payment)
+    + Transaction(Customer customer, String paymentType, String cardNumber)
+    + String getPaymentType()
+    + boolean getApproved()
+    + void setApproved(boolean approved)
+    + double getTotal()
+    + double getPayment()
+    + double getChange()
+    + String getCardNumber()
+    + String getTimestamp()
+    + Customer getCustomer()
+    + String getFormattedCartList()
+    - void setDateTime()
+    + String displayTransactionPayment()
+    + String displayRejected()
+    + String toString()
+}
+Transaction *- Payment
+Transaction o- Customer
+@enduml

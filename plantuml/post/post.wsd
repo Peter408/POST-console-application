@@ -1,0 +1,17 @@
+@startuml post
+class Store
+class POST {
+  + final int postid
+  {static} - int idCount
+  - Store store
+  + POST()
+  + Transaction checkout(Customer customer, String paymentType, String cardNumber)
+  + void addItemToCatalog(Item item)
+  + void addItemToInventory(Item item)
+  + void openStore()
+  + void closeStore()
+  + Store getStore()
+}
+
+POST *- Store
+@enduml

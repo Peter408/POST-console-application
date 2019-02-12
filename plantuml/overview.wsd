@@ -1,4 +1,4 @@
-@startuml
+@startuml overview
 scale max 800*600
 package "fileparser" {
     class FileParser

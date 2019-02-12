@@ -1,4 +1,4 @@
-@startuml
+@startuml productparser
 class FileParser
 class ProductParser {
     + ProductParser(String fileName)
