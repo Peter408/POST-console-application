@@ -1,0 +1,17 @@
+@startuml cartitem
+class Item
+class CartItem {
+    private Item item
+    private int quantity
+    public CartItem()
+    public CartItem(Item item, int quantity)
+    public Item getItem()
+    public int getQuantity()
+    public void setQuantity(int quantity)
+    private void checkQuantity(int quantity)
+    public int hashCode()
+    public boolean equals(Object obj)
+}
+
+CartItem o- Item
+@enduml

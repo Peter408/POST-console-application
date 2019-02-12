@@ -1,0 +1,10 @@
+@startuml package
+package "item" {
+    class Cart
+    class CartItem
+    class Item
+}
+
+Cart o- "0..*" Item
+CartItem o- Item
+@enduml
