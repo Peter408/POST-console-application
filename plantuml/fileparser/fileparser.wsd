@@ -1,0 +1,11 @@
+@startuml
+abstract class FileParser {
+    - File file
+    - FileReader fileReader
+    - BufferedReader bufferedReader
+    + FileParser(String fileName)
+    + String parseSegment(int segmentLength)
+    + String parseLine()
+    + void nextLine()
+}
+@enduml
