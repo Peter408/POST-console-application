@@ -1,0 +1,18 @@
+@startuml
+class Store
+class FileParser
+class TransactionParser {
+    Store store
+    + TransactionParser(String fileName, Store storeParameter)
+    + ArrayList<Transaction> extractTransactions()
+    - ArrayList<Transaction> parseTransactions()
+    - Transaction parseTransaction()
+    - String parseName()
+    - void parseItems(Customer customer)
+    - String parsePaymentType()
+    - double parsePaymentSum()
+    - String parseCreditCardNumber()
+}
+FileParser <|-- TransactionParser
+TransactionParser o- Store
+@enduml

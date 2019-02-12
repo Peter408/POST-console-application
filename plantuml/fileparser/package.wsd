@@ -1,0 +1,9 @@
+@startuml
+package "fileparser" {
+    class FileParser
+    class ProductParser
+    class TransactionParser
+}
+FileParser <|-- ProductParser
+FileParser <|-- TransactionParser
+@enduml
