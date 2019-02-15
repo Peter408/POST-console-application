@@ -1,4 +1,4 @@
-WITH_JAR=-cp ".:./jars/gson-2.8.5.jar"
+WITH_JAR=-cp "./:../jars/gson-2.8.5.jar"
 
 install:
 	./scripts/downloadgson
@@ -11,3 +11,6 @@ build:
 
 run:
 	cd src; java ${WITH_JAR} Main
+
+gson:
+	cd src; javac ${WITH_JAR} item/GSONTest.java; java ${WITH_JAR} item/GSONTest
