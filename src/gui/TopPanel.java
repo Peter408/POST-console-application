@@ -16,7 +16,5 @@ public class TopPanel extends JPanel {
         this.setPreferredSize(dimension);
         this.setSize(dimension);
         this.setBackground(Color.CYAN);
-        this.setFocusable(true);
-        this.requestFocusInWindow();
     }
 }

@@ -27,7 +27,6 @@ public class ShopPanel extends JPanel{
 
         constraints.gridy = 2;
         this.add(new BottomPanel(), constraints);
-
     }
 }
 

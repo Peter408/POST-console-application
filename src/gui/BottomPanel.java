@@ -14,9 +14,5 @@ public class BottomPanel extends  JPanel{
         this.setPreferredSize( dimension );
         this.setSize( dimension );
         this.setBackground(Color.BLUE);
-        this.setFocusable( true );
-        this.requestFocusInWindow();
-
     }
-
 }

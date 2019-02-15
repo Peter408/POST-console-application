@@ -15,8 +15,13 @@ public class MiddlePanel extends JPanel {
         this.setPreferredSize( dimension );
         this.setSize( dimension );
         this.setBackground(Color.BLACK);
-        this.setFocusable( true );
-        this.requestFocusInWindow();
+
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx =0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 3;
     }
 
 }

@@ -15,7 +15,5 @@ public class OptionsPanel extends JPanel {
         this.setPreferredSize(dimension);
         this.setSize(dimension);
         this.setBackground(Color.ORANGE);
-        this.setFocusable(true);
-        this.requestFocusInWindow();
     }
 }
