@@ -1,7 +1,7 @@
 package post;
 
 import item.Item;
-import store.Store;
+import store.*;
 import transaction.Transaction;
 import user.Customer;
 
@@ -57,5 +57,9 @@ public class POST {
 
     public Store getStore() {
         return this.store;
+    }
+
+    public Catalog getCatalog() {
+        return this.store.getCatalog();
     }
 }
