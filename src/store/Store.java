@@ -102,6 +102,11 @@ public class Store {
         return this.catalog.removeFromCatalog(item);
     }
 
+    //Get catalog object
+    public Catalog getCatalog() {
+        return this.catalog;
+    }
+
 
     //Retrieve all items in catalog
     public List<Item> getAvailableItems() {
