@@ -44,11 +44,19 @@ public class Api {
         return helpers.stream().map(i -> i.build()).collect(Collectors.toList());
     }
 
-    public void putTransaction(Transaction transaction) throws IOException {
+    public int putTransaction(Transaction transaction) throws IOException {
         String body = this.gson.toJson(new TransactionHelper(transaction));
         Put putHandler = new Put(this.transactionsUrl);
         Response res = putHandler.execute(body);
-        System.out.println(res);
+        return this.gson.fromJson(res.getBody(), Id.class).getId();
+    }
+
+    private class Id {
+        int id;
+
+        int getId() {
+            return this.id;
+        }
     }
 
     public void putPaymentType(Payment payment) throws IOException{
