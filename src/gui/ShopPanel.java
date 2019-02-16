@@ -4,13 +4,19 @@ import gui.panel.bottompanel.BottomPanel;
 import gui.panel.middlepanel.MiddlePanel;
 import gui.panel.optionspanel.OptionsPanel;
 import gui.panel.toppanel.TopPanel;
+import post.POST;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ShopPanel extends JPanel{
+    
     private TopPanel topPanel = new TopPanel();
-    public ShopPanel(){
+    private MiddlePanel middlePanel;
+    private BottomPanel bottomPanel = new BottomPanel();
+
+
+    public ShopPanel(POST post){
         this.setLayout( new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -28,10 +34,11 @@ public class ShopPanel extends JPanel{
         this.add(topPanel, constraints);
 
         constraints.gridy = 1;
-        this.add(new MiddlePanel(), constraints);
+        middlePanel = new MiddlePanel(post.getCatalog());
+        this.add(middlePanel, constraints);
 
         constraints.gridy = 2;
-        this.add(new BottomPanel(), constraints);
+        this.add(bottomPanel, constraints);
     }
 
     public String getCustomerName() {
