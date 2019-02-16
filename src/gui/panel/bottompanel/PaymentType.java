@@ -2,8 +2,6 @@ package gui.panel.bottompanel;
 
 import javax.swing.*;
 
-import com.sun.org.apache.xalan.internal.templates.Constants;
-
 import java.awt.*;
 
 public class PaymentType {
@@ -15,7 +13,7 @@ public class PaymentType {
 
         JPanel paymentPanel = new JPanel();
         paymentPanel.setLayout(new GridBagLayout());
-        
+
         // check
         // or make as JPanal and add to it from the function
         JRadioButton checkPanel = createRadioButton("Check");
