@@ -9,10 +9,10 @@ import user.Customer;
 class ApiTest {
     public static void main(String[] args) {
         try {
-            Api api = new Api("http://localhost:3000");
+            Api api = new Api("https://post-server.herokuapp.com");
             Customer c = new Customer("Eric");
             Transaction t = new Transaction(c, "CREDIT", "12312");
-            api.putTransaction(t);
+            System.out.println(api.putTransaction(t));
             // for (Item item : api.getProducts()) {
             // System.out.println(item);
             // }
