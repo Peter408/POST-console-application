@@ -2,7 +2,6 @@ package store;
 
 import item.Item;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Catalog implements Observer {
@@ -39,28 +38,6 @@ public class Catalog implements Observer {
             result = this.catalogItems.get(index);
         }
         return result;
-    }
-
-    //Search functions
-    public ArrayList<Item> searchItemByName(String query){
-        ArrayList<Item> resultsList = new ArrayList<>();
-
-        for( Item item : catalogItems){
-            if(item.getName().toLowerCase().contains(query.toLowerCase())){
-                resultsList.add(item);
-            }
-        }
-        return resultsList;
-    }
-
-    public ArrayList<Item> searchItemByUPC(String upc){
-        ArrayList<Item> resultsList = new ArrayList<>();
-        for(Item item : catalogItems){
-            if(item.getId().equalsIgnoreCase(upc)){
-                resultsList.add(item);
-            }
-        }
-        return resultsList;
     }
 
     //Retrieve items in catalog based on upc / description
