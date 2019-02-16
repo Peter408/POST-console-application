@@ -1,4 +1,4 @@
-package gui;
+package gui.panel.toppanel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -15,7 +15,7 @@ public class TopPanel extends JPanel {
     private JTextField customerName = new JTextField();
     private static final int MAX_WIDTH = 800;
     private static final int MAX_HEIGHT = 75;
-    private static final int ITEM_GAP = 5;
+
 
     private Dimension dimension;
 
