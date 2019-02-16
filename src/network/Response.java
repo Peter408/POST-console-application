@@ -47,4 +47,9 @@ public class Response {
             this.result = this.result + line;
         }
     }
+
+    @Override
+    public String toString() {
+        return this.getBody();
+    }
 }

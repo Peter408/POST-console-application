@@ -25,8 +25,7 @@ public class Cart {
      *                  `CartItem`s with null `Item`s will be ignored.
      */
     public Cart(List<CartItem> purchases) {
-        this.itemToQuantityMap = purchases.stream().filter(i -> i != null && i.getItem() != null)
-                .collect(Collectors.toMap(item -> item.getItem(), item -> item.getQuantity()));
+        this.setCartItems(purchases);
     }
 
     /**
@@ -96,6 +95,11 @@ public class Cart {
         itemToQuantityMap.clear();
     }
 
+    public void setCartItems(List<CartItem> items) {
+        this.itemToQuantityMap = items.stream().filter(i -> i != null && i.getItem() != null)
+                .collect(Collectors.toMap(item -> item.getItem(), item -> item.getQuantity()));
+    }
+
     /**
      * displays the cart in a list format
      *
@@ -104,9 +108,8 @@ public class Cart {
     public String displayCartItems() {
         StringBuffer SB = new StringBuffer();
         itemToQuantityMap.forEach((k, v) -> {
-            SB.append("Item: " + k.getName() + " " + v + " @ $" +
-                    String.format("%.2f", k.getPrice()) + " $" +
-                    String.format("%.2f", k.getPrice() * v) + "\n");
+            SB.append("Item: " + k.getName() + " " + v + " @ $" + String.format("%.2f", k.getPrice()) + " $"
+                    + String.format("%.2f", k.getPrice() * v) + "\n");
         });
         return SB.toString();
     }

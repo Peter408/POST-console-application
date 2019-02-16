@@ -3,14 +3,19 @@ package network;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import item.Item;
+import transaction.Transaction;
+import user.Customer;
 
 class ApiTest {
     public static void main(String[] args) {
         try {
             Api api = new Api("http://localhost:3000");
-            for (Item item : api.getProducts()) {
-                System.out.println(item);
-            }
+            Customer c = new Customer("Eric");
+            Transaction t = new Transaction(c, "CREDIT", "12312");
+            api.putTransaction(t);
+            // for (Item item : api.getProducts()) {
+            // System.out.println(item);
+            // }
         } catch (MalformedURLException e) {
             System.out.println("bad url");
             System.out.println(e.getMessage());
