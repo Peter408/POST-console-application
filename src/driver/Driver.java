@@ -1,19 +1,26 @@
 package driver;
 
-import fileparser.ProductParser;
-import fileparser.TransactionParser;
-import item.Item;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Random;
+import java.io.FileNotFoundException;
+
 import post.POST;
+import fileparser.TransactionParser;
+import fileparser.ProductParser;
+import item.Item;
 import transaction.Invoice;
 import transaction.Transaction;
 
 import java.io.FileNotFoundException;
-import java.util.*;
 
 /*
   Driver is the middleware between the POST and the UI
 */
 public class Driver {
+
     protected final String NAME = "~~~~ McBurgerTown Point of Sale Terminal ~~~~";
     protected final String STATUS = "\nSTATUS\nStore: ";
     protected final String INVALIDINPUT = "Input not recognized, valid input is a single digit number from 1 - 4";
@@ -26,8 +33,8 @@ public class Driver {
      * Runtime State
      */
     protected Page page = Page.MAIN;
-    private Inputs currentInput;
-    private HashMap<Page, Inputs> inputs;
+    private Input currentInput;
+    private HashMap<Page, Input> inputs;
     private Scanner in;
     private POST post;
     private TransactionParser transactionParser;
@@ -36,15 +43,16 @@ public class Driver {
     protected String productsPath;
     protected String transactionsPath;
     protected String dbLocation;
+
     // only run tests and not menu
     private boolean onlyTest = false;
-
+    
     public Driver() {
         this.in = new Scanner(System.in);
         this.post = new POST();
         this.storeState = "CLOSED";
         this.dbLocation = "";
-        this.inputs = new HashMap<Page, Inputs>();
+        this.inputs = new HashMap<Page, Input>();
         this.inputs.put(Page.MAIN, new MainMenu(this));
         this.inputs.put(Page.OPERATIONS, new Operations(this));
         this.inputs.put(Page.SHOPPING, new Shopping(this));
@@ -62,11 +70,6 @@ public class Driver {
         }
         screen(this.page);
     }
-
-    /*
-     * databasePath is relative to this folder, /src default path/ no path provided
-     * -> database is in /src
-     */
 
     private void setDatabasePath(String[] args) {
         if (args.length != 2 && args.length != 0) {
