@@ -1,5 +1,10 @@
 package gui;
 
+import gui.panel.bottompanel.BottomPanel;
+import gui.panel.middlepanel.MiddlePanel;
+import gui.panel.optionspanel.OptionsPanel;
+import gui.panel.toppanel.TopPanel;
+
 import javax.swing.*;
 import java.awt.*;
 

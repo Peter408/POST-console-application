@@ -1,4 +1,4 @@
-package gui;
+package gui.panel.bottompanel;
 
 import javax.swing.*;
 import java.awt.*;
