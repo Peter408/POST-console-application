@@ -1,7 +1,6 @@
 package gui.panel.middlepanel;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class MiddlePanel extends JPanel {
