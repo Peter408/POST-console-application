@@ -1,4 +1,4 @@
-package gui;
+package gui.panel.optionspanel;
 
 
 import javax.swing.*;
