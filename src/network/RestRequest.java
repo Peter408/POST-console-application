@@ -8,14 +8,14 @@ import java.io.IOException;
 public abstract class RestRequest {
     protected HttpURLConnection connection;
 
-    public RestRequest(String uri) throws MalformedURLException, IOException {
-        connection = (HttpURLConnection) new URL(uri).openConnection();
+    public RestRequest(URL uri) throws MalformedURLException, IOException {
+        connection = (HttpURLConnection) uri.openConnection();
         setRequiredHeaders();
     }
 
-    public abstract String execute() throws IOException;
+    public abstract Response execute() throws IOException;
 
-    public abstract String execute(String body) throws IOException;
+    public abstract Response execute(String body) throws IOException;
 
     private void setRequiredHeaders() {
         // I want json returned
@@ -23,6 +23,6 @@ public abstract class RestRequest {
         // I'm sending json
         connection.setRequestProperty("Content-Type", "application/json");
         // Required authentication token
-        connection.setRequestProperty("x-team-id", "jrob");
+        connection.setRequestProperty("x-team-id", "team-tabs");
     }
 }

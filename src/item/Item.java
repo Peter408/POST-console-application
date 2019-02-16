@@ -36,6 +36,22 @@ public class Item {
     }
 
     /**
+     * Standard-use constructor
+     *
+     * @param id    UPC id
+     * @param name  Name/description of product
+     * @param price Price in dollars and cents
+     */
+    public Item(String id, String name, String price) throws NumberFormatException {
+        this.id = id;
+        this.name = name;
+        String s = price.substring(1);
+        System.out.println("string to be parsed: " + s);
+        this.price = Double.parseDouble(s);
+        ;
+    }
+
+    /**
      * Accessor for UPC id
      *
      * @return UPC id as String
