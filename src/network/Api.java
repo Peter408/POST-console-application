@@ -20,14 +20,17 @@ public class Api {
     private Gson gson;
     private static final String PRODUCTS_PATH = "/products";
     private static final String TRANSACTIONS_PATH = "/sales";
+    private static final String PAYMENTS_PATH = "/payments";
     private URL baseUri;
     private URL productsUrl;
     private URL transactionsUrl;
+    private URL paymentUrl;
 
     public Api(String uri) throws MalformedURLException {
         this.baseUri = new URL(uri);
         this.productsUrl = new URL(this.baseUri.toExternalForm() + PRODUCTS_PATH);
         this.transactionsUrl = new URL(this.baseUri.toExternalForm() + TRANSACTIONS_PATH);
+        this.paymentUrl = new URL(this.baseUri.toExternalForm() + PAYMENTS_PATH);
         this.gson = new Gson();
     }
 
@@ -35,8 +38,7 @@ public class Api {
         Get getHandler = new Get(this.productsUrl);
         Response res = getHandler.execute();
         String body = res.getBody();
-        TypeToken<List<ItemHelper>> itemListType = new TypeToken<List<ItemHelper>>() {
-        };
+        TypeToken<List<ItemHelper>> itemListType = new TypeToken<List<ItemHelper>>() {};
         Type type = itemListType.getType();
         List<ItemHelper> helpers = gson.fromJson(body, type);
         return helpers.stream().map(i -> i.build()).collect(Collectors.toList());
@@ -47,6 +49,26 @@ public class Api {
         Put putHandler = new Put(this.transactionsUrl);
         Response res = putHandler.execute(body);
         System.out.println(res);
+    }
+
+    public void putPaymentType(Payment payment) throws IOException{
+      String body = this.gson.toJson(new PaymentHelper(
+        payment.getPaymentType(),
+        payment.getPayment(),
+        payment.getCardNumber()
+      ));
+      try {
+        URL url = appendURL(this.paymentUrl, payment.getPaymentType());
+        Put putHandler = new Put(url);
+        Response res = putHandler.execute(body);
+        System.out.println(res);
+      } catch (MalformedURLException e) {
+        e.printStackTrace();
+      }
+    }
+
+    private URL appendURL(URL url, String extension) throws MalformedURLException {
+      return new URL(url.toExternalForm() + extension);
     }
 
     private class ItemHelper {

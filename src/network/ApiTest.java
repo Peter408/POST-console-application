@@ -9,7 +9,7 @@ import user.Customer;
 class ApiTest {
     public static void main(String[] args) {
         try {
-            Api api = new Api("http://localhost:3000");
+            Api api = new Api("http://post-server.herokuapp.com");
             Customer c = new Customer("Eric");
             Transaction t = new Transaction(c, "CREDIT", "12312");
             api.putTransaction(t);
