@@ -1,4 +1,4 @@
-package gui;
+package gui.panel.toppanel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
