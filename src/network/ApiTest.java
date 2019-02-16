@@ -8,7 +8,9 @@ class ApiTest {
     public static void main(String[] args) {
         try {
             Api api = new Api("http://localhost:3000");
-            System.out.println(api.getProducts());
+            for (Item item : api.getProducts()) {
+                System.out.println(item);
+            }
         } catch (MalformedURLException e) {
             System.out.println("bad url");
             System.out.println(e.getMessage());
@@ -16,7 +18,7 @@ class ApiTest {
             System.out.println("error getting products");
             System.out.println(e.getMessage());
         }
-        Item item = new Item("0111", "asdf", "$79.75");
-        System.out.println(item);
+        // Item item = new Item("0111", "asdf", "$79.75");
+        // System.out.println(item);
     }
 }

@@ -4,7 +4,7 @@ install:
 	./scripts/downloadgson
 
 clean:
-	rm -rf src/*.class
+	find src -type f -name "*.class" -delete
 
 build:
 	cd src; javac ${WITH_JAR} Main.java

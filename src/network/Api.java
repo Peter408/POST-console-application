@@ -4,6 +4,8 @@ import java.net.MalformedURLException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.lang.reflect.Type;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,13 +25,36 @@ public class Api {
         this.gson = new Gson();
     }
 
+    class ItemHelper {
+        private String upc;
+        private String description;
+        private String price;
+
+        public ItemHelper(String upc, String description, String price) {
+            this.upc = upc;
+            this.description = description;
+            this.price = price;
+        }
+
+        public Item makeItem() {
+            return new Item(this.upc, this.description, Double.parseDouble(this.price.substring(1)));
+        }
+
+        @Override
+        public String toString() {
+            return String.format("upc: %-5s, description: %-20s, price: %-7s%n", this.upc, this.description,
+                    this.price);
+        }
+    }
+
     public List<Item> getProducts() throws IOException {
         Get getHandler = new Get(this.productsUrl);
         Response res = getHandler.execute();
         String body = res.getBody();
-
-        TypeToken<List<Item>> itemListType = new TypeToken<List<Item>>() {
+        TypeToken<List<ItemHelper>> itemListType = new TypeToken<List<ItemHelper>>() {
         };
-        return gson.fromJson(body, itemListType.getType());
+        Type type = itemListType.getType();
+        List<ItemHelper> helpers = gson.fromJson(body, type);
+        return helpers.stream().map(i -> i.makeItem()).collect(Collectors.toList());
     }
 }
