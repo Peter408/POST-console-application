@@ -4,12 +4,9 @@ import javax.swing.*;
 import javax.swing.JButton;
 import javax.swing.border.Border;
 
-import javafx.scene.control.Button;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 
 public class Checkout {
     JButton button;
@@ -27,7 +24,7 @@ public class Checkout {
 
     void createCheckout() {
         JPanel checkoutPanel = new JPanel();
-    
+
         checkoutPanel.setLayout(new BorderLayout());
 
         button = new JButton();
@@ -39,7 +36,8 @@ public class Checkout {
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Button was clicked");
-                if(delegate != null) delegate.checkoutButtonClicked(e);
+                if (delegate != null)
+                    delegate.checkoutButtonClicked(e);
             }
         });
 
