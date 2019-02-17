@@ -8,12 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SearchBarPanel extends JPanel implements ActionListener {
-    private static final int WIDTH = 600;
-    private static final int HEIGHT = 75;
+    private static final int WIDTH = 400;
+    private static final int HEIGHT = 30;
     private Dimension dimension;
 
-    private JTextField textField;
-    private JLabel label;
+    private JTextField searchField;
+    private JLabel searchLabel;
 
     Catalog catalog;
 
@@ -34,6 +34,8 @@ public class SearchBarPanel extends JPanel implements ActionListener {
         this.setSize(dimension);
         // this.setBackground(Color.GREEN);
         initializeSubviews();
+        this.add(searchLabel);
+        this.add(searchField);
     }
 
     SearchBarPanel(Delegate delegate) {
@@ -42,9 +44,9 @@ public class SearchBarPanel extends JPanel implements ActionListener {
     }
 
     private void initializeSubviews() {
-        this.textField = new JTextField();
-        this.label = new JLabel();
-        this.label.setText("Search:");
+        this.searchLabel = new JLabel("Search: ");
+        this.searchField = new JTextField();
+        searchField.setColumns(40);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class SearchBarPanel extends JPanel implements ActionListener {
         if (this.delegate == null)
             return;
         System.out.println("asdfasdfasdf");
-        delegate.filterResults(this.textField.getText());
+        delegate.filterResults(this.searchField.getText());
     }
 
 }
