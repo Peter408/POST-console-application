@@ -10,8 +10,9 @@ import javax.swing.JPanel;
 public class Total {
     String total = "$20";
     JLabel label;
+    JPanel panel;
 
-    JPanel createTotal() {
+    void createTotal() {
         JPanel totalPanel = new JPanel();
         totalPanel.setLayout(new BorderLayout());
     
@@ -19,7 +20,11 @@ public class Total {
 
         totalPanel.add(label, BorderLayout.EAST);
 
-        return totalPanel;
+        this.panel = totalPanel;
+    }
+
+    JPanel getPanel() {
+        return this.panel;
     }
 
     void setTotal(String total) {

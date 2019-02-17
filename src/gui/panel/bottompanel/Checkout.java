@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 
 public class Checkout {
     JButton button;
+    JPanel panel;
+
     CheckoutDelegate delegate;
 
     interface CheckoutDelegate {
@@ -23,7 +25,7 @@ public class Checkout {
         this.delegate = delegate;
     }
 
-    JPanel createCheckout() {
+    void createCheckout() {
         JPanel checkoutPanel = new JPanel();
     
         checkoutPanel.setLayout(new BorderLayout());
@@ -41,6 +43,10 @@ public class Checkout {
             }
         });
 
-        return checkoutPanel;
+        this.panel = checkoutPanel;
+    }
+
+    JPanel getPanel() {
+        return this.panel;
     }
 }

@@ -10,7 +10,9 @@ public class PaymentType {
     JRadioButton cashPanel;
     JRadioButton creditPanel;
 
-    JPanel createPaymentType() {
+    JPanel panel;
+
+    void createPaymentType() {
         JPanel paymentPanel = new JPanel();
         BoxLayout boxLayout = new BoxLayout(paymentPanel, BoxLayout.Y_AXIS);
         paymentPanel.setLayout(boxLayout);
@@ -38,13 +40,17 @@ public class PaymentType {
         buttonGroup.add(cashPanel);
         buttonGroup.add(creditPanel);
         
-        return paymentPanel;
+        this.panel = paymentPanel;
     }
 
     private JRadioButton createRadioButton(String name) {
         JRadioButton radioButton = new JRadioButton();
         radioButton.setText(name); 
         return radioButton;
+    }
+
+    public JPanel getPanel() {
+        return this.panel;
     }
 
     enum PaymentTypeEnum {
