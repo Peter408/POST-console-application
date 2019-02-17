@@ -14,26 +14,29 @@ public class BottomPanel extends  JPanel implements CheckoutDelegate {
     private Dimension dimension;
     private PaymentType paymentType;
     private Checkout checkout;
+    private Total total;
 
     public BottomPanel() {
         this.dimension = new Dimension( MAX_WIDTH, MAX_HEIGHT);
         this.setPreferredSize( dimension );
         this.setSize( dimension );
-        this.setBackground(Color.GRAY);
 
         this.setLayout(new BorderLayout());
 
         // create instance
         paymentType = new PaymentType();
         checkout = new Checkout(this);
+        total = new Total();
 
         JPanel paymentTypePanel = paymentType.createPaymentType();
         JPanel checkoutPanel = checkout.createCheckout();
+        JPanel totalPanel = total.createTotal();
 
         // add payenttype
         this.add(paymentTypePanel, BorderLayout.WEST);
 
         // add total
+        this.add(totalPanel, BorderLayout.NORTH);
 
         // add checkouts
         this.add(checkoutPanel, BorderLayout.EAST);
