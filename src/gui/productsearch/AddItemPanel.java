@@ -26,7 +26,7 @@ public class AddItemPanel extends JPanel {
         this.add(productTable, constraints);
 
         constraints.gridy = 2;
-        ProductAdder productAdder = new ProductAdder(catalog);
+        ProductAdder productAdder = new ProductAdder();
         this.add(productAdder, constraints);
     }
 }
