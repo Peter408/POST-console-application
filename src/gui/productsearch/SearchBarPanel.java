@@ -1,30 +1,28 @@
 package gui.productsearch;
 
-import store.Catalog;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class SearchBarPanel extends JPanel implements ActionListener {
+public class SearchBarPanel extends JPanel {
     private static final int WIDTH = 400;
     private static final int HEIGHT = 30;
     private Dimension dimension;
-
     private JTextField searchField;
     private JLabel searchLabel;
-
-    Catalog catalog;
-
     private Delegate delegate;
 
     interface Delegate {
         void filterResults(String query);
     }
 
-    SearchBarPanel(Catalog catalog) {
-        this.catalog = catalog;
+    public SearchBarPanel (){
+        initialize();
+    }
+
+    public SearchBarPanel(Delegate delegate) {
+        this.delegate = delegate;
         initialize();
     }
 
@@ -38,23 +36,23 @@ public class SearchBarPanel extends JPanel implements ActionListener {
         this.add(searchField);
     }
 
-    SearchBarPanel(Delegate delegate) {
-        this.delegate = delegate;
-        initializeSubviews();
-    }
-
     private void initializeSubviews() {
         this.searchLabel = new JLabel("Search: ");
         this.searchField = new JTextField();
+        searchField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) { }
+
+            @Override
+            public void keyPressed(KeyEvent e) { }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(delegate != null) {
+                    delegate.filterResults(searchField.getText());
+                }
+            }
+        });
         searchField.setColumns(40);
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (this.delegate == null)
-            return;
-        System.out.println("asdfasdfasdf");
-        delegate.filterResults(this.searchField.getText());
-    }
-
 }
