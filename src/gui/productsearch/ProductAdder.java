@@ -1,4 +1,4 @@
-package gui.panel.productsearch;
+package gui.productsearch;
 
 import store.Catalog;
 
@@ -11,15 +11,16 @@ public class ProductAdder extends JPanel {
     private Dimension dimension;
 
     Catalog catalog;
-    ProductAdder (Catalog catalog){
+
+    ProductAdder(Catalog catalog) {
         this.catalog = catalog;
         initialize();
     }
 
-    public void initialize(){
-        this.dimension = new Dimension( WIDTH, HEIGHT);
-        this.setPreferredSize( dimension );
-        this.setSize( dimension );
+    public void initialize() {
+        this.dimension = new Dimension(WIDTH, HEIGHT);
+        this.setPreferredSize(dimension);
+        this.setSize(dimension);
         this.setBackground(Color.BLUE);
     }
 }

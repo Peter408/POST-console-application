@@ -1,5 +1,5 @@
 import gui.ShopFrame;
-import gui.panel.productsearch.AddItemFrame;
+import gui.productsearch.AddItemFrame;
 import item.Item;
 import post.POST;
 
@@ -14,6 +14,6 @@ public class Main {
         post.addItemToCatalog(orange);
 
         new ShopFrame(new POST());
-        new AddItemFrame( post.getCatalog() );
+        new AddItemFrame(post.getCatalog());
     }
 }

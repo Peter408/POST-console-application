@@ -1,4 +1,4 @@
-package gui.panel.productsearch;
+package gui.productsearch;
 
 import store.Catalog;
 
@@ -12,17 +12,16 @@ public class ProductTable extends JPanel {
 
     Catalog catalog;
 
-    ProductTable(Catalog catalog){
+    ProductTable(Catalog catalog) {
         this.catalog = catalog;
         initialize();
     }
 
-    public void initialize(){
-        this.dimension = new Dimension( WIDTH, HEIGHT);
-        this.setPreferredSize( dimension );
-        this.setSize( dimension );
+    public void initialize() {
+        this.dimension = new Dimension(WIDTH, HEIGHT);
+        this.setPreferredSize(dimension);
+        this.setSize(dimension);
         this.setBackground(Color.CYAN);
     }
-
 
 }
