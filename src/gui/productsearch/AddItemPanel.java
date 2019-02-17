@@ -1,15 +1,20 @@
 package gui.productsearch;
 
+import item.Item;
 import store.Catalog;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedList;
 
 public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate{
     private static final int WIDTH = 600;
     private static final int HEIGHT = 125;
 
+    private Catalog catalog;
+
     AddItemPanel(Catalog catalog) {
+        this.catalog = catalog;
         this.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -33,5 +38,11 @@ public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate{
     @Override
     public void filterResults(String query) {
         System.out.print(query);
+        LinkedList<Item> results = new LinkedList<>();
+
+        results.addAll(catalog.searchItemByName(query));
+        results.addAll(catalog.searchItemByUPC(query));
+        if(results!= null) { System.out.println(results); }
+        //System.out.println(catalog);
     }
 }

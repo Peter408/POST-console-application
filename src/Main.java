@@ -12,8 +12,8 @@ public class Main {
         post.addItemToInventory(orange);
         post.addItemToCatalog(apple);
         post.addItemToCatalog(orange);
-
-        new ShopFrame(new POST());
+        
+        new ShopFrame( post );
         new AddItemFrame(post.getCatalog());
     }
 }
