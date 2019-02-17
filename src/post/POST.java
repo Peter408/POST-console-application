@@ -1,6 +1,11 @@
 package post;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.List;
+
 import item.Item;
+import network.Api;
 import store.*;
 import transaction.Transaction;
 import user.Customer;
@@ -13,10 +18,32 @@ public class POST {
     public final int postid;
     private static int idCount = 0;
     private Store store;
+    private Api api;
 
-    public POST() {
+    public POST(String apiUrl) {
         this.postid = idCount++;
         this.store = new Store(Integer.toString(this.postid));
+        try {
+            this.api = new Api(apiUrl);
+            initializeProductList();
+            store.getAvailableItems();
+        } catch (MalformedURLException e) {
+            System.err.println("Invalid API URL:" + e.getMessage());
+        }
+    }
+
+    private boolean initializeProductList() {
+        try {
+            List<Item> products = api.getProducts();
+            for (Item item : products) {
+                store.addToInventory(item);
+                store.addToCatalog(item);
+            }
+            return true;
+        } catch (IOException e) {
+            System.err.println("unable to fetch product list:" + e.getMessage());
+        }
+        return false;
     }
 
     /**
