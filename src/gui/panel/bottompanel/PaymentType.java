@@ -1,44 +1,65 @@
 package gui.panel.bottompanel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 
-public class PaymentType {
-    private static final int MAX_WIDTH = 400; // change this shit cuz im stupid
-    private static final int TEXT_HEIGHT = 30;
-    
-    static JPanel createPaymentType() {
-        GridBagConstraints constraints = setConstraints();
+public class PaymentType { 
+    JRadioButton checkPanel;
+    JRadioButton cashPanel;
+    JRadioButton creditPanel;
 
+    JPanel createPaymentType() {
         JPanel paymentPanel = new JPanel();
-        paymentPanel.setLayout(new GridBagLayout());
+        BoxLayout boxLayout = new BoxLayout(paymentPanel, BoxLayout.Y_AXIS);
+        paymentPanel.setLayout(boxLayout);
+        paymentPanel.setBorder(new EmptyBorder(new Insets(0, 0 , 50, 50)));
+
+        ButtonGroup buttonGroup = new ButtonGroup();
+
+        checkPanel = new JRadioButton();
+        cashPanel = new JRadioButton();
+        creditPanel = new JRadioButton();
 
         // check
-        // or make as JPanal and add to it from the function
-        JRadioButton checkPanel = createRadioButton("Check");
-        paymentPanel.add(checkPanel, constraints);
+        checkPanel = createRadioButton("Check");
+        paymentPanel.add(checkPanel);
+
         // cash
+        cashPanel = createRadioButton("Cash");
+        paymentPanel.add(cashPanel);
+    
         // credit
+        creditPanel = createRadioButton("Credit");
+        paymentPanel.add(creditPanel);
+
+        buttonGroup.add(checkPanel);
+        buttonGroup.add(cashPanel);
+        buttonGroup.add(creditPanel);
         
         return paymentPanel;
     }
 
-    private static GridBagConstraints setConstraints() {
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        constraints.anchor = GridBagConstraints.NORTHWEST;
-        return constraints;
+    private JRadioButton createRadioButton(String name) {
+        JRadioButton radioButton = new JRadioButton();
+        radioButton.setText(name); 
+        return radioButton;
     }
 
-    private static JRadioButton createRadioButton(String name) {
-        JRadioButton radioButton = new JRadioButton();
-        radioButton.setText(name);
-        // set bound ?
-        // radioButton.setBounds(0, 25, 25, 25); 
-        return radioButton;
+    enum PaymentTypeEnum {
+        CREDIT, CASH, CHECK, NONE
+    }
+
+    public PaymentTypeEnum getSelected() {
+        if(cashPanel.isSelected()) {
+            return PaymentTypeEnum.CASH;
+        } else if(checkPanel.isSelected()){
+            return PaymentTypeEnum.CHECK;
+        } else if(creditPanel.isSelected()){
+            return PaymentTypeEnum.CREDIT;
+        } else {
+            return PaymentTypeEnum.NONE;
+        }
     }
 }
