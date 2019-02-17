@@ -5,7 +5,7 @@ import store.Catalog;
 import javax.swing.*;
 import java.awt.*;
 
-public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate{
+public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate, ProductAdder.Delegate {
     private static final int WIDTH = 600;
     private static final int HEIGHT = 125;
 
@@ -26,12 +26,17 @@ public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate{
         this.add(productTable, constraints);
 
         constraints.gridy = 2;
-        ProductAdder productAdder = new ProductAdder();
+        ProductAdder productAdder = new ProductAdder(this);
         this.add(productAdder, constraints);
     }
 
     @Override
     public void filterResults(String query) {
         System.out.print(query);
+    }
+
+    @Override
+    public void addSelectedProduct(int withQuantity) {
+        System.out.println("adding item with quantity: " + withQuantity);
     }
 }
