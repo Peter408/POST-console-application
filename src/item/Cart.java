@@ -101,6 +101,13 @@ public class Cart {
     }
 
     /**
+     * Adds a `CartItem` to the cart.
+     */
+    public void add(CartItem item) {
+        this.setQuantityForItem(item.getItem(), item.getQuantity());
+    }
+
+    /**
      * displays the cart in a list format
      *
      * @return the string representation
