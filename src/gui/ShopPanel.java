@@ -42,7 +42,7 @@ public class ShopPanel extends JPanel implements AddItemPanel.Delegate, TopPanel
         this.add(topPanel, constraints);
 
         constraints.gridy = 1;
-        middlePanel = new MiddlePanel(this, post.getCatalog());
+        middlePanel = new MiddlePanel(this, post.getCatalog(), customer.getCart());
         this.add(middlePanel, constraints);
 
         constraints.gridy = 2;
