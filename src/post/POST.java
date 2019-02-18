@@ -7,6 +7,7 @@ import java.util.List;
 import item.Item;
 import network.Api;
 import store.*;
+import transaction.Invoice;
 import transaction.Transaction;
 import user.Customer;
 
@@ -19,6 +20,7 @@ public class POST {
     private static int idCount = 0;
     private Store store;
     private Api api;
+    private List<Transaction> transactions;
 
     public POST(String apiUrl) {
         this.postid = idCount++;
@@ -53,7 +55,14 @@ public class POST {
      * @return Transaction instance
      */
     public Transaction checkout(Customer customer, String paymentType, String cardNumber) {
-        return new Transaction(customer, paymentType, cardNumber);
+        Transaction t = new Transaction(customer, paymentType, cardNumber);
+        transactions.add(t);
+        try {
+            api.putTransaction(t);
+        } catch (IOException e) {
+            System.err.println("Unable to PUT transaction to api: " + e.getMessage());
+        }
+        return t;
     }
 
     public boolean addItemToCatalog(Item item) {
@@ -77,6 +86,11 @@ public class POST {
     }
 
     public boolean closeStore() {
+        for (Transaction transaction : transactions) {
+            Invoice invoice = new Invoice(transaction);
+            System.out.println(invoice.displayInvoice());
+        }
+        this.transactions.clear();
         return this.store.close();
     }
 
