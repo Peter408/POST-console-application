@@ -15,18 +15,16 @@ public class ProductTable extends JPanel {
     static final long serialVersionUID = 60001;
     private static final int WIDTH = 600;
     private static final int HEIGHT = 300;
-    private static final int SECTION_WIDTH = WIDTH / 37;
-    private static final int COLUMN_COUNT = 4;
+    private static final int SECTION_WIDTH = WIDTH / 34;
+    private static final int COLUMN_COUNT = 3;
     private static final String[] COLUMN_NAMES = {
         "UPC",
         "Item",
-        "QTY",
         "Unit Price"
     };
     private static final int[] COLUMN_WIDTHS = {
         SECTION_WIDTH * 4,
         SECTION_WIDTH * 20,
-        SECTION_WIDTH * 3,
         SECTION_WIDTH * 10
     };
     private Dimension dimension;
