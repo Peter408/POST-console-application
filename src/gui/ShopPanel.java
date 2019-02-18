@@ -12,23 +12,23 @@ import user.Customer;
 import javax.swing.*;
 import java.awt.*;
 
-public class ShopPanel extends JPanel implements AddItemPanel.Delegate{
-    private TopPanel topPanel = new TopPanel();
+public class ShopPanel extends JPanel implements AddItemPanel.Delegate, TopPanel.Delegate {
+    private TopPanel topPanel;
     private MiddlePanel middlePanel;
-    private BottomPanel bottomPanel = new BottomPanel();
+    private BottomPanel bottomPanel;
 
     private Customer customer;
     private POST post;
 
-    public ShopPanel(POST post){
+    public ShopPanel(POST post) {
         this.post = post;
         this.customer = new Customer("");
 
-        this.setLayout( new GridBagLayout());
+        this.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
         constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridx =0;
+        constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridheight = 3;
 
@@ -38,6 +38,7 @@ public class ShopPanel extends JPanel implements AddItemPanel.Delegate{
         constraints.gridy = 0;
         constraints.gridheight = 1;
 
+        topPanel = new TopPanel(this);
         this.add(topPanel, constraints);
 
         constraints.gridy = 1;
@@ -45,6 +46,7 @@ public class ShopPanel extends JPanel implements AddItemPanel.Delegate{
         this.add(middlePanel, constraints);
 
         constraints.gridy = 2;
+        bottomPanel = new BottomPanel();
         this.add(bottomPanel, constraints);
     }
 
@@ -53,8 +55,13 @@ public class ShopPanel extends JPanel implements AddItemPanel.Delegate{
     }
 
     @Override
-    public void itemAddedToCart( CartItem cartItem ){
+    public void nameChanged(String name) {
+        customer.setName(name);
+        System.out.println("new name: " + name);
+    }
+
+    @Override
+    public void itemAddedToCart(CartItem cartItem) {
         customer.addToCart(cartItem);
     }
 }
-
