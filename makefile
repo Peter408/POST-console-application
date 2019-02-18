@@ -11,9 +11,3 @@ build:
 
 run:
 	cd src; java ${WITH_JAR} Driver
-
-gson:
-	cd src; javac ${WITH_JAR} item/GSONTest.java; java ${WITH_JAR} item/GSONTest
-
-api:
-	cd src; javac ${WITH_JAR} network/ApiTest.java; java ${WITH_JAR} network/ApiTest
