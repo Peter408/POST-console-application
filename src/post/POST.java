@@ -25,14 +25,12 @@ public class POST {
         this.store = new Store(Integer.toString(this.postid));
         try {
             this.api = new Api(apiUrl);
-            initializeProductList();
-            store.getAvailableItems();
         } catch (MalformedURLException e) {
             System.err.println("Invalid API URL:" + e.getMessage());
         }
     }
 
-    private boolean initializeProductList() {
+    public boolean initializeProductList() {
         try {
             List<Item> products = api.getProducts();
             for (Item item : products) {
