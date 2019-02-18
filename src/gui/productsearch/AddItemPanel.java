@@ -6,12 +6,14 @@ import store.Catalog;
 import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
+import java.util.List;
 
 public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate, ProductAdder.Delegate {
     private static final int WIDTH = 600;
     private static final int HEIGHT = 125;
 
     private Catalog catalog;
+    private ProductTable productTable;
 
     AddItemPanel(Catalog catalog) {
         this.catalog = catalog;
@@ -27,7 +29,7 @@ public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate, Pro
         this.add(searchBarPanel, constraints);
 
         constraints.gridy = 1;
-        ProductTable productTable = new ProductTable();
+        productTable = new ProductTable();
         this.add(productTable, constraints);
 
         constraints.gridy = 2;
@@ -38,16 +40,19 @@ public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate, Pro
     @Override
     public void filterResults(String query) {
         System.out.print(query);
-        LinkedList<Item> results = new LinkedList<>();
+        List<Item> results = new LinkedList<>();
 
         results.addAll(catalog.searchItemByName(query));
         results.addAll(catalog.searchItemByUPC(query));
-        if(results!= null) { System.out.println(results); }
-        //System.out.println(catalog);
+        if (results != null) {
+            productTable.setData(results);
+        }
+
     }
 
     @Override
     public void addSelectedProduct(int withQuantity) {
-        System.out.println("adding item with quantity: " + withQuantity);
+        Item item = productTable.getSelectedItem();
+        System.out.println("adding" + item + " with quantity: " + withQuantity);
     }
 }
