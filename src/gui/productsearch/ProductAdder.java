@@ -44,7 +44,7 @@ public class ProductAdder extends JPanel implements ActionListener {
     private void initializeSubviews() {
         this.addButton = new JButton("Add");
         this.quantityLabel = new JLabel("Quantity: ");
-        this.quantityField = new JTextField("1");
+        this.quantityField = new JTextField();
 
         this.quantityField.setColumns(5);
         this.addButton.addActionListener(this);
