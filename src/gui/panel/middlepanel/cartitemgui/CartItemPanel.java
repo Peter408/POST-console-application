@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
+import gui.productsearch.AddItemFrame;
+import gui.productsearch.AddItemPanel;
 import item.*;
 import store.Catalog;
 
 public class CartItemPanel extends JPanel {
-
     static final long serialVersionUID = 20001;
     private static final int MAX_WIDTH = 800;
     private static final int SECTION_WIDTH = MAX_WIDTH / 50;
@@ -21,7 +22,7 @@ public class CartItemPanel extends JPanel {
     Catalog catalog;
     DefaultTableModel defaultTableModel;
 
-    public CartItemPanel(Catalog catalog) {
+    public CartItemPanel(AddItemPanel.Delegate delegate, Catalog catalog) {
         super(new GridLayout(1,0));
         this.catalog = catalog;
         defaultTableModel = new DefaultTableModel(new Vector<String>(
@@ -34,6 +35,7 @@ public class CartItemPanel extends JPanel {
             "Delete"
             })
         ), 0);
+
         JTable table = new JTable(defaultTableModel);
         table.setFillsViewportHeight(true);
         table.getColumnModel().getColumn(0).setPreferredWidth(SECTION_WIDTH * 4);
@@ -56,9 +58,5 @@ public class CartItemPanel extends JPanel {
             item.getQuantity() * item.getItem().getPrice(),
             "X"
         });
-    }
-
-    public void createAddItemWindow() {
-        new AddItemWindow(this, catalog);
     }
 }

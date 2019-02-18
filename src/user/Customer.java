@@ -1,6 +1,7 @@
 package user;
 
 import item.Cart;
+import item.CartItem;
 import item.Item;
 
 public class Customer extends User {
@@ -14,6 +15,11 @@ public class Customer extends User {
     public boolean addToCart(Item item, int quantity) {
         final int itemQuantity = cart.getQuantityForItem(item);
         cart.setQuantityForItem(item, quantity + itemQuantity);
+        return true;
+    }
+
+    public boolean addToCart( CartItem item){
+        addToCart(item.getItem(), item.getQuantity());
         return true;
     }
 

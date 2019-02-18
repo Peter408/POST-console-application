@@ -1,5 +1,6 @@
 package gui.panel.middlepanel;
 
+import gui.productsearch.AddItemPanel;
 import store.Catalog;
 import gui.panel.middlepanel.cartitemgui.*;
 
@@ -14,7 +15,7 @@ public class MiddlePanel extends JPanel {
     private Dimension dimension;
     private CartItemPanel cartItemPanel;
 
-    public MiddlePanel(Catalog catalog){
+    public MiddlePanel(AddItemPanel.Delegate delegate, Catalog catalog){
         this.catalog = catalog;
         this.dimension = new Dimension( MAX_WIDTH, MAX_HEIGHT);
         this.setPreferredSize( dimension );
@@ -23,7 +24,7 @@ public class MiddlePanel extends JPanel {
 
         this.setLayout(new BorderLayout());
         this.add(MiddleHeader.createHeaderPanel(), BorderLayout.NORTH);
-        cartItemPanel = new CartItemPanel(catalog);
+        cartItemPanel = new CartItemPanel(delegate, catalog);
         this.add(cartItemPanel);
     }
 }

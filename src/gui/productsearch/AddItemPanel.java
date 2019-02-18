@@ -1,5 +1,6 @@
 package gui.productsearch;
 
+import item.CartItem;
 import item.Item;
 import store.Catalog;
 
@@ -14,8 +15,15 @@ public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate, Pro
 
     private Catalog catalog;
     private ProductTable productTable;
+    private Delegate delegate;
+    private CartItem itemAdded;
 
-    AddItemPanel(Catalog catalog) {
+    public interface Delegate{
+        void itemAddedToCart(CartItem cartItem);
+    }
+
+    AddItemPanel(Delegate delegate, Catalog catalog) {
+        this.delegate = delegate;
         this.catalog = catalog;
         this.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -47,12 +55,19 @@ public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate, Pro
         if (results != null) {
             productTable.setData(results);
         }
-
     }
 
     @Override
     public void addSelectedProduct(int withQuantity) {
         Item item = productTable.getSelectedItem();
         System.out.println("adding" + item + " with quantity: " + withQuantity);
+        if(withQuantity <= 0 ) {
+
+        } else {
+            itemAdded = new CartItem(item, withQuantity);
+            if(this.delegate != null){
+                delegate.itemAddedToCart( itemAdded );
+            }
+        }
     }
 }
