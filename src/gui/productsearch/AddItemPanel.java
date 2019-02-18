@@ -43,6 +43,8 @@ public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate, Pro
         constraints.gridy = 2;
         ProductAdder productAdder = new ProductAdder(this);
         this.add(productAdder, constraints);
+
+        productTable.setData(catalog.getAvailableItems());
     }
 
     @Override
