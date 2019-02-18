@@ -58,7 +58,15 @@ public class ProductTable extends JPanel {
     }
 
     public void setData(ArrayList<Item> data) {
-        /* TODO */
+        this.data = data;
+        tableModel.setRowCount(0);
+        for (Item item : data) {
+            tableModel.addRow(new Object[] {
+                item.getId(),
+                item.getName(),
+                item.getPrice()
+            });
+        }
     }
 
     class ProductTableModel extends DefaultTableModel {
