@@ -5,20 +5,31 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Label;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class TopPanel extends JPanel {
+public class TopPanel extends JPanel implements KeyListener {
     static final long serialVersionUID = 1001;
     private JTextField customerName = new JTextField();
     private static final int MAX_WIDTH = 800;
     private static final int MAX_HEIGHT = 75;
 
     private Dimension dimension;
+    private JLabel customerLabel;
+    private Delegate delegate;
 
-    public TopPanel() {
+    public interface Delegate {
+        void nameChanged(String name);
+    }
+
+    public TopPanel(Delegate delegate) {
+        this.delegate = delegate;
         setDefaultConfiguration();
         setComponents();
     }
@@ -34,7 +45,7 @@ public class TopPanel extends JPanel {
         this.setLayout(new BorderLayout());
     }
 
-    private void setComponents(){
+    private void setComponents() {
         setLeftComponents();
         setRightComponents();
     }
@@ -46,7 +57,9 @@ public class TopPanel extends JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBag.add(new Label("Customer"), gridBagConstraints);
+        customerLabel = new JLabel("Customer");
+        customerLabel.addKeyListener(this);
+        gridBag.add(customerLabel, gridBagConstraints);
         gridBagConstraints.gridy = 1;
         customerName.setColumns(20);
         gridBag.add(customerName, gridBagConstraints);
@@ -61,5 +74,19 @@ public class TopPanel extends JPanel {
         gridBagConstraints.gridx = 0;
         gridBag.add(new Label((new SimpleDateFormat("MMM dd, yyyy")).format(new Date())), gridBagConstraints);
         this.add(gridBag, BorderLayout.EAST);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (this.delegate != null)
+            delegate.nameChanged(this.customerLabel.getText());
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
     }
 }
