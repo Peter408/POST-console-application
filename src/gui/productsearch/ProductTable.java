@@ -42,7 +42,7 @@ public class ProductTable extends JPanel {
         this.setPreferredSize(dimension);
         this.setSize(dimension);
         this.setBackground(Color.CYAN);
-        this.setLayout(new BorderLayout());
+        this.setLayout(new GridLayout(1,1));
         this.data = new ArrayList<>();
         tableModel = new ProductTableModel(new Vector<String>(Arrays.asList(COLUMN_NAMES)), 0);
         table = new JTable(tableModel);
@@ -54,7 +54,7 @@ public class ProductTable extends JPanel {
 
     public void setComponents() {
         JScrollPane scrollPane = new JScrollPane(table);
-        add(scrollPane, BorderLayout.PAGE_START);
+        add(scrollPane);
     }
 
     public void setData(ArrayList<Item> data) {
