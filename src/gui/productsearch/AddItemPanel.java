@@ -27,7 +27,7 @@ public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate, Pro
         this.add(searchBarPanel, constraints);
 
         constraints.gridy = 1;
-        ProductTable productTable = new ProductTable(catalog);
+        ProductTable productTable = new ProductTable();
         this.add(productTable, constraints);
 
         constraints.gridy = 2;
