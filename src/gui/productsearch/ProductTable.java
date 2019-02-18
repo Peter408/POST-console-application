@@ -68,6 +68,15 @@ public class ProductTable extends JPanel {
             });
         }
     }
+    
+    public Item getSelectedItem() {
+        int index = table.getSelectedRow();
+        if (-1 != index) {
+            return data.get(index);
+        } else {
+            return null;
+        }
+    }
 
     class ProductTableModel extends DefaultTableModel {
 
