@@ -18,7 +18,7 @@ public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate, Pro
     private Delegate delegate;
     private CartItem itemAdded;
 
-    public interface Delegate{
+    public interface Delegate {
         void itemAddedToCart(CartItem cartItem);
     }
 
@@ -61,12 +61,10 @@ public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate, Pro
     public void addSelectedProduct(int withQuantity) {
         Item item = productTable.getSelectedItem();
         System.out.println("adding" + item + " with quantity: " + withQuantity);
-        if(withQuantity <= 0 ) {
-
-        } else {
+        if (withQuantity > 0) {
             itemAdded = new CartItem(item, withQuantity);
-            if(this.delegate != null){
-                delegate.itemAddedToCart( itemAdded );
+            if (this.delegate != null) {
+                delegate.itemAddedToCart(itemAdded);
             }
         }
     }
