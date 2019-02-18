@@ -5,18 +5,16 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
-
 public class Total {
-    String total = "$20";
+    String total = "$20.00";
     JLabel label;
     JPanel panel;
 
     void createTotal() {
         JPanel totalPanel = new JPanel();
         totalPanel.setLayout(new BorderLayout());
-    
-        label = new JLabel("Total: $0");
+
+        label = new JLabel("Total: $0.00");
 
         totalPanel.add(label, BorderLayout.EAST);
 
@@ -29,6 +27,7 @@ public class Total {
 
     void setTotal(String total) {
         this.total = total;
-        label.setText("Total: $" + total);
+        String totalString = String.format("$%.2f", total);
+        label.setText(totalString);
     }
 }
