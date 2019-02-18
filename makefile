@@ -7,13 +7,7 @@ clean:
 	find src -type f -name "*.class" -delete
 
 build:
-	cd src; javac ${WITH_JAR} Main.java
+	cd src; javac ${WITH_JAR} Driver.java
 
 run:
-	cd src; java ${WITH_JAR} Main
-
-gson:
-	cd src; javac ${WITH_JAR} item/GSONTest.java; java ${WITH_JAR} item/GSONTest
-
-api:
-	cd src; javac ${WITH_JAR} network/ApiTest.java; java ${WITH_JAR} network/ApiTest
+	cd src; java ${WITH_JAR} Driver
