@@ -58,11 +58,11 @@ public class TopPanel extends JPanel implements KeyListener {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         customerLabel = new JLabel("Customer");
-        customerLabel.addKeyListener(this);
         gridBag.add(customerLabel, gridBagConstraints);
         gridBagConstraints.gridy = 1;
         customerName.setColumns(20);
         gridBag.add(customerName, gridBagConstraints);
+        customerName.addKeyListener(this);
         this.add(gridBag, BorderLayout.WEST);
     }
 
@@ -79,7 +79,7 @@ public class TopPanel extends JPanel implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (this.delegate != null)
-            delegate.nameChanged(this.customerLabel.getText());
+            delegate.nameChanged(this.customerName.getText());
     }
 
     @Override

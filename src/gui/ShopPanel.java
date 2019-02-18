@@ -57,7 +57,6 @@ public class ShopPanel extends JPanel implements AddItemPanel.Delegate, TopPanel
     @Override
     public void nameChanged(String name) {
         customer.setName(name);
-        System.out.println("new name: " + name);
     }
 
     @Override
