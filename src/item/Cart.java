@@ -74,8 +74,12 @@ public class Cart {
         this.support.firePropertyChange("itemToQuantityMap", itemToQuantityMap, itemToQuantityMap);
     }
 
-    public void add(CartItem item) {
-        this.setQuantityForItem(item.getItem(), item.getQuantity());
+    public void add(CartItem cartItem) {
+        if (null != this.itemToQuantityMap.get(cartItem.getItem())) {
+            this.setQuantityForItem(cartItem.getItem(), this.getQuantityForItem(cartItem.getItem()) + cartItem.getQuantity());
+        } else {
+            this.setQuantityForItem(cartItem.getItem(), cartItem.getQuantity());
+        }
         this.support.firePropertyChange("itemToQuantityMap", itemToQuantityMap, itemToQuantityMap);
     }
 
