@@ -79,21 +79,12 @@ public class Cart {
         this.support.firePropertyChange("itemToQuantityMap", itemToQuantityMap, itemToQuantityMap);
     }
 
-    public String displayCartItems() {
-        StringBuffer SB = new StringBuffer();
-        this.itemToQuantityMap.forEach((k, v) -> {
-            SB.append("Item: " + k.getName() + " " + v + " @ $" + String.format("%.2f", k.getPrice()) + " $"
-                    + String.format("%.2f", k.getPrice() * v) + "\n");
-        });
-        return SB.toString();
-    }
-
     @Override
     public String toString() {
         StringBuffer SB = new StringBuffer();
         this.itemToQuantityMap.forEach((k, v) -> {
-            SB.append(k.toString() + "\t");
-            SB.append("quantity: " + v + "\n");
+            SB.append("Item: " + k.getName() + " " + v + " @ $" + String.format("%.2f", k.getPrice()) + " $"
+                    + String.format("%.2f", k.getPrice() * v) + "\n");
         });
         return SB.toString();
     }

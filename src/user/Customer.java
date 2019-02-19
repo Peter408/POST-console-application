@@ -46,7 +46,7 @@ public class Customer extends User {
     }
 
     public String getCartItemList() {
-        return this.cart.displayCartItems();
+        return this.cart.toString();
     }
 
     @Override
