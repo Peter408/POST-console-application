@@ -3,8 +3,11 @@ package gui.panel.middlepanel.cartitemgui;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -26,33 +29,43 @@ import item.*;
 import store.Catalog;
 import item.Cart;
 
-public class CartItemPanel extends JPanel implements ActionListener {
+public class CartItemPanel extends JPanel implements ActionListener, PropertyChangeListener {
     // view constants
     static final long serialVersionUID = 20001;
     private static final int MAX_WIDTH = 800;
+    private static final int MAX_HEIGHT = 320;
     private static final int SECTION_WIDTH = MAX_WIDTH / 50;
     private static final String[] COLUMN_NAMES = { "UPC", "Item", "QTY", "Unit Price", "Total Price", "Delete" };
     private static final int[] COLUMN_WIDTHS = { SECTION_WIDTH * 4, SECTION_WIDTH * 20, SECTION_WIDTH * 3,
             SECTION_WIDTH * 10, SECTION_WIDTH * 10, SECTION_WIDTH * 3 };
     private static final int COLUMN_COUNT = 6;
+    private Dimension dimension;
 
     // view data
     private Catalog catalog;
     private CartItemPanelTableModel tableModel;
     private CartItemPanelTable table;
-    private AddItemPanel.Delegate delegate;
-    private Cart cart;
+    private Delegate delegate;
+    private AddItemPanel.Delegate addItemDelegate;
 
-    public CartItemPanel(AddItemPanel.Delegate delegate, Catalog catalog, Cart cart) {
-        setDefaultConfiguration(delegate, catalog, cart);
+    public interface Delegate {
+        void itemRemovedFromCart(Item item);
+    }
+
+    public CartItemPanel(AddItemPanel.Delegate addItemDelegate, Delegate delegate, Catalog catalog, Cart cart) {
+        setDefaultConfiguration(addItemDelegate, delegate, catalog, cart);
         setComponents();
     }
 
-    public void setDefaultConfiguration(AddItemPanel.Delegate delegate, Catalog catalog, Cart cart) {
+    public void setDefaultConfiguration(AddItemPanel.Delegate addItemDelegate, Delegate delegate, Catalog catalog, Cart cart) {
         this.setLayout(new BorderLayout());
+        this.addItemDelegate = addItemDelegate;
         this.delegate = delegate;
         this.catalog = catalog;
-        this.cart = cart;
+        cart.addPropertyChangeListener(this);
+        this.dimension = new Dimension(MAX_WIDTH, MAX_HEIGHT);
+        this.setPreferredSize(this.dimension);
+        this.setSize(this.dimension);
         tableModel = new CartItemPanelTableModel(new Vector<String>(Arrays.asList(COLUMN_NAMES)), 0);
         table = new CartItemPanelTable(tableModel, this);
         table.setFillsViewportHeight(true);
@@ -63,14 +76,11 @@ public class CartItemPanel extends JPanel implements ActionListener {
 
     public void setComponents() {
         JScrollPane scrollPane = new JScrollPane(table);
+        table.setPreferredScrollableViewportSize(this.dimension);
         Button addItem = new Button("< Add Item >");
         addItem.addActionListener(this);
-        add(addItem, BorderLayout.SOUTH);
-        add(scrollPane, BorderLayout.PAGE_START);
-    }
-
-    public double getTotalPrice() {
-        return cart.getTotalCost();
+        this.add(addItem, BorderLayout.SOUTH);
+        this.add(scrollPane, BorderLayout.PAGE_START);
     }
 
     private Object[] createTableRow(CartItem item) {
@@ -80,41 +90,27 @@ public class CartItemPanel extends JPanel implements ActionListener {
                 item.getId() };
     }
 
-    public void addItem(CartItem newCartItem) {
-        if (cart.contains(newCartItem.getItem())) {
-            int oldQuantity = cart.getQuantityForItem(newCartItem.getItem());
-            int newQuantity = oldQuantity + newCartItem.getQuantity();
-            cart.setQuantityForItem(newCartItem.getItem(), newQuantity);
-            tableModel.setRowCount(0);
-            List<CartItem> items = cart.getPurchases();
-            Collections.sort(items);
-            for (CartItem cartItem : items) {
-                tableModel.addRow(this.createTableRow(cartItem));
-            }
-        } else {
-            cart.add(newCartItem);
-            tableModel.addRow(this.createTableRow(newCartItem));
-        }
-        table.getColumn("Delete").setCellRenderer(new DeleteRenderer());
-        table.getColumn("Delete").setCellEditor(new DeleteEditor(new JCheckBox()));
-    }
-
     public void removeItem(String UPC) {
-        Item item = new Item(UPC);
-        cart.removeItem(item);
-    }
-
-    public void clearTable() {
-        this.cart.clearCart();
-        tableModel.setRowCount(0);
+        ((CartItemPanel.Delegate)this.delegate).itemRemovedFromCart(new Item(UPC));
     }
 
     public void createAddItemWindow() {
-        new AddItemFrame(delegate, catalog);
+        new AddItemFrame(addItemDelegate, catalog);
     }
 
     public void actionPerformed(ActionEvent action) {
         createAddItemWindow();
+    }
+
+    public void propertyChange(PropertyChangeEvent event) {
+        tableModel.setRowCount(0);
+        List<CartItem> items = ((Cart)event.getSource()).getPurchases();
+        Collections.sort(items);
+        for (CartItem cartItem : items) {
+            tableModel.addRow(this.createTableRow(cartItem));
+        }
+        table.getColumn("Delete").setCellRenderer(new DeleteRenderer());
+        table.getColumn("Delete").setCellEditor(new DeleteEditor(new JCheckBox()));
     }
 
     class CartItemPanelTable extends JTable {

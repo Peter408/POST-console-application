@@ -40,13 +40,14 @@ public class Api {
 
     public List<Item> getProducts() throws IOException {
         Get getHandler = new Get(this.paths.get("products"));
-        List<ItemHelper> helpers =  getHelpers(getHandler.execute());
+        List<ItemHelper> helpers = getHelpers(getHandler.execute());
         return helpers.stream().map(ItemHelper::build).collect(Collectors.toList());
     }
 
     private List<ItemHelper> getHelpers(Response res) {
         String body = res.getBody();
-        TypeToken<List<ItemHelper>> itemListType = new TypeToken<List<ItemHelper>>() {};
+        TypeToken<List<ItemHelper>> itemListType = new TypeToken<List<ItemHelper>>() {
+        };
         Type type = itemListType.getType();
         return gson.fromJson(body, type);
     }
@@ -60,30 +61,37 @@ public class Api {
 
     private class Id {
         int id;
+
         int getId() {
             return this.id;
         }
     }
 
-    public void putPaymentType(Payment payment) throws IOException{
-      String body = this.gson.toJson(new PaymentHelper(
-        payment.getPaymentType(),
-        payment.getPayment(),
-        payment.getCardNumber()
-      ));
-      try {
-        URL url = appendURL(this.paths.get("payments"), payment.getPaymentType());
-        Put putHandler = new Put(url);
-        Response res = putHandler.execute(body);
-        System.out.println(res);
-      } catch (MalformedURLException e) {
-        e.printStackTrace();
-      }
+    public boolean putPaymentType(Payment payment) throws IOException {
+        String body = this.gson
+                .toJson(new PaymentHelper(payment.getPaymentType(), payment.getPayment(), payment.getCardNumber()));
+        try {
+            URL url = appendURL(this.paths.get("payments"), payment.getPaymentType());
+            Put putHandler = new Put(url);
+            Response res = putHandler.execute(body);
+            switch (res.getStatusCode()) {
+            case 202:
+                return true;
+            case 406:
+                return false;
+            case 400:
+                throw new IOException("Malformed request: " + res.getBody());
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /*
-        a: - "Hey shouldn't we move all of these helper classes into a sub package?"
-        b: - "No, I want these all to say here because they're gross and should never escape"
+     * a: - "Hey shouldn't we move all of these helper classes into a sub package?"
+     * b: -
+     * "No, I want these all to say here because they're gross and should never escape"
      */
     private class ItemHelper {
         private String upc;
