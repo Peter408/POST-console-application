@@ -15,7 +15,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Vector;
@@ -75,8 +74,10 @@ public class CartItemPanel extends JPanel implements ActionListener {
     }
 
     private Object[] createTableRow(CartItem item) {
-        return new Object[] { item.getItem().getId(), item.getItem().getName(), item.getQuantity(),
-                item.getItem().getPrice(), item.getQuantity() * item.getItem().getPrice(), item.getItem().getId() };
+        String unitPrice = String.format("%.2f", item.getUnitPrice());
+        String extendedPrice = String.format("%.2f", item.getExtendedPrice());
+        return new Object[] { item.getId(), item.getName(), item.getQuantity(), unitPrice, extendedPrice,
+                item.getId() };
     }
 
     public void addItem(CartItem newCartItem) {
@@ -128,7 +129,7 @@ public class CartItemPanel extends JPanel implements ActionListener {
 
         public void removeRow(int row, String UPC) {
             DefaultCellEditor cellEditor = (DefaultCellEditor) getCellEditor();
-            if (null != cellEditor) {
+            if (cellEditor != null) {
                 cellEditor.stopCellEditing();
             }
             ((CartItemPanelTableModel) getModel()).removeRow(row);
@@ -147,7 +148,7 @@ public class CartItemPanel extends JPanel implements ActionListener {
 
         @Override
         public boolean isCellEditable(int row, int column) {
-            return 5 == column;
+            return column == 5;
         }
 
     }

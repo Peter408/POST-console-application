@@ -81,7 +81,7 @@ public class Cart {
      * quantity of the item but remove it entirely, instead use
      * `setQuantityForItem`.
      *
-     * @param item `Item` instace
+     * @param item `Item` instance
      * @return the quantity of this item that was contained in the cart
      */
     public int removeItem(Item item) {
@@ -97,7 +97,7 @@ public class Cart {
 
     public void setCartItems(List<CartItem> items) {
         this.itemToQuantityMap = items.stream().filter(i -> i != null && i.getItem() != null)
-                .collect(Collectors.toMap(item -> item.getItem(), item -> item.getQuantity()));
+                .collect(Collectors.toMap(CartItem::getItem, CartItem::getQuantity));
     }
 
     /**
@@ -107,10 +107,6 @@ public class Cart {
         this.setQuantityForItem(item.getItem(), item.getQuantity());
     }
 
-    /**
-     * 
-     * @return
-     */
     public boolean contains(Item item) {
         return this.itemToQuantityMap.containsKey(item);
     }
@@ -123,8 +119,9 @@ public class Cart {
     public String displayCartItems() {
         StringBuffer SB = new StringBuffer();
         itemToQuantityMap.forEach((k, v) -> {
-            SB.append("Item: " + k.getName() + " " + v + " @ $" + String.format("%.2f", k.getPrice()) + " $"
-                    + String.format("%.2f", k.getPrice() * v) + "\n");
+            SB.append("Item: ").append(k.getName()).append(" ").append(v).append(" @ $");
+            SB.append(String.format("%.2f", k.getPrice())).append(" $");
+            SB.append(String.format("%.2f", k.getPrice() * v)).append("\n");
         });
         return SB.toString();
     }
@@ -133,8 +130,8 @@ public class Cart {
     public String toString() {
         StringBuffer SB = new StringBuffer();
         itemToQuantityMap.forEach((k, v) -> {
-            SB.append(k.toString() + "\t");
-            SB.append("quantity: " + v + "\n");
+            SB.append(k.toString()).append("\t");
+            SB.append("quantity: ").append(v).append("\n");
         });
         return SB.toString();
     }

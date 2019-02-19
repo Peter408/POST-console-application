@@ -51,9 +51,6 @@ public class Customer extends User {
 
     @Override
     public String toString() {
-        StringBuffer SB = new StringBuffer();
-        SB.append(this.getName() + "\n");
-        SB.append(this.cart.toString());
-        return SB.toString();
+        return this.getName() + "\n" + this.cart.toString();
     }
 }
