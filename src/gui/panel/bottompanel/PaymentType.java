@@ -5,7 +5,7 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 
-public class PaymentType { 
+public class PaymentType {
     JRadioButton checkPanel;
     JRadioButton cashPanel;
     JRadioButton creditPanel;
