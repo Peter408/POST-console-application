@@ -42,20 +42,24 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
     private Catalog catalog;
     private CartItemPanelTableModel tableModel;
     private CartItemPanelTable table;
-    private AddItemPanel.Delegate delegate;
-    private Cart cart;
+    private Delegate delegate;
+    private AddItemPanel.Delegate addItemDelegate;
 
-    public CartItemPanel(AddItemPanel.Delegate delegate, Catalog catalog, Cart cart) {
-        setDefaultConfiguration(delegate, catalog, cart);
+    public interface Delegate {
+        void itemRemovedFromCart(Item item);
+    }
+
+    public CartItemPanel(AddItemPanel.Delegate addItemDelegate, Delegate delegate, Catalog catalog, Cart cart) {
+        setDefaultConfiguration(addItemDelegate, delegate, catalog, cart);
         setComponents();
     }
 
-    public void setDefaultConfiguration(AddItemPanel.Delegate delegate, Catalog catalog, Cart cart) {
+    public void setDefaultConfiguration(AddItemPanel.Delegate addItemDelegate, Delegate delegate, Catalog catalog, Cart cart) {
         this.setLayout(new BorderLayout());
+        this.addItemDelegate = addItemDelegate;
         this.delegate = delegate;
         this.catalog = catalog;
-        this.cart = cart;
-        this.cart.addPropertyChangeListener(this);
+        cart.addPropertyChangeListener(this);
         tableModel = new CartItemPanelTableModel(new Vector<String>(Arrays.asList(COLUMN_NAMES)), 0);
         table = new CartItemPanelTable(tableModel, this);
         table.setFillsViewportHeight(true);
@@ -72,22 +76,17 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
         this.add(scrollPane, BorderLayout.PAGE_START);
     }
 
-    public double getTotalPrice() {
-        return cart.getTotalCost();
-    }
-
     private Object[] createTableRow(CartItem item) {
         return new Object[] { item.getItem().getId(), item.getItem().getName(), item.getQuantity(),
                 item.getItem().getPrice(), item.getQuantity() * item.getItem().getPrice(), item.getItem().getId() };
     }
 
     public void removeItem(String UPC) {
-        Item item = new Item(UPC);
-        this.cart.removeItem(item);
+        ((CartItemPanel.Delegate)this.delegate).itemRemovedFromCart(new Item(UPC));
     }
 
     public void createAddItemWindow() {
-        new AddItemFrame(delegate, catalog);
+        new AddItemFrame(addItemDelegate, catalog);
     }
 
     public void actionPerformed(ActionEvent action) {
@@ -96,7 +95,7 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
 
     public void propertyChange(PropertyChangeEvent event) {
         tableModel.setRowCount(0);
-        List<CartItem> items = cart.getPurchases();
+        List<CartItem> items = ((Cart)event.getSource()).getPurchases();
         Collections.sort(items);
         for (CartItem cartItem : items) {
             tableModel.addRow(this.createTableRow(cartItem));

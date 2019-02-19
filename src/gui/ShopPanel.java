@@ -2,17 +2,18 @@ package gui;
 
 import gui.panel.bottompanel.BottomPanel;
 import gui.panel.middlepanel.MiddlePanel;
+import gui.panel.middlepanel.cartitemgui.CartItemPanel;
 import gui.panel.optionspanel.OptionsPanel;
 import gui.panel.toppanel.TopPanel;
 import gui.productsearch.AddItemPanel;
-import item.CartItem;
+import item.*;
 import post.POST;
 import user.Customer;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class ShopPanel extends JPanel implements AddItemPanel.Delegate, TopPanel.Delegate {
+public class ShopPanel extends JPanel implements AddItemPanel.Delegate, CartItemPanel.Delegate, TopPanel.Delegate {
     private TopPanel topPanel;
     private MiddlePanel middlePanel;
     private BottomPanel bottomPanel;
@@ -42,7 +43,7 @@ public class ShopPanel extends JPanel implements AddItemPanel.Delegate, TopPanel
         this.add(topPanel, constraints);
 
         constraints.gridy = 1;
-        middlePanel = new MiddlePanel(this, post.getCatalog(), customer.getCart());
+        middlePanel = new MiddlePanel(this, this, post.getCatalog(), customer.getCart());
         this.add(middlePanel, constraints);
 
         constraints.gridy = 2;
@@ -62,5 +63,10 @@ public class ShopPanel extends JPanel implements AddItemPanel.Delegate, TopPanel
     @Override
     public void itemAddedToCart(CartItem cartItem) {
         customer.getCart().add(cartItem);
+    }
+
+    @Override
+    public void itemRemovedFromCart(Item item) {
+        customer.removeFromCart(item);
     }
 }

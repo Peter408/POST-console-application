@@ -14,12 +14,12 @@ public class MiddlePanel extends JPanel {
 
     private Dimension dimension;
 
-    public MiddlePanel(AddItemPanel.Delegate delegate, Catalog catalog, Cart cart) {
+    public MiddlePanel(AddItemPanel.Delegate addItemDelegate, CartItemPanel.Delegate cartItemDelegate, Catalog catalog, Cart cart) {
         this.dimension = new Dimension(MAX_WIDTH, MAX_HEIGHT);
         this.setPreferredSize(dimension);
         this.setSize(dimension);
         this.setBackground(Color.GRAY);
         this.setLayout(new GridLayout(1, 1));
-        this.add(new CartItemPanel(delegate, catalog, cart));
+        this.add(new CartItemPanel(addItemDelegate, cartItemDelegate, catalog, cart));
     }
 }
