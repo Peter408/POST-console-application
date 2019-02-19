@@ -2,119 +2,88 @@ package store;
 
 import item.Item;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
-import java.util.Observable;
 
 
-public class Inventory extends Observable {
-    private HashMap<Item, Integer> inventoryMap; //item keyed to quantity
-    private HashMap<String, Item> upcMap;
+public class Inventory {
+    private PropertyChangeSupport support;
+    private HashMap<String, Integer> UPCtoQuantity;
 
     public Inventory() {
-        this.inventoryMap = new HashMap<>();
-        this.upcMap = new HashMap<>();
+        this.support = new PropertyChangeSupport(this);
+        this.UPCtoQuantity = new HashMap<>();
     }
 
-    //Add item
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        this.support.addPropertyChangeListener(listener);
+    }
+ 
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        this.support.removePropertyChangeListener(listener);
+    }
+
     public boolean addItem(Item item, int increment) {
-        Integer quantity = null;
-        if (inventoryMap.containsKey(item)) {
-            quantity = inventoryMap.get(item);
+        Integer quantity;
+        if (null == (quantity = this.UPCtoQuantity.get(item.getId()))) {
+            this.UPCtoQuantity.put(item.getId(), increment);
+        } else {
+            quantity += increment;
+            this.UPCtoQuantity.put(item.getId(), increment);
         }
-
-        if (quantity == null) {
-            quantity = 0;
-        }
-
-        quantity += increment;
-        inventoryMap.put(item, quantity);
-        upcMap.put(item.getId(), item);
+        this.support.firePropertyChange("UPCtoQuantity", null, this.UPCtoQuantity);
         return true;
     }
 
     public boolean addItem(Item item) {
-        return addItem(item, 1);
+        return this.addItem(item, 1);
     }
 
-
-    //Remove item based on passed item
-    public boolean removeItem(Item item, int decrement) {
-        Integer quantity = inventoryMap.get(item);
+    public boolean removeItem(String UPC, int decrement) {
+        Integer quantity = UPCtoQuantity.get(UPC);
         if (quantity != null) {
-            quantity -= decrement;
-
-            if (quantity < 0) return false; //CANNOT HAVE NEGATIVE ITEMS
-
-            inventoryMap.put(item, quantity);
+            if (0 > (quantity -= decrement)) {
+                return false; //CANNOT HAVE NEGATIVE ITEM QUANTITY
+            }
+            UPCtoQuantity.put(UPC, quantity);
         }
-        return true;
-    }
-
-    public boolean removeItem(Item item) {
-        return removeItem(item, 1);
-    }
-
-
-    //Remove inventory item based on upc / description
-    public boolean removeItem(String item, int decrement) {
-        Integer quantity = inventoryMap.get(item);
-        if (quantity != null) {
-            quantity -= decrement;
-
-            if (quantity < 0) return false;
-
-            Item nameOnly = new Item();
-            nameOnly.setId(item);
-            inventoryMap.put(nameOnly, quantity);
-        }
+        this.support.firePropertyChange("UPCtoQuantity", null, this.UPCtoQuantity);
         return true;
     }
 
     public boolean removeItem(String item) {
-        return removeItem(item, 1);
+        return this.removeItem(item, 1);
+    }
+    
+    public boolean removeItem(Item item, int decrement) {
+        return this.removeItem(item.getId(), decrement);
     }
 
+    public boolean removeItem(Item item) {
+        return this.removeItem(item, 1);
+    }
 
-    //Remove item completely from inventory
+    public boolean deleteItem(String UPC) {
+        this.UPCtoQuantity.remove(UPC);
+        this.support.firePropertyChange("UPCtoQuantity", null, this.UPCtoQuantity);
+        return true;
+    }
+
     public boolean deleteItem(Item item) {
-        inventoryMap.remove(item);
-        upcMap.remove(item.getId());
-
-        setChanged();
-        notifyObservers();
-        return true;
+        return this.deleteItem(item.getId());
     }
 
-    public boolean deleteItem(String upc) {
-        inventoryMap.remove(upc);
-        upcMap.remove(upc);
-
-        setChanged();
-        notifyObservers();
-        return true;
+    public Integer getQuantity(String UPC) {
+        return this.UPCtoQuantity.get(UPC);
     }
 
-    public Item getItem(String upc) {
-        return this.upcMap.get(upc);
-    }
-
-    ;
-
-    public Item getItem(Item item) {
-        return this.upcMap.get(item.getId());
-    }
-
-    //Print items in inventory
-    public void printInventory() {
-        System.out.println(inventoryMap);
-    }
-
-    public HashMap getInventory() {
-        return inventoryMap;
+    public HashMap<String, Integer> getInventory() {
+        return this.UPCtoQuantity;
     }
 
     @Override
     public String toString() {
-        return "INVENTORY: \n" + inventoryMap.toString() + "\n";
+        return "INVENTORY: \n" + UPCtoQuantity.toString() + "\n";
     }
 }

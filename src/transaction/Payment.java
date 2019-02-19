@@ -67,7 +67,7 @@ public class Payment {
     }
 
     private boolean validateCard() {
-        if (this.cardNumber.length() == 5 || this.cardNumber.matches("[0-9]+")) {
+        if (this.cardNumber.matches("[0-9]+")) {
             return true;
         }
         return false;

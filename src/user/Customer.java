@@ -23,6 +23,11 @@ public class Customer extends User {
         return true;
     }
 
+    public boolean removeFromCart(Item item) {
+        this.cart.removeItem(item);
+        return true;
+    }
+
     public boolean removeFromCart(Item item, int quantity) {
         final int itemQuantity = cart.getQuantityForItem(item);
         if (itemQuantity == 0 || quantity <= 0) {
@@ -46,7 +51,7 @@ public class Customer extends User {
     }
 
     public String getCartItemList() {
-        return this.cart.displayCartItems();
+        return this.cart.toString();
     }
 
     @Override

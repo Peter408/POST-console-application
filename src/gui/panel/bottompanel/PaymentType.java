@@ -4,13 +4,25 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class PaymentType { 
+public class PaymentType implements ActionListener {
     JRadioButton checkPanel;
     JRadioButton cashPanel;
     JRadioButton creditPanel;
 
     JPanel panel;
+
+    Delegate delegate;
+
+    interface Delegate {
+        void paymentTypeClicked(ActionEvent e);
+    }
+
+    public PaymentType(Delegate delegate) {
+        this.delegate = delegate;
+    }
 
     void createPaymentType() {
         JPanel paymentPanel = new JPanel();
@@ -27,14 +39,17 @@ public class PaymentType {
         // check
         checkPanel = createRadioButton("Check");
         paymentPanel.add(checkPanel);
+        checkPanel.addActionListener(this);
 
         // cash
         cashPanel = createRadioButton("Cash");
         paymentPanel.add(cashPanel);
+        cashPanel.addActionListener(this);
     
         // credit
         creditPanel = createRadioButton("Credit");
         paymentPanel.add(creditPanel);
+        creditPanel.addActionListener(this);
 
         buttonGroup.add(checkPanel);
         buttonGroup.add(cashPanel);
@@ -67,5 +82,10 @@ public class PaymentType {
         } else {
             return PaymentTypeEnum.NONE;
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(this.delegate != null) this.delegate.paymentTypeClicked(e);
     }
 }
