@@ -15,7 +15,7 @@ public class BottomPanel extends  JPanel implements CheckoutDelegate {
     private PaymentType paymentType;
     private Checkout checkout;
     private Total total;
-
+    
     public BottomPanel() {
         this.dimension = new Dimension( MAX_WIDTH, MAX_HEIGHT);
         this.setPreferredSize( dimension );
