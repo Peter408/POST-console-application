@@ -28,7 +28,7 @@ public class PaymentType implements ActionListener {
         JPanel paymentPanel = new JPanel();
         BoxLayout boxLayout = new BoxLayout(paymentPanel, BoxLayout.Y_AXIS);
         paymentPanel.setLayout(boxLayout);
-        paymentPanel.setBorder(new EmptyBorder(new Insets(0, 0 , 50, 50)));
+        paymentPanel.setBorder(new EmptyBorder(new Insets(0, 0, 50, 50)));
 
         ButtonGroup buttonGroup = new ButtonGroup();
 
@@ -45,7 +45,7 @@ public class PaymentType implements ActionListener {
         cashPanel = createRadioButton("Cash");
         paymentPanel.add(cashPanel);
         cashPanel.addActionListener(this);
-    
+
         // credit
         creditPanel = createRadioButton("Credit");
         paymentPanel.add(creditPanel);
@@ -54,13 +54,13 @@ public class PaymentType implements ActionListener {
         buttonGroup.add(checkPanel);
         buttonGroup.add(cashPanel);
         buttonGroup.add(creditPanel);
-        
+
         this.panel = paymentPanel;
     }
 
     private JRadioButton createRadioButton(String name) {
         JRadioButton radioButton = new JRadioButton();
-        radioButton.setText(name); 
+        radioButton.setText(name);
         return radioButton;
     }
 
@@ -68,16 +68,16 @@ public class PaymentType implements ActionListener {
         return this.panel;
     }
 
-    enum PaymentTypeEnum {
+    public enum PaymentTypeEnum {
         CREDIT, CASH, CHECK, NONE
     }
 
     public PaymentTypeEnum getSelected() {
-        if(cashPanel.isSelected()) {
+        if (cashPanel.isSelected()) {
             return PaymentTypeEnum.CASH;
-        } else if(checkPanel.isSelected()){
+        } else if (checkPanel.isSelected()) {
             return PaymentTypeEnum.CHECK;
-        } else if(creditPanel.isSelected()){
+        } else if (creditPanel.isSelected()) {
             return PaymentTypeEnum.CREDIT;
         } else {
             return PaymentTypeEnum.NONE;
@@ -86,6 +86,7 @@ public class PaymentType implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(this.delegate != null) this.delegate.paymentTypeClicked(e);
+        if (this.delegate != null)
+            this.delegate.paymentTypeClicked(e);
     }
 }

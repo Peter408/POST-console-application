@@ -2,12 +2,14 @@ package post;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import item.Item;
 import network.Api;
 import store.*;
 import transaction.Invoice;
+import transaction.Payment;
 import transaction.Transaction;
 import user.Customer;
 
@@ -25,6 +27,7 @@ public class POST {
     public POST(String apiUrl) {
         this.postid = idCount++;
         this.store = new Store(Integer.toString(this.postid));
+        this.transactions = new ArrayList<>();
         try {
             this.api = new Api(apiUrl);
         } catch (MalformedURLException e) {
@@ -46,16 +49,9 @@ public class POST {
         return false;
     }
 
-    /**
-     * Completes a transaction.
-     *
-     * @param customer    user purchasing item(s)
-     * @param paymentType String of "CREDIT", "CASH", or "CHECK"
-     * @param cardNumber  String of card number
-     * @return Transaction instance
-     */
-    public Transaction checkout(Customer customer, String paymentType, String cardNumber) {
-        Transaction t = new Transaction(customer, paymentType, cardNumber);
+    public Transaction checkout(Customer customer, Payment payment) {
+        Transaction t = new Transaction(customer, payment);
+        System.out.println("putting transaction: " + t.toString());
         transactions.add(t);
         try {
             api.putTransaction(t);
