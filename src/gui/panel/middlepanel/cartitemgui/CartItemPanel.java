@@ -33,6 +33,7 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
     // view constants
     static final long serialVersionUID = 20001;
     private static final int MAX_WIDTH = 800;
+    private static final int MAX_HEIGHT = 320;
     private static final int SECTION_WIDTH = MAX_WIDTH / 50;
     private static final String[] COLUMN_NAMES = { "UPC", "Item", "QTY", "Unit Price", "Total Price", "Delete" };
     private static final int[] COLUMN_WIDTHS = { SECTION_WIDTH * 4, SECTION_WIDTH * 20, SECTION_WIDTH * 3,
@@ -62,6 +63,9 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
         this.delegate = delegate;
         this.catalog = catalog;
         cart.addPropertyChangeListener(this);
+        this.dimension = new Dimension(MAX_WIDTH, MAX_HEIGHT);
+        this.setPreferredSize(this.dimension);
+        this.setSize(this.dimension);
         tableModel = new CartItemPanelTableModel(new Vector<String>(Arrays.asList(COLUMN_NAMES)), 0);
         table = new CartItemPanelTable(tableModel, this);
         table.setFillsViewportHeight(true);
