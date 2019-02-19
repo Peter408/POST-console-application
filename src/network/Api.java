@@ -33,7 +33,7 @@ public class Api {
     public List<Item> getProducts() throws IOException {
         Get getHandler = new Get(this.paths.get("products"));
         List<ItemHelper> helpers =  getHelpers(getHandler.execute());
-        return helpers.stream().map(i -> i.build()).collect(Collectors.toList());
+        return helpers.stream().map(ItemHelper::build).collect(Collectors.toList());
     }
 
     private List<ItemHelper> getHelpers(Response res) {
@@ -92,7 +92,7 @@ public class Api {
             this.price = price;
         }
 
-        public Item build() {
+        Item build() {
             return new Item(this.upc, this.description, Double.parseDouble(this.price.substring(1)));
         }
     }
@@ -108,7 +108,7 @@ public class Api {
             this.price = Double.toString(item.getItem().getPrice());
         }
 
-        public CartItem build() {
+        CartItem build() {
             Item item = new ItemHelper(this.upc, null, this.price).build();
             return new CartItem(item, quantity);
         }
@@ -119,13 +119,13 @@ public class Api {
         private double amount;
         private String cardNumber;
 
-        public PaymentHelper(String type, double amount, String cardNumber) {
+        PaymentHelper(String type, double amount, String cardNumber) {
             this.type = type;
             this.amount = amount;
             this.cardNumber = cardNumber;
         }
 
-        public Payment build() {
+        Payment build() {
             return new Payment(type, amount, cardNumber);
         }
     }
@@ -140,16 +140,16 @@ public class Api {
 
         public Transaction build() {
             Customer c = new Customer(customer);
-            List<CartItem> cartItems = items.stream().map(i -> i.build()).collect(Collectors.toList());
+            List<CartItem> cartItems = items.stream().map(CartItemHelper::build).collect(Collectors.toList());
             c.getCart().setCartItems(cartItems);
             Payment p = tendered.build();
             return new Transaction(c, p.getPaymentType(), p.getCardNumber());
         }
 
-        public TransactionHelper(Transaction t) {
+        TransactionHelper(Transaction t) {
             this.customer = t.getCustomer().getName();
             this.timeOfSale = t.getTimestamp();
-            this.items = t.getCustomer().getCart().getPurchases().stream().map(i -> new CartItemHelper(i))
+            this.items = t.getCustomer().getCart().getPurchases().stream().map(CartItemHelper::new)
                     .collect(Collectors.toList());
             this.total = t.getTotal();
             this.tendered = new PaymentHelper(t.getPaymentType(), t.getPayment(), t.getCardNumber());
