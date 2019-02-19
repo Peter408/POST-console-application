@@ -117,7 +117,7 @@ public class CartItemPanel extends JPanel implements ActionListener {
     }
 
     public void createAddItemWindow() {
-        new AddItemFrame(delegate, catalog);
+        AddItemFrame.getInstance(delegate, catalog);
     }
 
     public void actionPerformed(ActionEvent action) {
