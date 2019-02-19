@@ -3,6 +3,7 @@ package network;
 import java.net.MalformedURLException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.lang.reflect.Type;
@@ -18,42 +19,39 @@ import user.Customer;
 
 public class Api {
     private Gson gson;
-    private static final String PRODUCTS_PATH = "/products";
-    private static final String TRANSACTIONS_PATH = "/sales";
-    private static final String PAYMENTS_PATH = "/payments";
-    private URL baseUri;
-    private URL productsUrl;
-    private URL transactionsUrl;
-    private URL paymentUrl;
+    private HashMap<String, URL> paths;
 
     public Api(String uri) throws MalformedURLException {
-        this.baseUri = new URL(uri);
-        this.productsUrl = new URL(this.baseUri.toExternalForm() + PRODUCTS_PATH);
-        this.transactionsUrl = new URL(this.baseUri.toExternalForm() + TRANSACTIONS_PATH);
-        this.paymentUrl = new URL(this.baseUri.toExternalForm() + PAYMENTS_PATH);
+        URL base = new URL(uri);
+        this.paths = new HashMap<>();
+        putPath(base, "products");
+        putPath(base, "payments");
+        putPath(base, "transactions");
         this.gson = new Gson();
-    }
+}
 
     public List<Item> getProducts() throws IOException {
-        Get getHandler = new Get(this.productsUrl);
-        Response res = getHandler.execute();
+        Get getHandler = new Get(this.paths.get("products"));
+        List<ItemHelper> helpers =  getHelpers(getHandler.execute());
+        return helpers.stream().map(i -> i.build()).collect(Collectors.toList());
+    }
+
+    private List<ItemHelper> getHelpers(Response res) {
         String body = res.getBody();
         TypeToken<List<ItemHelper>> itemListType = new TypeToken<List<ItemHelper>>() {};
         Type type = itemListType.getType();
-        List<ItemHelper> helpers = gson.fromJson(body, type);
-        return helpers.stream().map(i -> i.build()).collect(Collectors.toList());
+        return gson.fromJson(body, type);
     }
 
     public int putTransaction(Transaction transaction) throws IOException {
         String body = this.gson.toJson(new TransactionHelper(transaction));
-        Put putHandler = new Put(this.transactionsUrl);
+        Put putHandler = new Put(this.paths.get("transactions"));
         Response res = putHandler.execute(body);
         return this.gson.fromJson(res.getBody(), Id.class).getId();
     }
 
     private class Id {
         int id;
-
         int getId() {
             return this.id;
         }
@@ -66,13 +64,17 @@ public class Api {
         payment.getCardNumber()
       ));
       try {
-        URL url = appendURL(this.paymentUrl, payment.getPaymentType());
+        URL url = appendURL(this.paths.get("payments"), payment.getPaymentType());
         Put putHandler = new Put(url);
         Response res = putHandler.execute(body);
         System.out.println(res);
       } catch (MalformedURLException e) {
         e.printStackTrace();
       }
+    }
+
+    private void putPath(URL base, String key) throws MalformedURLException {
+        this.paths.put(key, appendURL(base, "/" + key));
     }
 
     private URL appendURL(URL url, String extension) throws MalformedURLException {
