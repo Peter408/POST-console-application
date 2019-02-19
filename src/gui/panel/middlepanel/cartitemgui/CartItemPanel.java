@@ -81,18 +81,9 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
                 item.getItem().getPrice(), item.getQuantity() * item.getItem().getPrice(), item.getItem().getId() };
     }
 
-    public void addItem(CartItem newCartItem) {
-        this.cart.add(newCartItem);
-    }
-
     public void removeItem(String UPC) {
         Item item = new Item(UPC);
         this.cart.removeItem(item);
-    }
-
-    public void clearTable() {
-        this.cart.clearCart();
-        tableModel.setRowCount(0);
     }
 
     public void createAddItemWindow() {
