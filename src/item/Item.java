@@ -13,6 +13,12 @@ public class Item {
      */
     private double price;
 
+    public Item(String id) {
+        this.id = id;
+        this.name = null;
+        this.price = 0.0;
+    }
+
     /**
      * Default constructor, sets `id` and `name` to null and `price` to 0.0
      */

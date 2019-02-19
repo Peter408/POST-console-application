@@ -5,7 +5,7 @@ package item;
  *
  * @author Eric Groom
  */
-public class CartItem {
+public class CartItem implements Comparable<CartItem> {
     /**
      * No setter for item, if you are setting the item you should be creating a new
      * instance instead
@@ -96,5 +96,10 @@ public class CartItem {
         if (other.getItem() == null)
             return false;
         return item.equals(other.getItem()) && quantity == other.getQuantity();
+    }
+
+    @Override
+    public int compareTo(CartItem o) {
+        return this.getItem().getId().compareTo(o.getItem().getId());
     }
 }

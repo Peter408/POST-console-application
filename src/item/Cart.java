@@ -108,6 +108,14 @@ public class Cart {
     }
 
     /**
+     * 
+     * @return
+     */
+    public boolean contains(Item item) {
+        return this.itemToQuantityMap.containsKey(item);
+    }
+
+    /**
      * displays the cart in a list format
      *
      * @return the string representation
