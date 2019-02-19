@@ -7,6 +7,5 @@ public class Driver {
         POST post = new POST("https://post-server.herokuapp.com");
         post.initializeProductList();
         new ShopFrame(post);
-        new AddItemFrame(post.getCatalog());
     }
 }

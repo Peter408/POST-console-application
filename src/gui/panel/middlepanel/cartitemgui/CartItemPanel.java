@@ -1,64 +1,193 @@
 package gui.panel.middlepanel.cartitemgui;
 
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
+import java.util.List;
 
+import gui.productsearch.AddItemFrame;
+import gui.productsearch.AddItemPanel;
 import item.*;
 import store.Catalog;
+import item.Cart;
 
-public class CartItemPanel extends JPanel {
-
+public class CartItemPanel extends JPanel implements ActionListener {
+    // view constants
     static final long serialVersionUID = 20001;
     private static final int MAX_WIDTH = 800;
     private static final int SECTION_WIDTH = MAX_WIDTH / 50;
-    ArrayList<CartItem> cartItem;
-    Catalog catalog;
-    DefaultTableModel defaultTableModel;
+    private static final String[] COLUMN_NAMES = { "UPC", "Item", "QTY", "Unit Price", "Total Price", "Delete" };
+    private static final int[] COLUMN_WIDTHS = { SECTION_WIDTH * 4, SECTION_WIDTH * 20, SECTION_WIDTH * 3,
+            SECTION_WIDTH * 10, SECTION_WIDTH * 10, SECTION_WIDTH * 3 };
+    private static final int COLUMN_COUNT = 6;
 
-    public CartItemPanel(Catalog catalog) {
-        super(new GridLayout(1,0));
+    // view data
+    private Catalog catalog;
+    private CartItemPanelTableModel tableModel;
+    private CartItemPanelTable table;
+    private AddItemPanel.Delegate delegate;
+    private Cart cart;
+    /* used alongside cart since cart is unordered */
+    private List<CartItem> orderedItems;
+
+    public CartItemPanel(AddItemPanel.Delegate delegate, Catalog catalog, Cart cart) {
+        setDefaultConfiguration(delegate, catalog, cart);
+        setComponents();
+    }
+
+    public void setDefaultConfiguration(AddItemPanel.Delegate delegate, Catalog catalog, Cart cart) {
+        this.setLayout(new BorderLayout());
+        this.delegate = delegate;
         this.catalog = catalog;
-        defaultTableModel = new DefaultTableModel(new Vector<String>(
-            Arrays.asList(new String[] {
-            "UPC",
-            "Item",
-            "QTY",
-            "Unit Price",
-            "Total Price",
-            "Delete"
-            })
-        ), 0);
-        JTable table = new JTable(defaultTableModel);
+        this.cart = cart;
+        this.orderedItems = cart.getPurchases();
+        tableModel = new CartItemPanelTableModel(new Vector<String>(Arrays.asList(COLUMN_NAMES)), 0);
+        table = new CartItemPanelTable(tableModel, this);
         table.setFillsViewportHeight(true);
-        table.getColumnModel().getColumn(0).setPreferredWidth(SECTION_WIDTH * 4);
-        table.getColumnModel().getColumn(1).setPreferredWidth(SECTION_WIDTH * 20);
-        table.getColumnModel().getColumn(2).setPreferredWidth(SECTION_WIDTH * 3);
-        table.getColumnModel().getColumn(3).setPreferredWidth(SECTION_WIDTH * 10);
-        table.getColumnModel().getColumn(4).setPreferredWidth(SECTION_WIDTH * 10);
-        table.getColumnModel().getColumn(5).setPreferredWidth(SECTION_WIDTH * 3);
+        for (int i = 0; i < COLUMN_COUNT; i++) {
+            table.getColumnModel().getColumn(i).setPreferredWidth(COLUMN_WIDTHS[i]);
+        }
+    }
+
+    public void setComponents() {
         JScrollPane scrollPane = new JScrollPane(table);
-        add(scrollPane);
+        Button addItem = new Button("< Add Item >");
+        addItem.addActionListener(this);
+        add(addItem, BorderLayout.SOUTH);
+        add(scrollPane, BorderLayout.PAGE_START);
+    }
+
+    public double getTotalPrice() {
+        return cart.getTotalCost();
+    }
+
+    private Object[] createTableRow(CartItem item) {
+        return new Object[] { item.getItem().getId(), item.getItem().getName(), item.getQuantity(),
+                item.getItem().getPrice(), item.getQuantity() * item.getItem().getPrice(), "X" };
     }
 
     public void addItem(CartItem item) {
-        cartItem.add(item);
-        defaultTableModel.addRow(new Object[]{
-            item.getItem().getId(),
-            item.getItem().getName(),
-            item.getQuantity(),
-            item.getItem().getPrice(),
-            item.getQuantity() * item.getItem().getPrice(),
-            "X"
-        });
+        cart.add(item);
+        orderedItems.add(item);
+        tableModel.addRow(this.createTableRow(item));
+        table.getColumn("Delete").setCellRenderer(new DeleteRenderer());
+        table.getColumn("Delete").setCellEditor(new DeleteEditor(new JCheckBox()));
+    }
+
+    public void removeItem(int index) {
+        CartItem cartItem = orderedItems.remove(index);
+        cart.removeItem(cartItem.getItem());
+    }
+
+    public void clearTable() {
+        this.cart.clearCart();
+        this.orderedItems.clear();
+        tableModel.setRowCount(0);
     }
 
     public void createAddItemWindow() {
-        new AddItemWindow(this, catalog);
+        new AddItemFrame(delegate, catalog);
     }
+
+    public void actionPerformed(ActionEvent action) {
+        createAddItemWindow();
+    }
+
+    class CartItemPanelTable extends JTable {
+
+        static final long serialVersionUID = 20001;
+        private CartItemPanel owner;
+
+        public CartItemPanelTable(CartItemPanelTableModel tableModel, CartItemPanel panel) {
+            super(tableModel);
+            owner = panel;
+        }
+
+        public void removeRow(int row) {
+            DefaultCellEditor cellEditor = (DefaultCellEditor) getCellEditor();
+            if (null != cellEditor) {
+                cellEditor.stopCellEditing();
+            }
+            ((CartItemPanelTableModel) getModel()).removeRow(row);
+            owner.removeItem(row);
+        }
+
+    }
+
+    class CartItemPanelTableModel extends DefaultTableModel {
+
+        static final long serialVersionUID = 200002;
+
+        public CartItemPanelTableModel(Vector<String> v, int row) {
+            super(v, row);
+        }
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return 5 == column;
+        }
+
+    }
+
+    class DeleteRenderer extends JButton implements TableCellRenderer {
+
+        static final long serialVersionUID = 20003;
+        private JTable table;
+        private int row;
+
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
+            this.table = table;
+            this.row = row;
+            setText(value.toString());
+            return this;
+        }
+
+        public JTable getTable() {
+            return table;
+        }
+
+        public int getRow() {
+            return row;
+        }
+
+    }
+
+    class DeleteEditor extends DefaultCellEditor {
+
+        static final long serialVersionUID = 20004;
+        protected JButton button;
+
+        public DeleteEditor(JCheckBox checkBox) {
+            super(checkBox);
+            button = new JButton();
+        }
+
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+                int column) {
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ((CartItemPanelTable) table).removeRow(row);
+                }
+            });
+            return button;
+        }
+
+    }
+
 }

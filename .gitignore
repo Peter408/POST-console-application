@@ -1,5 +1,7 @@
 /conf
 /logs
+/.idea
+/out
 *.class
 *.DS_Store
 launch.json
