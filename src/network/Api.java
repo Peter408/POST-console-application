@@ -28,7 +28,15 @@ public class Api {
         putPath(base, "payments");
         putPath(base, "transactions");
         this.gson = new Gson();
-}
+    }
+
+    private void putPath(URL base, String key) throws MalformedURLException {
+        this.paths.put(key, appendURL(base, "/" + key));
+    }
+
+    private URL appendURL(URL url, String extension) throws MalformedURLException {
+        return new URL(url.toExternalForm() + extension);
+    }
 
     public List<Item> getProducts() throws IOException {
         Get getHandler = new Get(this.paths.get("products"));
@@ -73,14 +81,10 @@ public class Api {
       }
     }
 
-    private void putPath(URL base, String key) throws MalformedURLException {
-        this.paths.put(key, appendURL(base, "/" + key));
-    }
-
-    private URL appendURL(URL url, String extension) throws MalformedURLException {
-      return new URL(url.toExternalForm() + extension);
-    }
-
+    /*
+        a: - "Hey shouldn't we move all of these helper classes into a sub package?"
+        b: - "No, I want these all to say here because they're gross and should never escape"
+     */
     private class ItemHelper {
         private String upc;
         private String description;
