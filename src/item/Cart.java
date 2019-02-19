@@ -20,6 +20,14 @@ public class Cart {
         this.setCartItems(purchases);
     }
 
+    public boolean contains(Item item) {
+        return this.itemToQuantityMap.containsKey(item);
+    }
+
+    public int getQuantityForItem(Item item) {
+        return this.itemToQuantityMap.getOrDefault(item, 0);
+    }
+
     public double getTotalCost() {
         return this.itemToQuantityMap.entrySet().stream().mapToDouble(entry -> {
             final Item item = entry.getKey();
@@ -69,14 +77,6 @@ public class Cart {
     public void add(CartItem item) {
         this.setQuantityForItem(item.getItem(), item.getQuantity());
         this.support.firePropertyChange("itemToQuantityMap", itemToQuantityMap, itemToQuantityMap);
-    }
-
-    public boolean contains(Item item) {
-        return this.itemToQuantityMap.containsKey(item);
-    }
-
-    public int getQuantityForItem(Item item) {
-        return this.itemToQuantityMap.getOrDefault(item, 0);
     }
 
     public String displayCartItems() {
