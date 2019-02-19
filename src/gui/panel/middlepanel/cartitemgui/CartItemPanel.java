@@ -5,6 +5,8 @@ import java.awt.Button;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -15,7 +17,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Vector;
@@ -27,7 +28,7 @@ import item.*;
 import store.Catalog;
 import item.Cart;
 
-public class CartItemPanel extends JPanel implements ActionListener {
+public class CartItemPanel extends JPanel implements ActionListener, PropertyChangeListener {
     // view constants
     static final long serialVersionUID = 20001;
     private static final int MAX_WIDTH = 800;
@@ -54,6 +55,7 @@ public class CartItemPanel extends JPanel implements ActionListener {
         this.delegate = delegate;
         this.catalog = catalog;
         this.cart = cart;
+        this.cart.addPropertyChangeListener(this);
         tableModel = new CartItemPanelTableModel(new Vector<String>(Arrays.asList(COLUMN_NAMES)), 0);
         table = new CartItemPanelTable(tableModel, this);
         table.setFillsViewportHeight(true);
@@ -66,8 +68,8 @@ public class CartItemPanel extends JPanel implements ActionListener {
         JScrollPane scrollPane = new JScrollPane(table);
         Button addItem = new Button("< Add Item >");
         addItem.addActionListener(this);
-        add(addItem, BorderLayout.SOUTH);
-        add(scrollPane, BorderLayout.PAGE_START);
+        this.add(addItem, BorderLayout.SOUTH);
+        this.add(scrollPane, BorderLayout.PAGE_START);
     }
 
     public double getTotalPrice() {
@@ -80,27 +82,12 @@ public class CartItemPanel extends JPanel implements ActionListener {
     }
 
     public void addItem(CartItem newCartItem) {
-        if (cart.contains(newCartItem.getItem())) {
-            int oldQuantity = cart.getQuantityForItem(newCartItem.getItem());
-            int newQuantity = oldQuantity + newCartItem.getQuantity();
-            cart.setQuantityForItem(newCartItem.getItem(), newQuantity);
-            tableModel.setRowCount(0);
-            List<CartItem> items = cart.getPurchases();
-            Collections.sort(items);
-            for (CartItem cartItem : items) {
-                tableModel.addRow(this.createTableRow(cartItem));
-            }
-        } else {
-            cart.add(newCartItem);
-            tableModel.addRow(this.createTableRow(newCartItem));
-        }
-        table.getColumn("Delete").setCellRenderer(new DeleteRenderer());
-        table.getColumn("Delete").setCellEditor(new DeleteEditor(new JCheckBox()));
+        this.cart.add(newCartItem);
     }
 
     public void removeItem(String UPC) {
         Item item = new Item(UPC);
-        cart.removeItem(item);
+        this.cart.removeItem(item);
     }
 
     public void clearTable() {
@@ -114,6 +101,17 @@ public class CartItemPanel extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent action) {
         createAddItemWindow();
+    }
+
+    public void propertyChange(PropertyChangeEvent event) {
+        tableModel.setRowCount(0);
+        List<CartItem> items = cart.getPurchases();
+        Collections.sort(items);
+        for (CartItem cartItem : items) {
+            tableModel.addRow(this.createTableRow(cartItem));
+        }
+        table.getColumn("Delete").setCellRenderer(new DeleteRenderer());
+        table.getColumn("Delete").setCellEditor(new DeleteEditor(new JCheckBox()));
     }
 
     class CartItemPanelTable extends JTable {
