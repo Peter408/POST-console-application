@@ -61,7 +61,6 @@ public class ShopPanel extends JPanel implements AddItemPanel.Delegate, TopPanel
 
     @Override
     public void itemAddedToCart(CartItem cartItem) {
-        customer.addToCart(cartItem);
         middlePanel.addCartItemToTable(cartItem);
     }
 }
