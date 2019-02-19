@@ -54,24 +54,24 @@ public class Cart {
             throw new IllegalArgumentException("quantity must be greater than or equal to 0");
         }
         this.itemToQuantityMap.put(item, quantity);
-        this.support.firePropertyChange("itemToQuantityMap", itemToQuantityMap, itemToQuantityMap);
+        this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
     }
 
     public int removeItem(Item item) {
         int returnValue = this.itemToQuantityMap.remove(item);
-        this.support.firePropertyChange("itemToQuantityMap", itemToQuantityMap, itemToQuantityMap);
+        this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
         return returnValue;
     }
 
     public void clearCart() {
         this.itemToQuantityMap.clear();
-        this.support.firePropertyChange("itemToQuantityMap", itemToQuantityMap, itemToQuantityMap);
+        this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
     }
 
     public void setCartItems(List<CartItem> items) {
         this.itemToQuantityMap = items.stream().filter(i -> i != null && i.getItem() != null)
                 .collect(Collectors.toMap(item -> item.getItem(), item -> item.getQuantity()));
-        this.support.firePropertyChange("itemToQuantityMap", itemToQuantityMap, itemToQuantityMap);
+        this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
     }
 
     public void add(CartItem cartItem) {
@@ -80,7 +80,7 @@ public class Cart {
         } else {
             this.setQuantityForItem(cartItem.getItem(), cartItem.getQuantity());
         }
-        this.support.firePropertyChange("itemToQuantityMap", itemToQuantityMap, itemToQuantityMap);
+        this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
     }
 
     @Override
