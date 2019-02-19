@@ -85,6 +85,7 @@ public class Api {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     /*
