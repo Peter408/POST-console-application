@@ -57,7 +57,8 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
         setComponents();
     }
 
-    public void setDefaultConfiguration(AddItemPanel.Delegate addItemDelegate, Delegate delegate, Catalog catalog, Cart cart) {
+    public void setDefaultConfiguration(AddItemPanel.Delegate addItemDelegate, Delegate delegate, Catalog catalog,
+            Cart cart) {
         this.setLayout(new BorderLayout());
         this.addItemDelegate = addItemDelegate;
         this.delegate = delegate;
@@ -91,11 +92,11 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
     }
 
     public void removeItem(String UPC) {
-        ((CartItemPanel.Delegate)this.delegate).itemRemovedFromCart(new Item(UPC));
+        ((CartItemPanel.Delegate) this.delegate).itemRemovedFromCart(new Item(UPC));
     }
 
     public void createAddItemWindow() {
-        new AddItemFrame(addItemDelegate, catalog);
+        AddItemFrame.getInstance(addItemDelegate, catalog);
     }
 
     public void actionPerformed(ActionEvent action) {
@@ -104,7 +105,7 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
 
     public void propertyChange(PropertyChangeEvent event) {
         tableModel.setRowCount(0);
-        List<CartItem> items = ((Cart)event.getSource()).getPurchases();
+        List<CartItem> items = ((Cart) event.getSource()).getPurchases();
         Collections.sort(items);
         for (CartItem cartItem : items) {
             tableModel.addRow(this.createTableRow(cartItem));
