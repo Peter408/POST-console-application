@@ -2,10 +2,9 @@ package network;
 
 import java.net.URL;
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 public class Get extends RestRequest {
-    public Get(URL uri) throws IOException {
+    Get(URL uri) throws IOException {
         super(uri);
         connection.setRequestMethod("GET");
     }

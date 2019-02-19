@@ -2,10 +2,10 @@ package network;
 
 import java.net.URL;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 
 public class Put extends RestRequest {
-  public Put(URL uri) throws MalformedURLException, IOException {
+  Put(URL uri) throws IOException {
     super(uri);
     connection.setRequestMethod("PUT");
   }
@@ -16,7 +16,7 @@ public class Put extends RestRequest {
 
   public Response execute(String body) throws IOException {
     connection.setDoOutput(true);
-    connection.getOutputStream().write(body.getBytes("UTF-8"));
+    connection.getOutputStream().write(body.getBytes(StandardCharsets.UTF_8));
 
     Response response = new Response(connection);
 

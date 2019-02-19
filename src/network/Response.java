@@ -7,12 +7,12 @@ import java.net.HttpURLConnection;
 
 public class Response {
     private int statusCode;
-    private String result;
+    private StringBuilder result;
     private BufferedReader bodyReader;
     private HttpURLConnection connection;
 
-    public Response(HttpURLConnection connection) throws IOException {
-        this.result = "";
+    Response(HttpURLConnection connection) throws IOException {
+        this.result = new StringBuilder();
         this.connection = connection;
 
         this.createReader();
@@ -24,8 +24,8 @@ public class Response {
         return this.statusCode;
     }
 
-    public String getBody() {
-        return this.result;
+    String getBody() {
+        return this.result.toString();
     }
 
     private void createReader() {
@@ -44,7 +44,7 @@ public class Response {
         String line;
 
         while ((line = bodyReader.readLine()) != null) {
-            this.result = this.result + line;
+            this.result.append(line);
         }
     }
 

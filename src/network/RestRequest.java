@@ -2,13 +2,12 @@ package network;
 
 import java.net.URL;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.io.IOException;
 
 public abstract class RestRequest {
-    protected HttpURLConnection connection;
+    HttpURLConnection connection;
 
-    public RestRequest(URL uri) throws MalformedURLException, IOException {
+    RestRequest(URL uri) throws IOException {
         connection = (HttpURLConnection) uri.openConnection();
         setRequiredHeaders();
     }
