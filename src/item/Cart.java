@@ -1,38 +1,33 @@
 package item;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Represents a shopping cart when checking out.
- */
 public class Cart {
+    private PropertyChangeSupport support;
     private Map<Item, Integer> itemToQuantityMap;
 
-    /**
-     * Default constructor which initializes purchases to an empty list.
-     */
     public Cart() {
+        this.support = new PropertyChangeSupport(this);
         this.itemToQuantityMap = new HashMap<>();
     }
 
-    /**
-     * Standard constructor.
-     *
-     * @param purchases list of `CartItems` to be purchased. Null values and
-     *                  `CartItem`s with null `Item`s will be ignored.
-     */
     public Cart(List<CartItem> purchases) {
         this.setCartItems(purchases);
     }
 
-    /**
-     * Accessor for the total cost of all items in a cart.
-     *
-     * @return cost in dollars and cents
-     */
+    public boolean contains(Item item) {
+        return this.itemToQuantityMap.containsKey(item);
+    }
+
+    public int getQuantityForItem(Item item) {
+        return this.itemToQuantityMap.getOrDefault(item, 0);
+    }
+
     public double getTotalCost() {
         return this.itemToQuantityMap.entrySet().stream().mapToDouble(entry -> {
             final Item item = entry.getKey();
@@ -41,97 +36,63 @@ public class Cart {
         }).sum();
     }
 
-    /**
-     * Accessor for items in Cart
-     *
-     * @return list of `CartItem`s
-     */
     public List<CartItem> getPurchases() {
         return this.itemToQuantityMap.entrySet().stream().map(entry -> new CartItem(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Sets the quantity for a certain item. If item doesn't exists in cart it will
-     * be added.
-     *
-     * @param item     `Item` instance
-     * @param quantity quantity of item
-     * @throws IllegalArgumentException if quantity is less than 0
-     */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        this.support.addPropertyChangeListener(listener);
+    }
+ 
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        this.support.removePropertyChangeListener(listener);
+    }
+
     public void setQuantityForItem(Item item, int quantity) throws IllegalArgumentException {
         if (quantity < 0) {
             throw new IllegalArgumentException("quantity must be greater than or equal to 0");
         }
         this.itemToQuantityMap.put(item, quantity);
+        this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
     }
 
-    /**
-     * Gets the quantity of a certain item in a cart
-     *
-     * @param item `Item` instance
-     * @return quantity of item in cart or 0 if not exists
-     */
     public int getQuantityForItem(Item item) {
         return this.itemToQuantityMap.getOrDefault(item, 0);
     }
 
-    /**
-     * Removes all of a certain item from the cart. This is not to deduct from the
-     * quantity of the item but remove it entirely, instead use
-     * `setQuantityForItem`.
-     *
-     * @param item `Item` instance
-     * @return the quantity of this item that was contained in the cart
-     */
     public int removeItem(Item item) {
-        return this.itemToQuantityMap.remove(item);
+        int returnValue = this.itemToQuantityMap.remove(item);
+        this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
+        return returnValue;
     }
 
-    /**
-     * Removes all items from the cart
-     */
     public void clearCart() {
-        itemToQuantityMap.clear();
+        this.itemToQuantityMap.clear();
+        this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
     }
 
     public void setCartItems(List<CartItem> items) {
         this.itemToQuantityMap = items.stream().filter(i -> i != null && i.getItem() != null)
-                .collect(Collectors.toMap(CartItem::getItem, CartItem::getQuantity));
+                .collect(Collectors.toMap(item -> item.getItem(), item -> item.getQuantity()));
+        this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
     }
 
-    /**
-     * Adds a `CartItem` to the cart.
-     */
-    public void add(CartItem item) {
-        this.setQuantityForItem(item.getItem(), item.getQuantity());
-    }
-
-    public boolean contains(Item item) {
-        return this.itemToQuantityMap.containsKey(item);
-    }
-
-    /**
-     * displays the cart in a list format
-     *
-     * @return the string representation
-     */
-    public String displayCartItems() {
-        StringBuffer SB = new StringBuffer();
-        itemToQuantityMap.forEach((k, v) -> {
-            SB.append("Item: ").append(k.getName()).append(" ").append(v).append(" @ $");
-            SB.append(String.format("%.2f", k.getPrice())).append(" $");
-            SB.append(String.format("%.2f", k.getPrice() * v)).append("\n");
-        });
-        return SB.toString();
+    public void add(CartItem cartItem) {
+        if (null != this.itemToQuantityMap.get(cartItem.getItem())) {
+            this.setQuantityForItem(cartItem.getItem(), this.getQuantityForItem(cartItem.getItem()) + cartItem.getQuantity());
+        } else {
+            this.setQuantityForItem(cartItem.getItem(), cartItem.getQuantity());
+        }
+        this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
     }
 
     @Override
     public String toString() {
         StringBuffer SB = new StringBuffer();
-        itemToQuantityMap.forEach((k, v) -> {
-            SB.append(k.toString()).append("\t");
-            SB.append("quantity: ").append(v).append("\n");
+        this.itemToQuantityMap.forEach((k, v) -> {
+            SB.append("Item: " + k.getName() + " " + v + " @ $" + String.format("%.2f", k.getPrice()) + " $"
+                    + String.format("%.2f", k.getPrice() * v) + "\n");
         });
         return SB.toString();
     }
