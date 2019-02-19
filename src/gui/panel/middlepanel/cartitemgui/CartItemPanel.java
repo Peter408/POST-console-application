@@ -84,7 +84,6 @@ public class CartItemPanel extends JPanel implements ActionListener {
             int oldQuantity = cart.getQuantityForItem(newCartItem.getItem());
             int newQuantity = oldQuantity + newCartItem.getQuantity();
             cart.setQuantityForItem(newCartItem.getItem(), newQuantity);
-            System.out.printf("Updating cart item: %s, quantity: %d\n", newCartItem.getItem().getId(), newQuantity);
             tableModel.setRowCount(0);
             List<CartItem> items = cart.getPurchases();
             Collections.sort(items);
@@ -93,8 +92,6 @@ public class CartItemPanel extends JPanel implements ActionListener {
             }
         } else {
             cart.add(newCartItem);
-            System.out.printf("Adding new cart Item: %s, with quantity: %d\n", newCartItem.getItem().getId(),
-                    newCartItem.getQuantity());
             tableModel.addRow(this.createTableRow(newCartItem));
         }
         table.getColumn("Delete").setCellRenderer(new DeleteRenderer());
@@ -182,7 +179,8 @@ public class CartItemPanel extends JPanel implements ActionListener {
     class DeleteEditor extends DefaultCellEditor {
 
         static final long serialVersionUID = 20004;
-        protected JButton button;
+        private JButton button;
+        private ActionListener actionListener;
         private String UPC;
 
         public DeleteEditor(JCheckBox checkBox) {
@@ -193,11 +191,18 @@ public class CartItemPanel extends JPanel implements ActionListener {
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
                 int column) {
             UPC = value.toString();
-            button.addActionListener(new ActionListener() {
+            if (actionListener != null) {
+                button.removeActionListener(actionListener);
+            }
+            actionListener = new ActionListener() {
+
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     ((CartItemPanelTable) table).removeRow(row, UPC);
                 }
-            });
+            };
+            button.addActionListener(actionListener);
+
             return button;
         }
 
