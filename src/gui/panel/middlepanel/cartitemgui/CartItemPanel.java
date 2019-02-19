@@ -3,6 +3,7 @@ package gui.panel.middlepanel.cartitemgui;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -37,6 +38,7 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
     private static final int[] COLUMN_WIDTHS = { SECTION_WIDTH * 4, SECTION_WIDTH * 20, SECTION_WIDTH * 3,
             SECTION_WIDTH * 10, SECTION_WIDTH * 10, SECTION_WIDTH * 3 };
     private static final int COLUMN_COUNT = 6;
+    private Dimension dimension;
 
     // view data
     private Catalog catalog;
@@ -70,6 +72,7 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
 
     public void setComponents() {
         JScrollPane scrollPane = new JScrollPane(table);
+        table.setPreferredScrollableViewportSize(this.dimension);
         Button addItem = new Button("< Add Item >");
         addItem.addActionListener(this);
         this.add(addItem, BorderLayout.SOUTH);
@@ -77,8 +80,10 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
     }
 
     private Object[] createTableRow(CartItem item) {
-        return new Object[] { item.getItem().getId(), item.getItem().getName(), item.getQuantity(),
-                item.getItem().getPrice(), item.getQuantity() * item.getItem().getPrice(), item.getItem().getId() };
+        String unitPrice = String.format("%.2f", item.getUnitPrice());
+        String extendedPrice = String.format("%.2f", item.getExtendedPrice());
+        return new Object[] { item.getId(), item.getName(), item.getQuantity(), unitPrice, extendedPrice,
+                item.getId() };
     }
 
     public void removeItem(String UPC) {
@@ -116,7 +121,7 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
 
         public void removeRow(int row, String UPC) {
             DefaultCellEditor cellEditor = (DefaultCellEditor) getCellEditor();
-            if (null != cellEditor) {
+            if (cellEditor != null) {
                 cellEditor.stopCellEditing();
             }
             ((CartItemPanelTableModel) getModel()).removeRow(row);
@@ -135,7 +140,7 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
 
         @Override
         public boolean isCellEditable(int row, int column) {
-            return 5 == column;
+            return column == 5;
         }
 
     }

@@ -64,6 +64,22 @@ public class CartItem implements Comparable<CartItem> {
         this.quantity = quantity;
     }
 
+    public double getUnitPrice() {
+        return this.item.getPrice();
+    }
+
+    public double getExtendedPrice() {
+        return this.item.getPrice() * this.quantity;
+    }
+
+    public String getId() {
+        return this.item.getId();
+    }
+
+    public String getName() {
+        return this.item.getName();
+    }
+
     private void checkQuantity(int quantity) throws IllegalArgumentException {
         if (quantity < 0) {
             throw new IllegalArgumentException("quantity must be greater than or equal to 0");

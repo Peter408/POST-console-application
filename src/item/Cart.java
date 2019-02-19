@@ -57,6 +57,10 @@ public class Cart {
         this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
     }
 
+    public int getQuantityForItem(Item item) {
+        return this.itemToQuantityMap.getOrDefault(item, 0);
+    }
+
     public int removeItem(Item item) {
         int returnValue = this.itemToQuantityMap.remove(item);
         this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
