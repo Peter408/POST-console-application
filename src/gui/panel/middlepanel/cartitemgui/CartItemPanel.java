@@ -3,6 +3,7 @@ package gui.panel.middlepanel.cartitemgui;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,11 +31,13 @@ public class CartItemPanel extends JPanel implements ActionListener {
     // view constants
     static final long serialVersionUID = 20001;
     private static final int MAX_WIDTH = 800;
+    private static final int MAX_HEIGHT = 320;
     private static final int SECTION_WIDTH = MAX_WIDTH / 50;
     private static final String[] COLUMN_NAMES = { "UPC", "Item", "QTY", "Unit Price", "Total Price", "Delete" };
     private static final int[] COLUMN_WIDTHS = { SECTION_WIDTH * 4, SECTION_WIDTH * 20, SECTION_WIDTH * 3,
             SECTION_WIDTH * 10, SECTION_WIDTH * 10, SECTION_WIDTH * 3 };
     private static final int COLUMN_COUNT = 6;
+    private Dimension dimension;
 
     // view data
     private Catalog catalog;
@@ -53,6 +56,9 @@ public class CartItemPanel extends JPanel implements ActionListener {
         this.delegate = delegate;
         this.catalog = catalog;
         this.cart = cart;
+        this.dimension = new Dimension(MAX_WIDTH, MAX_HEIGHT);
+        this.setPreferredSize(this.dimension);
+        this.setSize(this.dimension);
         tableModel = new CartItemPanelTableModel(new Vector<String>(Arrays.asList(COLUMN_NAMES)), 0);
         table = new CartItemPanelTable(tableModel, this);
         table.setFillsViewportHeight(true);
@@ -63,6 +69,7 @@ public class CartItemPanel extends JPanel implements ActionListener {
 
     public void setComponents() {
         JScrollPane scrollPane = new JScrollPane(table);
+        table.setPreferredScrollableViewportSize(this.dimension);
         Button addItem = new Button("< Add Item >");
         addItem.addActionListener(this);
         add(addItem, BorderLayout.SOUTH);
