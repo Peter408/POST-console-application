@@ -11,9 +11,9 @@ abstract public class PaymentListener extends JPanel {
     JTextField inputTextField;
     JPanel paymentPanel;
 
-    public JPanel getPanel(){
-        return this.paymentPanel;
-    }
+    //public JPanel getPanel(){
+    //    return this.paymentPanel;
+    //}
 
     public PaymentListener(){
         initialize();
@@ -35,11 +35,11 @@ abstract public class PaymentListener extends JPanel {
             @Override
             public void keyReleased(KeyEvent e) {
                 String input = inputTextField.getText();
-                if( checkValidation( input ) ){
+                if( PaymentListener.this.checkValidation() ){
                     inputTextField.setBorder(new LineBorder(null));
                     System.out.println(inputTextField.getText());
                     //if(delegate != null) {
-                    //    delegate.filterResults(inputTextField.getText());
+                    //    delegate.applyPayment(inputTextField.getText());
                     //}
                 } else {
                     inputTextField.setBorder(new LineBorder(Color.RED));
@@ -50,8 +50,13 @@ abstract public class PaymentListener extends JPanel {
 
         paymentPanel.add(inputLabel);
         paymentPanel.add(inputTextField);
+        add(paymentPanel);
     }
 
-    abstract boolean checkValidation(String input);
-    abstract void setInputLabel();
+    public String getInputValue() {
+        return this.inputTextField.getText();
+    }
+
+    abstract public boolean checkValidation();
+    abstract public void setInputLabel();
 }
