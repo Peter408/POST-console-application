@@ -17,6 +17,7 @@ import javax.swing.table.TableCellRenderer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Vector;
 import java.util.List;
 
@@ -42,8 +43,6 @@ public class CartItemPanel extends JPanel implements ActionListener {
     private CartItemPanelTable table;
     private AddItemPanel.Delegate delegate;
     private Cart cart;
-    /* used alongside cart since cart is unordered */
-    private List<CartItem> orderedItems;
 
     public CartItemPanel(AddItemPanel.Delegate delegate, Catalog catalog, Cart cart) {
         setDefaultConfiguration(delegate, catalog, cart);
@@ -55,7 +54,6 @@ public class CartItemPanel extends JPanel implements ActionListener {
         this.delegate = delegate;
         this.catalog = catalog;
         this.cart = cart;
-        this.orderedItems = cart.getPurchases();
         tableModel = new CartItemPanelTableModel(new Vector<String>(Arrays.asList(COLUMN_NAMES)), 0);
         table = new CartItemPanelTable(tableModel, this);
         table.setFillsViewportHeight(true);
@@ -78,25 +76,35 @@ public class CartItemPanel extends JPanel implements ActionListener {
 
     private Object[] createTableRow(CartItem item) {
         return new Object[] { item.getItem().getId(), item.getItem().getName(), item.getQuantity(),
-                item.getItem().getPrice(), item.getQuantity() * item.getItem().getPrice(), "X" };
+                item.getItem().getPrice(), item.getQuantity() * item.getItem().getPrice(), item.getItem().getId() };
     }
 
-    public void addItem(CartItem item) {
-        cart.add(item);
-        orderedItems.add(item);
-        tableModel.addRow(this.createTableRow(item));
+    public void addItem(CartItem newCartItem) {
+        if (cart.contains(newCartItem.getItem())) {
+            int oldQuantity = cart.getQuantityForItem(newCartItem.getItem());
+            int newQuantity = oldQuantity + newCartItem.getQuantity();
+            cart.setQuantityForItem(newCartItem.getItem(), newQuantity);
+            tableModel.setRowCount(0);
+            List<CartItem> items = cart.getPurchases();
+            Collections.sort(items);
+            for (CartItem cartItem : items) {
+                tableModel.addRow(this.createTableRow(cartItem));
+            }
+        } else {
+            cart.add(newCartItem);
+            tableModel.addRow(this.createTableRow(newCartItem));
+        }
         table.getColumn("Delete").setCellRenderer(new DeleteRenderer());
         table.getColumn("Delete").setCellEditor(new DeleteEditor(new JCheckBox()));
     }
 
-    public void removeItem(int index) {
-        CartItem cartItem = orderedItems.remove(index);
-        cart.removeItem(cartItem.getItem());
+    public void removeItem(String UPC) {
+        Item item = new Item(UPC);
+        cart.removeItem(item);
     }
 
     public void clearTable() {
         this.cart.clearCart();
-        this.orderedItems.clear();
         tableModel.setRowCount(0);
     }
 
@@ -118,13 +126,13 @@ public class CartItemPanel extends JPanel implements ActionListener {
             owner = panel;
         }
 
-        public void removeRow(int row) {
+        public void removeRow(int row, String UPC) {
             DefaultCellEditor cellEditor = (DefaultCellEditor) getCellEditor();
             if (null != cellEditor) {
                 cellEditor.stopCellEditing();
             }
             ((CartItemPanelTableModel) getModel()).removeRow(row);
-            owner.removeItem(row);
+            owner.removeItem(UPC);
         }
 
     }
@@ -154,7 +162,7 @@ public class CartItemPanel extends JPanel implements ActionListener {
                 int row, int column) {
             this.table = table;
             this.row = row;
-            setText(value.toString());
+            setText("X");
             return this;
         }
 
@@ -171,7 +179,9 @@ public class CartItemPanel extends JPanel implements ActionListener {
     class DeleteEditor extends DefaultCellEditor {
 
         static final long serialVersionUID = 20004;
-        protected JButton button;
+        private JButton button;
+        private ActionListener actionListener;
+        private String UPC;
 
         public DeleteEditor(JCheckBox checkBox) {
             super(checkBox);
@@ -180,11 +190,19 @@ public class CartItemPanel extends JPanel implements ActionListener {
 
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
                 int column) {
-            button.addActionListener(new ActionListener() {
+            UPC = value.toString();
+            if (actionListener != null) {
+                button.removeActionListener(actionListener);
+            }
+            actionListener = new ActionListener() {
+
+                @Override
                 public void actionPerformed(ActionEvent e) {
-                    ((CartItemPanelTable) table).removeRow(row);
+                    ((CartItemPanelTable) table).removeRow(row, UPC);
                 }
-            });
+            };
+            button.addActionListener(actionListener);
+
             return button;
         }
 
