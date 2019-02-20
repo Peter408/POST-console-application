@@ -33,8 +33,7 @@ public class CloseStore {
 
         button = new JButton();
         try {
-            // TODO fix route to button to reource dir
-            Image img = ImageIO.read(getClass().getResource("offButton.png")).getScaledInstance(WIDTH,HEIGHT, Image.SCALE_DEFAULT);
+            Image img = ImageIO.read(getClass().getResource("/gui/resources/offButton.png")).getScaledInstance(WIDTH,HEIGHT, Image.SCALE_DEFAULT);
             button.setIcon(new ImageIcon(img));
             button.setBorder(BorderFactory.createEmptyBorder());
         } catch(Exception e) {
