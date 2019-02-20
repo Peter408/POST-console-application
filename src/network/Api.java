@@ -5,17 +5,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.lang.reflect.Type;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
 import item.CartItem;
 import item.Item;
-import transaction.Payment;
-import transaction.Transaction;
-import user.Customer;
+import network.adapters.*;
+import transaction.*;
 
 public class Api {
     private Gson gson;
@@ -24,13 +21,18 @@ public class Api {
     public Api(String uri) throws MalformedURLException {
         URL base = new URL(uri);
         this.paths = new HashMap<>();
-        putPath(base, "products");
-        putPath(base, "payments");
-        putPath(base, "transactions");
-        this.gson = new Gson();
+        registerPath(base, "products");
+        registerPath(base, "payments");
+        registerPath(base, "sales");
+        this.gson = new GsonBuilder()
+                .registerTypeAdapter(Item.class, new ItemAdapter())
+                .registerTypeAdapter(CartItem.class, new CartItemAdapter())
+                .registerTypeAdapter(Payment.class, new PaymentAdapter())
+                .registerTypeAdapter(Transaction.class, new TransactionAdapter())
+                .create();
     }
 
-    private void putPath(URL base, String key) throws MalformedURLException {
+    private void registerPath(URL base, String key) throws MalformedURLException {
         this.paths.put(key, appendURL(base, "/" + key));
     }
 
@@ -40,36 +42,27 @@ public class Api {
 
     public List<Item> getProducts() throws IOException {
         Get getHandler = new Get(this.paths.get("products"));
-        List<ItemHelper> helpers = getHelpers(getHandler.execute());
-        return helpers.stream().map(ItemHelper::build).collect(Collectors.toList());
-    }
-
-    private List<ItemHelper> getHelpers(Response res) {
-        String body = res.getBody();
-        TypeToken<List<ItemHelper>> itemListType = new TypeToken<List<ItemHelper>>() {
+        Response res = getHandler.execute();
+        TypeToken typeToken = new TypeToken<List<Item>>() {
         };
-        Type type = itemListType.getType();
-        return gson.fromJson(body, type);
+        return gson.fromJson(res.getBody(), typeToken.getType());
     }
 
     public int putTransaction(Transaction transaction) throws IOException {
-        String body = this.gson.toJson(new TransactionHelper(transaction));
-        Put putHandler = new Put(this.paths.get("transactions"));
+        Put putHandler = new Put(this.paths.get("sales"));
+        String body = this.gson.toJson(transaction);
+        System.out.println(body);
         Response res = putHandler.execute(body);
-        return this.gson.fromJson(res.getBody(), Id.class).getId();
+        int id = this.gson.fromJson(res.getBody(), Id.class).id;
+        return id;
     }
 
     private class Id {
         int id;
-
-        int getId() {
-            return this.id;
-        }
     }
 
     public boolean putPaymentType(Payment payment) throws IOException {
-        String body = this.gson
-                .toJson(new PaymentHelper(payment.getPaymentType(), payment.getPayment(), payment.getCardNumber()));
+        String body = this.gson.toJson(payment);
         try {
             URL url = appendURL(this.paths.get("payments"), payment.getPaymentType());
             Put putHandler = new Put(url);
@@ -86,85 +79,5 @@ public class Api {
             e.printStackTrace();
         }
         return false;
-    }
-
-    /*
-     * a: - "Hey shouldn't we move all of these helper classes into a sub package?"
-     * b: -
-     * "No, I want these all to say here because they're gross and should never escape"
-     */
-    private class ItemHelper {
-        private String upc;
-        private String description;
-        private String price;
-
-        ItemHelper(String upc, String description, String price) {
-            this.upc = upc;
-            this.description = description;
-            this.price = price;
-        }
-
-        Item build() {
-            return new Item(this.upc, this.description, Double.parseDouble(this.price.substring(1)));
-        }
-    }
-
-    private class CartItemHelper {
-        private int quantity;
-        private String upc;
-        private String price;
-
-        CartItemHelper(CartItem item) {
-            this.quantity = item.getQuantity();
-            this.upc = item.getItem().getId();
-            this.price = Double.toString(item.getItem().getPrice());
-        }
-
-        CartItem build() {
-            Item item = new ItemHelper(this.upc, null, this.price).build();
-            return new CartItem(item, quantity);
-        }
-    }
-
-    private class PaymentHelper {
-        private String type;
-        private double amount;
-        private String cardNumber;
-
-        PaymentHelper(String type, double amount, String cardNumber) {
-            this.type = type;
-            this.amount = amount;
-            this.cardNumber = cardNumber;
-        }
-
-        Payment build() {
-            return new Payment(type, amount, cardNumber);
-        }
-    }
-
-    private class TransactionHelper {
-        private String customer;
-        private String timeOfSale;
-        private List<CartItemHelper> items;
-        private double total;
-        private PaymentHelper tendered;
-        private double returned;
-
-        public Transaction build() {
-            Customer c = new Customer(customer);
-            List<CartItem> cartItems = items.stream().map(CartItemHelper::build).collect(Collectors.toList());
-            c.getCart().setCartItems(cartItems);
-            Payment p = tendered.build();
-            return new Transaction(c, p.getPaymentType(), p.getCardNumber());
-        }
-
-        TransactionHelper(Transaction t) {
-            this.customer = t.getCustomer().getName();
-            this.timeOfSale = t.getTimestamp();
-            this.items = t.getCustomer().getCart().getPurchases().stream().map(CartItemHelper::new)
-                    .collect(Collectors.toList());
-            this.total = t.getTotal();
-            this.tendered = new PaymentHelper(t.getPaymentType(), t.getPayment(), t.getCardNumber());
-        }
     }
 }

@@ -2,6 +2,7 @@ package transaction;
 
 import user.Customer;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,6 +15,12 @@ public class Transaction {
         this.customer = customer;
         double total = customer.getTotal();
         this.payment = new Payment(paymentType, total, payment, cardNumber);
+        setDateTime();
+    }
+
+    public Transaction(Customer customer, Payment payment) {
+        this.customer = customer;
+        this.payment = payment;
         setDateTime();
     }
 
@@ -41,8 +48,8 @@ public class Transaction {
         return this.payment.getTotal();
     }
 
-    public double getPayment() {
-        return this.payment.getPayment();
+    public Payment getPayment() {
+        return this.payment;
     }
 
     public double getChange() {
@@ -66,9 +73,7 @@ public class Transaction {
     }
 
     private void setDateTime() {
-        DateTimeFormatter FOMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy 'at' hh:mm a");
-        LocalDateTime localDateTime = LocalDateTime.now();
-        this.today = FOMATTER.format(localDateTime);
+        this.today = Instant.now().toString();
     }
 
     public String displayTransactionPayment() {

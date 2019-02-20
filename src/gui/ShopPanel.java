@@ -1,6 +1,8 @@
 package gui;
 
 import gui.panel.bottompanel.BottomPanel;
+import gui.panel.bottompanel.PaymentType;
+import gui.panel.bottompanel.PaymentType.PaymentTypeEnum;
 import gui.panel.middlepanel.MiddlePanel;
 import gui.panel.middlepanel.cartitemgui.CartItemPanel;
 import gui.panel.optionspanel.OptionsPanel;
@@ -8,12 +10,15 @@ import gui.panel.toppanel.TopPanel;
 import gui.productsearch.AddItemPanel;
 import item.*;
 import post.POST;
+import transaction.Payment;
+import transaction.Transaction;
 import user.Customer;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class ShopPanel extends JPanel implements AddItemPanel.Delegate, CartItemPanel.Delegate, TopPanel.Delegate {
+public class ShopPanel extends JPanel
+        implements AddItemPanel.Delegate, CartItemPanel.Delegate, TopPanel.Delegate, BottomPanel.Delegate {
     private TopPanel topPanel;
     private MiddlePanel middlePanel;
     private BottomPanel bottomPanel;
@@ -47,7 +52,7 @@ public class ShopPanel extends JPanel implements AddItemPanel.Delegate, CartItem
         this.add(middlePanel, constraints);
 
         constraints.gridy = 2;
-        bottomPanel = new BottomPanel();
+        bottomPanel = new BottomPanel(this);
         this.add(bottomPanel, constraints);
     }
 
@@ -68,5 +73,27 @@ public class ShopPanel extends JPanel implements AddItemPanel.Delegate, CartItem
     @Override
     public void itemRemovedFromCart(Item item) {
         customer.removeFromCart(item);
+    }
+
+    @Override
+    public void checkout(PaymentType.PaymentTypeEnum paymentType, String associatedValue) {
+        Payment payment;
+        Customer customer = this.customer;
+        double total = customer.getTotal();
+        switch (paymentType) {
+            case CASH:
+                payment = new Payment("CASH", total, Double.parseDouble(associatedValue), null);
+                break;
+            case CHECK:
+                payment = new Payment("CHECK", total, null);
+                break;
+            case CREDIT:
+                payment = new Payment("CREDIT", total, associatedValue);
+                break;
+            default:
+                // TODO throw exception?
+                return;
+        }
+        this.post.checkout(customer, payment);
     }
 }
