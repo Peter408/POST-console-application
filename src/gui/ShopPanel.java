@@ -85,6 +85,9 @@ public class ShopPanel extends JPanel
     public void checkout(PaymentType.PaymentTypeEnum paymentType, String associatedValue) {
         Payment payment;
         Customer customer = this.customer;
+        if (customer.getCart().isEmpty()) {
+            return;
+        }
         double total = customer.getTotal();
         switch (paymentType) {
             case CASH:

@@ -83,6 +83,10 @@ public class Cart {
         this.support.firePropertyChange("itemToQuantityMap", null, itemToQuantityMap);
     }
 
+    public boolean isEmpty() {
+        return this.itemToQuantityMap.isEmpty();
+    }
+
     @Override
     public String toString() {
         StringBuffer SB = new StringBuffer();
