@@ -35,6 +35,7 @@ public class Checkout {
         // on button click
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                System.out.println("Button was clicked");
                 if (delegate != null)
                     delegate.checkoutButtonClicked(e);
             }

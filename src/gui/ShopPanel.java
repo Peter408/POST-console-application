@@ -6,6 +6,7 @@ import gui.panel.bottompanel.PaymentType.PaymentTypeEnum;
 import gui.panel.middlepanel.MiddlePanel;
 import gui.panel.middlepanel.cartitemgui.CartItemPanel;
 import gui.panel.optionspanel.OptionsPanel;
+import gui.panel.optionspanel.CloseStore;
 import gui.panel.toppanel.TopPanel;
 import gui.productsearch.AddItemPanel;
 import item.*;
@@ -16,12 +17,15 @@ import user.Customer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class ShopPanel extends JPanel
-        implements AddItemPanel.Delegate, CartItemPanel.Delegate, TopPanel.Delegate, BottomPanel.Delegate {
+        implements AddItemPanel.Delegate, CartItemPanel.Delegate, TopPanel.Delegate, BottomPanel.Delegate
+        , CloseStore.Delegate {
     private TopPanel topPanel;
     private MiddlePanel middlePanel;
     private BottomPanel bottomPanel;
+    private OptionsPanel optionsPanel;
 
     private Customer customer;
     private POST post;
@@ -38,7 +42,9 @@ public class ShopPanel extends JPanel
         constraints.gridy = 0;
         constraints.gridheight = 3;
 
-        this.add(new OptionsPanel(), constraints);
+
+        optionsPanel = new OptionsPanel(this);
+        this.add(optionsPanel, constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 0;
@@ -52,7 +58,7 @@ public class ShopPanel extends JPanel
         this.add(middlePanel, constraints);
 
         constraints.gridy = 2;
-        bottomPanel = new BottomPanel(this, customer.getCart());
+        bottomPanel = new BottomPanel(this);
         this.add(bottomPanel, constraints);
     }
 
@@ -94,11 +100,13 @@ public class ShopPanel extends JPanel
                 // TODO throw exception?
                 return;
         }
-        boolean validPayment = this.post.validatePayment(payment);
-        if (validPayment) {
-            this.post.checkout(customer, payment);
-        } else {
-            System.err.println("payment is invalid: " + payment);
-        }
+        this.post.checkout(customer, payment);
     }
+
+    @Override
+    public void closeButtonClicked() {
+        System.out.println("close store");
+        post.closeStore();
+        //TODO close store and print invoices?
+    } 
 }

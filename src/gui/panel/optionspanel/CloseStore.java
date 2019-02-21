@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
+import javax.swing.Action;
 
 public class CloseStore {
     JButton button;
@@ -19,7 +20,14 @@ public class CloseStore {
     private static final int HEIGHT = 35;
     private Dimension dimension;
 
-    public CloseStore() {
+    Delegate delegate;
+
+    public interface Delegate {
+        public void closeButtonClicked();
+    }
+
+    public CloseStore(Delegate delegate) {
+        this.delegate = delegate;
         createCloseStore();
     }
 
@@ -33,8 +41,7 @@ public class CloseStore {
 
         button = new JButton();
         try {
-            // TODO fix route to button to reource dir
-            Image img = ImageIO.read(getClass().getResource("offButton.png")).getScaledInstance(WIDTH,HEIGHT, Image.SCALE_DEFAULT);
+            Image img = ImageIO.read(getClass().getResource("/gui/resources/offButton.png")).getScaledInstance(WIDTH,HEIGHT, Image.SCALE_DEFAULT);
             button.setIcon(new ImageIcon(img));
             button.setBorder(BorderFactory.createEmptyBorder());
         } catch(Exception e) {
@@ -44,8 +51,9 @@ public class CloseStore {
         closeStorePanel.add(button, BorderLayout.CENTER);
 
         button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("close store");
+            public void actionPerformed(ActionEvent event) {
+                if (delegate != null)
+                    delegate.closeButtonClicked();
             }
         });
 
