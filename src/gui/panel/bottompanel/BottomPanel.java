@@ -65,6 +65,7 @@ public class BottomPanel extends JPanel implements CheckoutDelegate, PaymentType
         this.cashListener = new CashListener();
         this.checkListener = new CheckListener();
         this.creditListener = new CreditListener();
+        changePaymentListener(this.checkListener);
     }
 
     @Override
