@@ -53,8 +53,7 @@ public class Api {
         String body = this.gson.toJson(transaction);
         System.out.println(body);
         Response res = putHandler.execute(body);
-        int id = this.gson.fromJson(res.getBody(), Id.class).id;
-        return id;
+        return this.gson.fromJson(res.getBody(), Id.class).id;
     }
 
     private class Id {
@@ -66,10 +65,8 @@ public class Api {
         String body = this.gson.toJson(payment);
         try {
             URL url = appendURL(this.paths.get("payments"), "/" + payment.getPaymentType().toLowerCase());
-            System.out.println(url);
             Post postHandler = new Post(url);
             Response res = postHandler.execute(body);
-            System.out.println(res.getStatusCode() + res.getBody());
             switch (res.getStatusCode()) {
             case 202:
                 return true;

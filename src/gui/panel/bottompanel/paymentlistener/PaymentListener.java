@@ -34,13 +34,8 @@ abstract public class PaymentListener extends JPanel {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                String input = inputTextField.getText();
                 if( PaymentListener.this.checkValidation() ){
                     inputTextField.setBorder(new LineBorder(null));
-                    System.out.println(inputTextField.getText());
-                    //if(delegate != null) {
-                    //    delegate.applyPayment(inputTextField.getText());
-                    //}
                 } else {
                     inputTextField.setBorder(new LineBorder(Color.RED));
                 }
