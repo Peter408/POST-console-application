@@ -41,6 +41,7 @@ public class PaymentType implements ActionListener {
         checkPanel = createRadioButton("Check");
         paymentPanel.add(checkPanel);
         checkPanel.addActionListener(this);
+        checkPanel.setSelected(true);
 
         // cash
         cashPanel = createRadioButton("Cash");
