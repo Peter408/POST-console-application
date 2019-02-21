@@ -107,6 +107,7 @@ public class ShopPanel extends JPanel
     public void closeButtonClicked() {
         System.out.println("close store");
         post.closeStore();
+        System.exit(0);
         //TODO close store and print invoices?
     } 
 }
