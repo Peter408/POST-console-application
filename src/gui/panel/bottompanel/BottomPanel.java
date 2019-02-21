@@ -115,4 +115,9 @@ public class BottomPanel extends JPanel implements CheckoutDelegate, PaymentType
     public void reset() {
         this.paymentListener.reset();
     }
+
+    public void setChange(double changeDue) {
+        String change = String.format("$%.2f", changeDue);
+        this.totalPanel.setChange(change);
+    }
 }
