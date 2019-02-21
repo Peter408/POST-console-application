@@ -62,7 +62,6 @@ public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate, Pro
     @Override
     public void addSelectedProduct(int withQuantity) {
         Item item = productTable.getSelectedItem();
-        System.out.println("adding" + item + " with quantity: " + withQuantity);
         if (withQuantity > 0) {
             itemAdded = new CartItem(item, withQuantity);
             if (this.delegate != null) {
