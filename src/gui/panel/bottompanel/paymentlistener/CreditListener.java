@@ -4,8 +4,12 @@ public class CreditListener extends PaymentListener {
 
     @Override
     public boolean checkValidation(){
-        //validate here
-        return true;
+        try {
+            Integer.parseInt(this.inputTextField.getText());
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     @Override
