@@ -1,12 +1,14 @@
 package gui.panel.bottompanel.paymentlistener;
 
+import gui.Resettable;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-abstract public class PaymentListener extends JPanel {
+abstract public class PaymentListener extends JPanel implements Resettable {
     JLabel inputLabel;
     JTextField inputTextField;
     JPanel paymentPanel;
@@ -54,4 +56,9 @@ abstract public class PaymentListener extends JPanel {
 
     abstract public boolean checkValidation();
     abstract public void setInputLabel();
+
+    @Override
+    public void reset() {
+        this.inputTextField.setText("");
+    }
 }

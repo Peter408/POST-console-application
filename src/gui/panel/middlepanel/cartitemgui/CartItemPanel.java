@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Vector;
 import java.util.List;
 
+import gui.Resettable;
 import gui.productsearch.AddItemFrame;
 import gui.productsearch.AddItemPanel;
 import item.*;

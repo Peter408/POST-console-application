@@ -1,5 +1,7 @@
 package gui.panel.toppanel;
 
+import gui.Resettable;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
@@ -14,7 +16,7 @@ import javax.swing.JTextField;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class TopPanel extends JPanel implements KeyListener {
+public class TopPanel extends JPanel implements KeyListener, Resettable {
     static final long serialVersionUID = 1001;
     private JTextField customerName = new JTextField();
     private static final int MAX_WIDTH = 800;
@@ -88,5 +90,9 @@ public class TopPanel extends JPanel implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
+    }
+
+    public void reset() {
+        this.customerName.setText("");
     }
 }

@@ -59,7 +59,6 @@ public class POST {
 
     public Transaction checkout(Customer customer, Payment payment) {
         Transaction t = new Transaction(customer, payment);
-        System.out.println("putting transaction: " + t.toString());
         transactions.add(t);
         try {
             api.putTransaction(t);

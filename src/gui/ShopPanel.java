@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 
 public class ShopPanel extends JPanel
         implements AddItemPanel.Delegate, CartItemPanel.Delegate, TopPanel.Delegate, BottomPanel.Delegate
-        , CloseStore.Delegate {
+        , CloseStore.Delegate, Resettable {
     private TopPanel topPanel;
     private MiddlePanel middlePanel;
     private BottomPanel bottomPanel;
@@ -100,7 +100,13 @@ public class ShopPanel extends JPanel
                 // TODO throw exception?
                 return;
         }
-        this.post.checkout(customer, payment);
+        boolean valid = this.post.validatePayment(payment);
+        if (valid) {
+            Transaction t = this.post.checkout(customer, payment);
+            this.reset();
+        } else {
+            System.err.println("invalid payment: " + payment);
+        }
     }
 
     @Override
@@ -108,6 +114,12 @@ public class ShopPanel extends JPanel
         System.out.println("close store");
         post.closeStore();
         System.exit(0);
-        //TODO close store and print invoices?
-    } 
+    }
+
+    public void reset() {
+        this.customer.setName("");
+        this.customer.getCart().clearCart();
+        this.topPanel.reset();
+        this.bottomPanel.reset();
+    }
 }

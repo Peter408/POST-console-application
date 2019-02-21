@@ -2,6 +2,7 @@ package gui.panel.bottompanel;
 
 import javax.swing.*;
 
+import gui.Resettable;
 import gui.panel.bottompanel.Checkout.CheckoutDelegate;
 import gui.panel.bottompanel.PaymentType.PaymentTypeEnum;
 import gui.panel.bottompanel.paymentlistener.*;
@@ -12,7 +13,7 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class BottomPanel extends JPanel implements CheckoutDelegate, PaymentType.Delegate, PropertyChangeListener {
+public class BottomPanel extends JPanel implements CheckoutDelegate, PaymentType.Delegate, PropertyChangeListener, Resettable {
     private static final int MAX_WIDTH = 800;
     private static final int MAX_HEIGHT = 125;
 
@@ -74,7 +75,6 @@ public class BottomPanel extends JPanel implements CheckoutDelegate, PaymentType
     public void propertyChange(PropertyChangeEvent evt) {
         double newValue = this.cart.getTotalCost();
         this.totalPanel.setTotal(String.format("$%.2f", newValue));
-
     }
 
     public void checkoutButtonClicked(ActionEvent e) {
@@ -114,4 +114,8 @@ public class BottomPanel extends JPanel implements CheckoutDelegate, PaymentType
         }
     }
 
+    @Override
+    public void reset() {
+        this.paymentListener.reset();
+    }
 }
