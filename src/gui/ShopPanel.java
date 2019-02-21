@@ -106,6 +106,7 @@ public class ShopPanel extends JPanel
         if (valid) {
             Transaction transaction = this.post.checkout(customer, payment);
             this.reset();
+            this.bottomPanel.setChange(transaction.getChange());
         } else {
             JOptionPane.showMessageDialog(this, "Not enough money");
             System.err.println("invalid payment: " + payment);

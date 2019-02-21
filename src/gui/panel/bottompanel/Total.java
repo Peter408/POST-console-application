@@ -1,6 +1,6 @@
 package gui.panel.bottompanel;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,6 +29,12 @@ public class Total {
     }
 
     public void setTotal(String total) {
+        label.setForeground(Color.BLACK);
         label.setText("Total: " + total);
+    }
+
+    public void setChange(String change) {
+        label.setForeground(Color.RED);
+        label.setText("Change: " + change);
     }
 }
