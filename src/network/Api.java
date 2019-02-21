@@ -53,8 +53,7 @@ public class Api {
         String body = this.gson.toJson(transaction);
         System.out.println(body);
         Response res = putHandler.execute(body);
-        int id = this.gson.fromJson(res.getBody(), Id.class).id;
-        return id;
+        return this.gson.fromJson(res.getBody(), Id.class).id;
     }
 
     private class Id {
@@ -62,11 +61,12 @@ public class Api {
     }
 
     public boolean putPaymentType(Payment payment) throws IOException {
+        if (payment.getPaymentType().equals("CASH")) return true;
         String body = this.gson.toJson(payment);
         try {
-            URL url = appendURL(this.paths.get("payments"), payment.getPaymentType());
-            Put putHandler = new Put(url);
-            Response res = putHandler.execute(body);
+            URL url = appendURL(this.paths.get("payments"), "/" + payment.getPaymentType().toLowerCase());
+            Post postHandler = new Post(url);
+            Response res = postHandler.execute(body);
             switch (res.getStatusCode()) {
             case 202:
                 return true;

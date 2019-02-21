@@ -52,7 +52,7 @@ public class ShopPanel extends JPanel
         this.add(middlePanel, constraints);
 
         constraints.gridy = 2;
-        bottomPanel = new BottomPanel(this);
+        bottomPanel = new BottomPanel(this, customer.getCart());
         this.add(bottomPanel, constraints);
     }
 
@@ -94,6 +94,11 @@ public class ShopPanel extends JPanel
                 // TODO throw exception?
                 return;
         }
-        this.post.checkout(customer, payment);
+        boolean validPayment = this.post.validatePayment(payment);
+        if (validPayment) {
+            this.post.checkout(customer, payment);
+        } else {
+            System.err.println("payment is invalid: " + payment);
+        }
     }
 }

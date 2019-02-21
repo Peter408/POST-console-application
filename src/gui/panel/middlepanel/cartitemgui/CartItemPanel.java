@@ -9,12 +9,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -96,7 +91,9 @@ public class CartItemPanel extends JPanel implements ActionListener, PropertyCha
     }
 
     public void createAddItemWindow() {
-        AddItemFrame.getInstance(addItemDelegate, catalog);
+        JFrame frame = AddItemFrame.getInstance(addItemDelegate, catalog);
+        frame.setVisible(true);
+        frame.toFront();
     }
 
     public void actionPerformed(ActionEvent action) {

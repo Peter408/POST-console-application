@@ -12,7 +12,7 @@ public class PaymentAdapter implements JsonSerializer<Payment>, JsonDeserializer
         obj.add("amount", new JsonPrimitive(payment.getPayment()));
         obj.add("type", new JsonPrimitive(payment.getPaymentType()));
         if (payment.getPaymentType().equals("CREDIT")) {
-            obj.add("cardNumber", new JsonPrimitive(payment.getCardNumber()));
+            obj.add("cardNumber", new JsonPrimitive(Integer.parseInt(payment.getCardNumber())));
         }
         return obj;
     }

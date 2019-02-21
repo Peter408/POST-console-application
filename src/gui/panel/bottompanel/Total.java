@@ -6,9 +6,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Total {
-    String total = "$20.00";
-    JLabel label;
-    JPanel panel;
+    private JLabel label;
+    private JPanel panel;
 
     void createTotal() {
         JPanel totalPanel = new JPanel();
@@ -25,9 +24,7 @@ public class Total {
         return this.panel;
     }
 
-    void setTotal(String total) {
-        this.total = total;
-        String totalString = String.format("$%.2f", total);
-        label.setText(totalString);
+    public void setTotal(String total) {
+        label.setText("Total: " + total);
     }
 }
