@@ -20,6 +20,7 @@ public class Checkout {
 
     public Checkout(CheckoutDelegate delegate) {
         this.delegate = delegate;
+        createCheckout();
     }
 
     void createCheckout() {

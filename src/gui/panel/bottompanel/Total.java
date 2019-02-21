@@ -9,6 +9,10 @@ public class Total {
     private JLabel label;
     private JPanel panel;
 
+    public Total() {
+        createTotal();
+    }
+
     void createTotal() {
         JPanel totalPanel = new JPanel();
         totalPanel.setLayout(new BorderLayout());

@@ -58,10 +58,6 @@ public class BottomPanel extends JPanel implements CheckoutDelegate, PaymentType
         checkout = new Checkout(this);
         totalPanel = new Total();
 
-        paymentType.createPaymentType();
-        checkout.createCheckout();
-        totalPanel.createTotal();
-
         this.add(paymentType.getPanel(), BorderLayout.WEST);
         this.add(checkout.getPanel(), BorderLayout.EAST);
         this.add(totalPanel.getPanel(), BorderLayout.NORTH);
