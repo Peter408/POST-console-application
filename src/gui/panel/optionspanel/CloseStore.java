@@ -45,7 +45,7 @@ public class CloseStore {
             button.setIcon(new ImageIcon(img));
             button.setBorder(BorderFactory.createEmptyBorder());
         } catch(Exception e) {
-            System.out.println("Broken");
+            System.out.println("No image found");
         }
 
         closeStorePanel.add(button, BorderLayout.CENTER);

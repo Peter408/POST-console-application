@@ -22,6 +22,7 @@ public class PaymentType implements ActionListener {
 
     public PaymentType(Delegate delegate) {
         this.delegate = delegate;
+        createPaymentType();
     }
 
     void createPaymentType() {

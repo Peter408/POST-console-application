@@ -105,7 +105,7 @@ public class ShopPanel extends JPanel
 
     @Override
     public void closeButtonClicked() {
-        System.out.println("close store");
+        System.out.println("closed store");
         post.closeStore();
         //TODO close store and print invoices?
     } 
