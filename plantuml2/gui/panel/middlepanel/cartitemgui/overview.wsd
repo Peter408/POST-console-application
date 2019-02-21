@@ -1,0 +1,96 @@
+@startuml package
+skinparam defaultFontSize 18
+left to right direction
+
+interface ActionListener
+interface PropertyChangeListener
+interface TableCellRenderer
+JPanel <|-- CartItemPanel.CartItemPanel
+ActionListener <|-- CartItemPanel.CartItemPanel
+PropertyChangeListener <|-- CartItemPanel.CartItemPanel
+
+JTable <|-- CartItemPanel.CartItemPanelTable
+
+DefaultTableModel <|-- CartItemPanel.CartItemPanelTableModel
+
+JButton <|-- CartItemPanel.DeleteRenderer
+TableCellRenderer <|-- CartItemPanel.DeleteRenderer
+
+DefaultCellEditor <|-- CartItemPanel.DeleteEditor
+
+Dimension --* CartItemPanel.CartItemPanel
+Catalog --o CartItemPanel.CartItemPanel
+CartItemPanelTableModel --* CartItemPanel.CartItemPanel
+CartItemPanelTable --* CartItemPanel.CartItemPanel
+CartItemPanel.Delegate -left-o CartItemPanel.CartItemPanel
+AddItemPanel.Delegate --o CartItemPanel.CartItemPanel
+
+CartItemPanel.CartItemPanel -left-o CartItemPanel.CartItemPanelTable
+
+JTable --o CartItemPanel.DeleteRenderer
+
+JButton --* CartItemPanel.DeleteEditor
+ActionListener --* CartItemPanel.DeleteEditor
+
+class CartItemPanel.CartItemPanel {
+    ~ {static} final long serialVersionUID
+    - {static} final int MAX_WIDTH
+    - {static} final int MAX_HEIGHT
+    - {static} final int SECTION_WIDTH
+    - {static} final String[] COLUMN_NAMES
+    - {static} final int[] COLUMN_WIDTHS
+    - {static} final int COLUMN_COUNT
+    - Dimension dimension
+    - Catalog catalog
+    - CartItemPanelTableModel tableModel
+    - CartItemPanelTable table
+    - Delegate delegate
+    - AddItemPanel.Delegate addItemDelegate
+
+    + CartItemPanel(AddItemPanel.Delegate addItemDelegate, Delegate delegate, Catalog catalog, Cart cart)
+    + void setDefaultConfiguration(AddItemPanel.Delegate addItemDelegate, Delegate delegate, Catalog catalog, Cart cart)
+    + void setComponents()
+    - Object[] createTableRow(CartItem item)
+    + void removeItem(String UPC)
+    + void createAddItemWindow()
+    + void actionPerformed(ActionEvent action)
+    + void propertyChange(PropertyChangeEvent event)
+}
+
+interface CartItemPanel.Delegate {
+        + void itemRemovedFromCart(Item item)
+}
+
+class CartItemPanel.CartItemPanelTable {
+    ~ {static} final long serialVersionUID
+    - CartItemPanel owner
+    + CartItemPanelTable(CartItemPanelTableModel tableModel, CartItemPanel panel)
+    + void removeRow(int row, String UPC)
+}
+
+class CartItemPanel.CartItemPanelTableModel {
+    ~ {static} final long serialVersionUID
+    + CartItemPanelTableModel(Vector<String> v, int row)
+    + boolean isCellEditable(int row, int column)
+}
+
+class CartItemPanel.DeleteRenderer {
+    ~ {static} final long serialVersionUID
+    - JTable table
+    - int row
+    + Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+    + JTable getTable()
+    + int getRow()
+}
+
+class CartItemPanel.DeleteEditor {
+
+    ~ {static} final long serialVersionUID
+    - JButton button
+    - ActionListener actionListener
+    - String UPC
+
+    + DeleteEditor(JCheckBox checkBox)
+    + Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
+}
+@enduml
