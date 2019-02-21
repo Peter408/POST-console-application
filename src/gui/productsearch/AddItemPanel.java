@@ -49,7 +49,6 @@ public class AddItemPanel extends JPanel implements SearchBarPanel.Delegate, Pro
 
     @Override
     public void filterResults(String query) {
-        System.out.print(query);
         List<Item> results = new LinkedList<>();
 
         results.addAll(catalog.searchItemByName(query));
