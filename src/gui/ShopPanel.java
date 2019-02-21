@@ -58,7 +58,7 @@ public class ShopPanel extends JPanel
         this.add(middlePanel, constraints);
 
         constraints.gridy = 2;
-        bottomPanel = new BottomPanel(this);
+        bottomPanel = new BottomPanel(this, customer.getCart());
         this.add(bottomPanel, constraints);
     }
 
