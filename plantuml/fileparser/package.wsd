@@ -1,9 +1,0 @@
-@startuml package
-package "fileparser" {
-    abstract class FileParser
-    class ProductParser
-    class TransactionParser
-}
-FileParser <|-- ProductParser
-FileParser <|-- TransactionParser
-@enduml

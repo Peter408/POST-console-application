@@ -1,9 +1,0 @@
-@startuml package
-package "user" {
-    abstract class User
-    class Customer
-    class Manager
-}
-User <|-- Customer
-User <|-- Manager
-@enduml

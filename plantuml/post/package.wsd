@@ -1,5 +1,0 @@
-@startuml package
-package "post" {
-    class POST
-}
-@enduml
