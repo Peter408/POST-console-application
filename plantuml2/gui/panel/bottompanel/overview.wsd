@@ -21,12 +21,12 @@ BottomPanel.BottomPanel o-left- BottomPanel.Delegate
 
 PropertyChangeListener <|-up- BottomPanel.BottomPanel
 Resettable <|-up- BottomPanel.BottomPanel
-Cart o-up- BottomPanel.BottomPanel
-Dimension *-up- BottomPanel.BottomPanel
-PaymentListener *-up- BottomPanel.BottomPanel
-CashListener *-up- BottomPanel.BottomPanel
-CheckListener *-up- BottomPanel.BottomPanel
-CreditListener *-up- BottomPanel.BottomPanel
+Cart -up-o BottomPanel.BottomPanel
+Dimension -up-* BottomPanel.BottomPanel
+PaymentListener -up-* BottomPanel.BottomPanel
+CashListener -up-* BottomPanel.BottomPanel
+CheckListener -up-* BottomPanel.BottomPanel
+CreditListener -up-* BottomPanel.BottomPanel
 
 Total *-down- JLabel
 Total *-down- JPanel

@@ -1,0 +1,46 @@
+@startuml package
+skinparam defaultFontSize 18
+left to right direction
+
+JPanel <|-- OptionsPanel.OptionsPanel
+
+JButton --* CloseStore.CloseStore
+JPanel --* CloseStore.CloseStore
+Dimension --* CloseStore.CloseStore
+CloseStore.Delegate --o CloseStore.CloseStore
+
+Dimension --* OptionsPanel.OptionsPanel
+CloseStore.CloseStore --o OptionsPanel.OptionsPanel
+
+interface CloseStore.Delegate {
+    + void closeButtonClicked()
+}
+
+interface OptionsPanel.Delegate {
+        + void closeButtonClicked()
+}
+
+class CloseStore.CloseStore {
+    JButton button
+    JPanel panel
+    - {static} final int WIDTH
+    - {static} final int HEIGHT
+    - Dimension dimension
+    Delegate delegate
+
+    + CloseStore(Delegate delegate)
+    void createCloseStore()
+    JPanel getPanel()
+}
+
+class OptionsPanel.OptionsPanel {
+    - {static} final int MAX_WIDTH
+    - {static} final int MAX_HEIGHT
+    - Dimension dimension
+    - CloseStore closeStore
+
+    + OptionsPanel(CloseStore.Delegate delegate)
+}
+
+
+@enduml
