@@ -12,6 +12,13 @@ public class Customer extends User {
         this.cart = new Cart();
     }
 
+    public Customer(Customer customer){
+        super(customer.getName());
+        this.cart = new Cart();
+        for (CartItem cartItem : customer.getCart().getPurchases()){
+            addToCart(cartItem.getItem(), cartItem.getQuantity());
+        }
+    }
     public boolean addToCart(Item item, int quantity) {
         final int itemQuantity = cart.getQuantityForItem(item);
         cart.setQuantityForItem(item, quantity + itemQuantity);

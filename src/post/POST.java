@@ -59,7 +59,8 @@ public class POST {
     }
 
     public Transaction checkout(Customer customer, Payment payment) {
-        Transaction t = new Transaction(customer, payment);
+        Customer savedCustomer = new Customer(customer);
+        Transaction t = new Transaction(savedCustomer, payment);
         transactions.add(t);
         try {
             api.putTransaction(t);
