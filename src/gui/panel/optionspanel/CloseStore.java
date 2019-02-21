@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
+import javax.swing.Action;
 
 public class CloseStore {
     JButton button;
@@ -19,7 +20,14 @@ public class CloseStore {
     private static final int HEIGHT = 35;
     private Dimension dimension;
 
-    public CloseStore() {
+    Delegate delegate;
+
+    public interface Delegate {
+        public void closeButtonClicked();
+    }
+
+    public CloseStore(Delegate delegate) {
+        this.delegate = delegate;
         createCloseStore();
     }
 
@@ -43,8 +51,9 @@ public class CloseStore {
         closeStorePanel.add(button, BorderLayout.CENTER);
 
         button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("close store");
+            public void actionPerformed(ActionEvent event) {
+                if (delegate != null)
+                    delegate.closeButtonClicked();
             }
         });
 
