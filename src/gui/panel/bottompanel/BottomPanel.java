@@ -5,11 +5,14 @@ import javax.swing.*;
 import gui.panel.bottompanel.Checkout.CheckoutDelegate;
 import gui.panel.bottompanel.PaymentType.PaymentTypeEnum;
 import gui.panel.bottompanel.paymentlistener.*;
+import item.Cart;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class BottomPanel extends JPanel implements CheckoutDelegate, PaymentType.Delegate {
+public class BottomPanel extends JPanel implements CheckoutDelegate, PaymentType.Delegate, PropertyChangeListener {
     private static final int MAX_WIDTH = 800;
     private static final int MAX_HEIGHT = 125;
 
@@ -24,6 +27,7 @@ public class BottomPanel extends JPanel implements CheckoutDelegate, PaymentType
     private CreditListener creditListener;
 
     private Delegate delegate;
+    private Cart cart;
 
     public interface Delegate {
         // TODO add payment
@@ -34,8 +38,10 @@ public class BottomPanel extends JPanel implements CheckoutDelegate, PaymentType
         this.initializeView();
     }
 
-    public BottomPanel(Delegate delegate) {
+    public BottomPanel(Delegate delegate, Cart cart) {
         this.delegate = delegate;
+        this.cart = cart;
+        cart.addPropertyChangeListener(this);
         this.initializeView();
     }
 
@@ -62,6 +68,13 @@ public class BottomPanel extends JPanel implements CheckoutDelegate, PaymentType
         this.cashListener = new CashListener();
         this.checkListener = new CheckListener();
         this.creditListener = new CreditListener();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        double newValue = this.cart.getTotalCost();
+        this.totalPanel.setTotal(String.format("$%.2f", newValue));
+
     }
 
     public void checkoutButtonClicked(ActionEvent e) {
