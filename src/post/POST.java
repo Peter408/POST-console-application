@@ -49,6 +49,14 @@ public class POST {
         return false;
     }
 
+    public boolean validatePayment(Payment payment) {
+        try {
+            return this.api.putPaymentType(payment);
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     public Transaction checkout(Customer customer, Payment payment) {
         Transaction t = new Transaction(customer, payment);
         System.out.println("putting transaction: " + t.toString());

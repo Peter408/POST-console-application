@@ -94,6 +94,11 @@ public class ShopPanel extends JPanel
                 // TODO throw exception?
                 return;
         }
-        this.post.checkout(customer, payment);
+        boolean validPayment = this.post.validatePayment(payment);
+        if (validPayment) {
+            this.post.checkout(customer, payment);
+        } else {
+            System.err.println("payment is invalid: " + payment);
+        }
     }
 }
