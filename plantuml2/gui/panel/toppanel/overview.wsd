@@ -1,0 +1,43 @@
+@startuml package
+skinparam defaultFontSize 18
+left to right direction
+
+interface KeyListener
+interface Resettable
+interface TopPanel.Delegate
+
+JPanel <|-- TopPanel.TopPanel
+KeyListener <|-- TopPanel.TopPanel
+Resettable <|-- TopPanel.TopPanel
+
+JTextField --* TopPanel.TopPanel
+Dimension --* TopPanel.TopPanel
+JLabel --* TopPanel.TopPanel
+TopPanel.Delegate --o TopPanel.TopPanel
+
+interface TopPanel.Delegate {
+    ~ void nameChanged(String name)
+}
+
+class TopPanel.TopPanel {
+    ~ {static} final long serialVersionUID
+    - {static} final int MAX_WIDTH
+    - {static} final int MAX_HEIGHT
+    - JTextField customerName
+    - Dimension dimension
+    - JLabel customerLabel
+    - Delegate delegate
+
+    + TopPanel(Delegate delegate)
+    + String getCustomerName()
+    - void setDefaultConfiguration()
+    - void setComponents()
+    - void setLeftComponents()
+    - void setRightComponents()
+    + void keyReleased(KeyEvent e)
+    + void keyPressed(KeyEvent e)
+    + void keyTyped(KeyEvent e)
+    + void reset()
+}
+
+@enduml
