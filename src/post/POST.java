@@ -50,6 +50,7 @@ public class POST {
     }
 
     public boolean validatePayment(Payment payment) {
+        if ( payment.getChange() < 0 ) { return false; }
         try {
             return this.api.putPaymentType(payment);
         } catch (IOException e) {

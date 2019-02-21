@@ -97,14 +97,14 @@ public class ShopPanel extends JPanel
                 payment = new Payment("CREDIT", total, associatedValue);
                 break;
             default:
-                // TODO throw exception?
                 return;
         }
         boolean valid = this.post.validatePayment(payment);
         if (valid) {
-            Transaction t = this.post.checkout(customer, payment);
+            Transaction transaction = this.post.checkout(customer, payment);
             this.reset();
         } else {
+            JOptionPane.showMessageDialog(this, "Not enough money");
             System.err.println("invalid payment: " + payment);
         }
     }
