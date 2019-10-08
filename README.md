@@ -25,3 +25,5 @@ make install
 make build
 make run
 ```
+
+Full documentation: [POST_documentation](https://github.com/Peter408/POST-console-application/blob/assignment-2/documentation/POST_documentation.pdf)
